@@ -1,0 +1,137 @@
+:root {
+  --ink: #050608;
+  --ink-soft: #0a0c10;
+  --surface: #0d0f14;
+  --surface-raised: #12151b;
+  --steel: #292d35;
+  --steel-light: #565c68;
+  --paper: #f1f1f0;
+  --paper-soft: #a9abb0;
+  --red: #ff2029;
+  --red-deep: #9d0710;
+  --ember: #ff6724;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-hot: rgba(255, 32, 41, 0.45);
+  --page-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --content-width: 1440px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  background: var(--ink);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 82% 5%, rgba(255, 32, 41, 0.08), transparent 26rem),
+    var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  content: '';
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+}
+
+::selection {
+  color: var(--paper);
+  background: var(--red);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--paper-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 1.75rem;
+  height: 1px;
+  content: '';
+  background: var(--red);
+  box-shadow: 0 0 10px rgba(255, 32, 41, 0.75);
+}
+
+.anvilMark {
+  position: relative;
+  display: block;
+  width: 7.25rem;
+  height: 5.4rem;
+}
+
+.anvilMark > span {
+  position: absolute;
+  display: block;
+  background: linear-gradient(145deg, #ff5a34 0%, var(--red) 35%, #b70a13 72%, #5a050a 100%);
+  box-shadow: 0 0 1.5rem rgba(255, 32, 41, 0.2);
+}
+
+.anvilMarkTop {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2.35rem;
+  clip-path: polygon(0 8%, 100% 8%, 89% 66%, 61% 66%, 53% 100%, 29% 100%, 23% 72%, 7% 58%);
+}
+
+.anvilMarkStem {
+  top: 1.95rem;
+  left: 38%;
+  width: 35%;
+  height: 2.55rem;
+  clip-path: polygon(18% 0, 100% 0, 76% 100%, 0 100%);
+}
+
+.anvilMarkBase {
+  bottom: 0;
+  left: 14%;
+  width: 72%;
+  height: 1.2rem;
+  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+}

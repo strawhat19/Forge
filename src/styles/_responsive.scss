@@ -1,0 +1,189 @@
+@media (max-width: 980px) {
+  .siteHeader {
+    grid-template-columns: 1fr auto;
+  }
+
+  .siteNav {
+    display: none;
+  }
+
+  .heroSection {
+    padding-top: 9rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .heroSection::before {
+    display: none;
+  }
+
+  .heroTitle {
+    font-size: clamp(5rem, 16vw, 9rem);
+  }
+
+  .heroVisual {
+    width: min(78vw, 32rem);
+    margin-top: 3rem;
+    justify-self: center;
+  }
+
+  .expertiseSection,
+  .processSection {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeading {
+    position: static;
+  }
+
+  .capabilityList,
+  .processList {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .siteHeader {
+    height: 5.25rem;
+  }
+
+  .siteBrand {
+    font-size: 1.1rem;
+  }
+
+  .headerCta {
+    font-size: 0;
+  }
+
+  .headerCta span {
+    font-size: 0.75rem;
+  }
+
+  .heroSection {
+    min-height: auto;
+    padding-top: 8.25rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(4.2rem, 20vw, 6.5rem);
+  }
+
+  .heroIntro {
+    font-size: 0.95rem;
+  }
+
+  .heroActions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .heroVisual {
+    width: min(88vw, 27rem);
+  }
+
+  .heroMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .heroMetrics > div {
+    padding: 1.1rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .heroMetrics > div:last-child {
+    border-bottom: 0;
+  }
+
+  .sectionHeading h2,
+  .processLead h2,
+  .contactSection h2 {
+    font-size: clamp(3.75rem, 18vw, 5.6rem);
+  }
+
+  .capabilityCard {
+    padding: 2rem 0;
+    grid-template-columns: 2rem 1fr;
+    gap: 1.25rem;
+  }
+
+  .capabilityCard ul {
+    grid-column: 2;
+    min-width: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .processList li {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .processList p {
+    grid-column: 2;
+  }
+
+  .studioStatement {
+    font-size: clamp(3.3rem, 16vw, 5rem);
+  }
+
+  .studioMeta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contactSection {
+    min-height: 68svh;
+  }
+
+  .contactSection::after {
+    opacity: 0.6;
+  }
+
+  .siteFooter {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  .siteFooter > div {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .forgeLoader::before {
+    inset: 0.75rem;
+  }
+
+  .forgeLoaderReadout {
+    min-width: 12rem;
+  }
+
+  .forgeLoaderRailTop {
+    top: 2rem;
+  }
+
+  .forgeLoaderRailBottom {
+    bottom: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .heroReveal {
+    opacity: 1;
+    transform: none;
+  }
+}
