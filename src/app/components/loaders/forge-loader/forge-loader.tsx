@@ -109,7 +109,9 @@ export default function ForgeLoader() {
         </defs>
       </svg>
 
-      <span className="forgeLoaderRail forgeLoaderRailTop">Forged in the dark</span>
+      <span className="forgeLoaderRail forgeLoaderRailTop">
+        Forged in Fire
+      </span>
 
       <div ref={coreRef} className="forgeLoaderCore">
         <div ref={ringRef} className="forgeLoaderRing">

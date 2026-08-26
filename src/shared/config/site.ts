@@ -1,6 +1,7 @@
 export const siteConfig = {
   title: 'Forge',
   contactEmail: 'hello@forge.studio',
+  titleAlt: `Forge // Official Home Page`,
   logo: 'icons-logos-graphics/logos/Forge_Vector.svg',
   logoAlt: 'icons-logos-graphics/logos/forge-circle-black.png',
   description: 'A digital foundry for bold products, systems, and experiences.',

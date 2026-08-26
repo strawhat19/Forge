@@ -20,7 +20,21 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   border-bottom: 1px solid var(--line);
-  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, -1.5rem, 0);
+  transition:
+    opacity 650ms ease,
+    transform 750ms cubic-bezier(0.2, 0.85, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.forgeReady .siteHeader {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, 0, 0);
 }
 
 .siteBrand {
@@ -251,20 +265,40 @@
 }
 
 .heroTitle {
-  max-width: 8ch;
-  margin-top: 1.55rem;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(5.25rem, 9.7vw, 10.75rem);
+  max-width: 10ch;
   font-weight: 700;
-  letter-spacing: -0.055em;
   line-height: 0.76;
+  margin-top: 1.55rem;
+  letter-spacing: -0.055em;
   text-transform: uppercase;
+  font-size: clamp(5.25rem, 9.7vw, 10.75rem);
+  font-family: var(--font-display), sans-serif;
 }
 
-.heroTitle span {
+.heroTitleLine {
   display: block;
+}
+
+.heroTitleAccent {
   color: transparent;
   padding-bottom: 5px;
+  background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.heroTitleWord,
+.heroTitleWord-mask {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.heroTitleWord-mask {
+  overflow: hidden;
+}
+
+.heroTitleAccent .heroTitleWord {
+  color: transparent;
   background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
   background-clip: text;
   -webkit-background-clip: text;
@@ -743,30 +777,30 @@
 }
 
 .contactSection::after {
-  position: absolute;
-  right: -5rem;
-  bottom: -14rem;
-  width: 34rem;
-  aspect-ratio: 1;
   content: '';
-  border: 1px solid rgba(255, 32, 41, 0.28);
+  right: -5rem;
+  width: 34rem;
+  bottom: -14rem;
+  aspect-ratio: 1;
+  position: absolute;
   border-radius: 50%;
+  border: 1px solid rgba(255, 32, 41, 0.28);
   box-shadow: 0 0 0 4rem rgba(255, 32, 41, 0.025), 0 0 0 8rem rgba(255, 32, 41, 0.018);
 }
 
 .contactLink {
-  position: relative;
   z-index: 2;
   display: flex;
-  width: min(100%, 52rem);
   margin-top: 4rem;
   padding: 1.5rem 0;
+  position: relative;
   align-items: center;
-  justify-content: space-between;
+  width: min(100%, 52rem);
   color: var(--paper-soft);
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  justify-content: space-between;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
   transition: color 180ms ease, border-color 180ms ease;
 }
 

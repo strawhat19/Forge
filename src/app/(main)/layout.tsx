@@ -10,8 +10,8 @@ import ForgeLoader from '@/app/components/loaders/forge-loader/forge-loader';
 
 const display = Barlow_Condensed({
   subsets: ['latin'],
-  weight: ['600', '700', '800'],
   variable: '--font-display',
+  weight: ['600', '700', '800'],
 });
 
 const sans = Geist({
@@ -34,8 +34,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteConfig.title,
-    template: `%s / ${siteConfig.title}`,
+    default: siteConfig.titleAlt,
+    template: `%s / ${siteConfig.titleAlt}`,
   },
   description: siteConfig.description,
   icons: {
@@ -61,7 +61,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <noscript>
-          <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
         <ForgeLoader />
         <SiteHeader />
