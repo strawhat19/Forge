@@ -3,7 +3,12 @@
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { useLayoutEffect, useRef } from 'react';
-import { forgeLoaderDoneEvent, isForgeLoaderDone, } from '@/app/components/loaders/forge-loader/forge-loader-events';
+import {
+  forgeLoaderDoneEvent,
+  forgeLoaderStartEvent,
+  isForgeLoaderDone,
+  isForgeLoaderReady,
+} from '@/app/components/loaders/forge-loader/forge-loader-events';
 
 export default function HeroSplitTitle() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
@@ -25,18 +30,24 @@ export default function HeroSplitTitle() {
     let tween: ReturnType<typeof gsap.to> | undefined;
     let revealed = false;
 
-    gsap.set(split.words, {
+    const hiddenState = {
       autoAlpha: 0,
       rotateX: -72,
       transformOrigin: '50% 100%',
       yPercent: 115,
-    });
+    };
+
+    const hideTitle = () => {
+      tween?.kill();
+      revealed = false;
+      gsap.set(split.words, hiddenState);
+    };
+
+    hideTitle();
 
     const revealTitle = () => {
-      if (revealed) return;
+      if (revealed || !isForgeLoaderReady() || !isForgeLoaderDone()) return;
       revealed = true;
-      window.removeEventListener(forgeLoaderDoneEvent, revealTitle);
-      // document.querySelector(`.forgeLoader`)?.classList.remove(`forgeLoading`);
       tween = gsap.to(split.words, {
         autoAlpha: 1,
         rotateX: 0,
@@ -49,13 +60,15 @@ export default function HeroSplitTitle() {
       });
     };
 
-    if (isForgeLoaderDone()) {
+    window.addEventListener(forgeLoaderStartEvent, hideTitle);
+    window.addEventListener(forgeLoaderDoneEvent, revealTitle);
+
+    if (isForgeLoaderReady() && isForgeLoaderDone()) {
       revealTitle();
-    } else {
-      window.addEventListener(forgeLoaderDoneEvent, revealTitle);
     }
 
     return () => {
+      window.removeEventListener(forgeLoaderStartEvent, hideTitle);
       window.removeEventListener(forgeLoaderDoneEvent, revealTitle);
       tween?.kill();
       split.revert();

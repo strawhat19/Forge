@@ -1,19 +1,22 @@
 'use client';
 
 import gsap from 'gsap';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import AnvilMark from '@/app/components/brand/anvil-mark';
 import {
   isForgeLoaderDone,
+  markForgeLoaderLoading,
   markForgeLoaderDone,
 } from './forge-loader-events';
 
 const MAX_BLUR = 7;
-const NAVIGATION_FALLBACK_MS = 2400;
+const NAVIGATION_COVER_DELAY_MS = 620;
+const NAVIGATION_FALLBACK_MS = 5000;
 
 export default function ForgeLoader() {
   const pathname = usePathname();
+  const router = useRouter();
   const previousPathnameRef = useRef(pathname);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const coreRef = useRef<HTMLDivElement | null>(null);
@@ -30,6 +33,7 @@ export default function ForgeLoader() {
   const replayFinishingRef = useRef(false);
   const finishRequestedRef = useRef(false);
   const fallbackTimerRef = useRef<number | null>(null);
+  const navigationTimerRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     const overlay = overlayRef.current;
@@ -84,7 +88,13 @@ export default function ForgeLoader() {
       clearFallbackTimer();
 
       const replayTimeline = timelineRef.current;
-      if (replayTimeline?.paused()) replayTimeline.resume();
+      const resumeReplay = () => {
+        if (replayTimeline?.paused()) replayTimeline.resume();
+      };
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(resumeReplay);
+      });
     };
 
     const startReplay = () => {
@@ -95,6 +105,7 @@ export default function ForgeLoader() {
       finishRequestedRef.current = false;
       clearFallbackTimer();
       timelineRef.current?.kill();
+      markForgeLoaderLoading();
 
       progress.value = 0;
       lastValue = 0;
@@ -116,6 +127,7 @@ export default function ForgeLoader() {
           finishRequestedRef.current = false;
           timelineRef.current = null;
           hideOverlay();
+          markForgeLoaderDone();
         },
       });
       timelineRef.current = replayTimeline;
@@ -176,8 +188,8 @@ export default function ForgeLoader() {
         status.textContent = 'Ready';
         gsap.timeline({
           onComplete: () => {
-            markForgeLoaderDone();
             hideOverlay();
+            markForgeLoaderDone();
           },
         })
           .to(bottomRail, { autoAlpha: 0, duration: 0.08 })
@@ -188,8 +200,8 @@ export default function ForgeLoader() {
 
       timelineRef.current = gsap.timeline({
         onComplete: () => {
-          markForgeLoaderDone();
           hideOverlay();
+          markForgeLoaderDone();
         },
       })
         .fromTo(
@@ -221,6 +233,10 @@ export default function ForgeLoader() {
 
     return () => {
       clearFallbackTimer();
+      if (navigationTimerRef.current !== null) {
+        window.clearTimeout(navigationTimerRef.current);
+        navigationTimerRef.current = null;
+      }
       timelineRef.current?.kill();
       startReplayRef.current = () => undefined;
       finishReplayRef.current = () => undefined;
@@ -228,12 +244,20 @@ export default function ForgeLoader() {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (previousPathnameRef.current === pathname) return;
 
     previousPathnameRef.current = pathname;
 
-    if (!isForgeLoaderDone()) return;
+    if (navigationTimerRef.current !== null) {
+      window.clearTimeout(navigationTimerRef.current);
+      navigationTimerRef.current = null;
+    }
+
+    if (!isForgeLoaderDone()) {
+      startReplayRef.current();
+      return;
+    }
 
     if (replayActiveRef.current) {
       finishReplayRef.current();
@@ -246,7 +270,7 @@ export default function ForgeLoader() {
 
   useEffect(() => {
     const handleLinkIntent = (event: MouseEvent) => {
-      if (!isForgeLoaderDone() || event.defaultPrevented || event.button !== 0) return;
+      if (event.defaultPrevented || event.button !== 0) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
       const target = event.target;
@@ -262,11 +286,36 @@ export default function ForgeLoader() {
       if (url.origin !== window.location.origin) return;
       if (url.pathname === window.location.pathname && url.search === window.location.search) return;
 
+      event.preventDefault();
+      event.stopPropagation();
       startReplayRef.current();
+
+      if (navigationTimerRef.current !== null) {
+        window.clearTimeout(navigationTimerRef.current);
+      }
+
+      const destination = `${url.pathname}${url.search}${url.hash}`;
+      navigationTimerRef.current = window.setTimeout(() => {
+        navigationTimerRef.current = null;
+        router.push(destination);
+      }, NAVIGATION_COVER_DELAY_MS);
     };
 
     document.addEventListener('click', handleLinkIntent, true);
     return () => document.removeEventListener('click', handleLinkIntent, true);
+  }, [router]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (navigationTimerRef.current !== null) {
+        window.clearTimeout(navigationTimerRef.current);
+        navigationTimerRef.current = null;
+      }
+      startReplayRef.current();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   return (

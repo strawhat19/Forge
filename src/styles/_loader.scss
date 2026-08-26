@@ -13,6 +13,10 @@
   cursor: wait;
 }
 
+html.forgeLoading body > :not(.forgeLoader) {
+  visibility: hidden;
+}
+
 .forgeLoader::before {
   position: absolute;
   inset: 1.25rem;
