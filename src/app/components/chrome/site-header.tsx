@@ -4,7 +4,7 @@ import { siteConfig } from '@/shared/config/site';
 export default function SiteHeader() {
   return (
     <header className="siteHeader">
-      <a className="siteBrand" href="#top" aria-label="Forge home">
+      <a className="siteBrand" href={`/`} aria-label="Forge home">
         <span className="siteBrandMark">
           <Image src={`/${siteConfig.logo}`} alt="Forge logo" width={28} height={32} priority />
         </span>

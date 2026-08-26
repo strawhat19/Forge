@@ -2,3 +2,11 @@
 @use '../styles/loader';
 @use '../styles/landing';
 @use '../styles/responsive';
+
+// html, body {
+//   &:has(.forgeLoading) {
+//     header {
+//       display: none !important;
+//     }
+//   }
+// }

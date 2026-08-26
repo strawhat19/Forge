@@ -80,21 +80,21 @@ p {
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
   gap: 0.65rem;
-  color: var(--paper-soft);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
   font-weight: 500;
+  font-size: 0.7rem;
+  align-items: center;
+  display: inline-flex;
   letter-spacing: 0.16em;
+  color: var(--paper-soft);
   text-transform: uppercase;
+  font-family: var(--font-mono), monospace;
 }
 
 .eyebrow::before {
-  width: 1.75rem;
   height: 1px;
   content: '';
+  width: 1.75rem;
   background: var(--red);
   box-shadow: 0 0 10px rgba(255, 32, 41, 0.75);
 }

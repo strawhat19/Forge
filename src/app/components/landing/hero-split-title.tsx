@@ -3,10 +3,7 @@
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { useLayoutEffect, useRef } from 'react';
-import {
-  forgeLoaderDoneEvent,
-  isForgeLoaderDone,
-} from '@/app/components/loaders/forge-loader/forge-loader-events';
+import { forgeLoaderDoneEvent, isForgeLoaderDone, } from '@/app/components/loaders/forge-loader/forge-loader-events';
 
 export default function HeroSplitTitle() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
@@ -37,9 +34,9 @@ export default function HeroSplitTitle() {
 
     const revealTitle = () => {
       if (revealed) return;
-
       revealed = true;
       window.removeEventListener(forgeLoaderDoneEvent, revealTitle);
+      // document.querySelector(`.forgeLoader`)?.classList.remove(`forgeLoading`);
       tween = gsap.to(split.words, {
         autoAlpha: 1,
         rotateX: 0,
