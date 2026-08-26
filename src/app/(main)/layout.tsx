@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/shared/config/site';
 import SiteHeader from '@/app/components/chrome/site-header';
 import SiteFooter from '@/app/components/chrome/site-footer';
+import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import { Barlow_Condensed, Geist, Geist_Mono } from 'next/font/google';
 import ForgeLoader from '@/app/components/loaders/forge-loader/forge-loader';
 
@@ -66,6 +67,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
+        <ScrollToTop />
       </body>
     </html>
   );

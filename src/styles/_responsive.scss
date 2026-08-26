@@ -141,6 +141,7 @@
   }
 
   .siteFooter {
+    padding-right: var(--page-gutter);
     grid-template-columns: 1fr;
     align-items: start;
     gap: 1.25rem;
@@ -149,6 +150,18 @@
   .siteFooter > div {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .scrollToTop {
+    right: max(0.875rem, calc(0.75rem + env(safe-area-inset-right, 0px)));
+    bottom: max(0.875rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .scrollToTop svg {
+    width: 1.05rem;
+    height: 1.05rem;
   }
 
   .forgeLoader::before {
@@ -185,5 +198,11 @@
   .heroReveal {
     opacity: 1;
     transform: none;
+  }
+
+  .scrollToTop,
+  .scrollToTop.visible {
+    transform: none;
+    transition-delay: 0ms;
   }
 }

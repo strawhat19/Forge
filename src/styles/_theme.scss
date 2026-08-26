@@ -100,39 +100,36 @@ p {
 }
 
 .anvilMark {
-  position: relative;
   display: block;
-  width: 7.25rem;
-  height: 5.4rem;
+  width: 7.75rem;
+  height: 4.8rem;
 }
 
-.anvilMark > span {
-  position: absolute;
+.anvilMark svg {
   display: block;
-  background: linear-gradient(145deg, #ff5a34 0%, var(--red) 35%, #b70a13 72%, #5a050a 100%);
-  box-shadow: 0 0 1.5rem rgba(255, 32, 41, 0.2);
-}
-
-.anvilMarkTop {
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 2.35rem;
-  clip-path: polygon(0 8%, 100% 8%, 89% 66%, 61% 66%, 53% 100%, 29% 100%, 23% 72%, 7% 58%);
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 1.15rem rgba(255, 32, 41, 0.18))
+    drop-shadow(0 0.65rem 0.8rem rgba(0, 0, 0, 0.3));
 }
 
-.anvilMarkStem {
-  top: 1.95rem;
-  left: 38%;
-  width: 35%;
-  height: 2.55rem;
-  clip-path: polygon(18% 0, 100% 0, 76% 100%, 0 100%);
+.anvilMarkBody {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
-.anvilMarkBase {
-  bottom: 0;
-  left: 14%;
-  width: 72%;
-  height: 1.2rem;
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+.anvilMarkSheen {
+  fill: rgba(255, 255, 255, 0.12);
+}
+
+.anvilMarkEdge {
+  fill: none;
+  stroke: rgba(255, 193, 160, 0.38);
+  stroke-width: 1;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
