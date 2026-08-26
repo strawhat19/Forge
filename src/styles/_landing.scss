@@ -256,8 +256,8 @@
 .heroCopy,
 .heroVisual,
 .heroMetrics {
-  position: relative;
   z-index: 2;
+  position: relative;
 }
 
 .heroCopy {
@@ -282,8 +282,8 @@
 .heroTitleAccent {
   color: transparent;
   padding-bottom: 5px;
-  background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
   background-clip: text;
+  background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
   -webkit-background-clip: text;
 }
 
@@ -300,39 +300,39 @@
 
 .heroTitleAccent .heroTitleWord {
   color: transparent;
-  background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
   background-clip: text;
+  background: linear-gradient(90deg, var(--red), #ff4230 44%, var(--ember));
   -webkit-background-clip: text;
 }
 
 .heroIntro {
   max-width: 38rem;
+  line-height: 1.72;
   margin-top: 2.3rem;
   color: var(--paper-soft);
   font-size: clamp(1rem, 1.5vw, 1.18rem);
-  line-height: 1.72;
 }
 
 .heroActions {
+  gap: 2rem;
   display: flex;
   margin-top: 2.5rem;
   align-items: center;
-  gap: 2rem;
 }
 
 .button {
-  display: inline-flex;
-  min-height: 3.35rem;
-  padding: 0.25rem 1.25rem;
-  align-items: center;
-  justify-content: center;
   gap: 1.6rem;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.67rem;
   font-weight: 600;
+  font-size: 0.67rem;
+  min-height: 3.35rem;
+  align-items: center;
+  display: inline-flex;
   letter-spacing: 0.09em;
+  justify-content: center;
+  padding: 0.25rem 1.25rem;
   text-transform: uppercase;
   border: 1px solid var(--red);
+  font-family: var(--font-mono), monospace;
 }
 
 .buttonPrimary {
