@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
+import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 
 export default function ForgeLanding() {
   return (
@@ -9,10 +10,7 @@ export default function ForgeLanding() {
         <div className="heroNoise" aria-hidden="true" />
         <div className="heroCopy">
           <span className="eyebrow heroReveal">Independent digital foundry</span>
-          <h1 className="heroTitle heroReveal">
-            Ideas enter.
-            <span>Products emerge.</span>
-          </h1>
+          <HeroSplitTitle />
           <p className="heroIntro heroReveal">
             We shape bold ideas into precise digital products—strategy, design,
             engineering, and intelligent systems under one roof.
