@@ -71,7 +71,15 @@
   gap: clamp(1.5rem, 3vw, 3rem);
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: clamp(1rem, 2vw, 1.8rem);
+}
+
 .siteNav a,
+.headerAuthLink,
 .headerCta {
   position: relative;
   color: var(--paper-soft);
@@ -82,7 +90,8 @@
   transition: color 180ms ease;
 }
 
-.siteNav a::after {
+.siteNav a::after,
+.headerAuthLink::after {
   position: absolute;
   right: 0;
   bottom: -0.45rem;
@@ -97,13 +106,33 @@
 
 .siteNav a:hover,
 .siteNav a:focus-visible,
+.headerAuthLink:hover,
+.headerAuthLink:focus-visible,
 .headerCta:hover,
 .headerCta:focus-visible {
   color: var(--paper);
 }
 
+.headerAuthLinkSignUp {
+  display: inline-flex;
+  padding: 0.55rem 0.8rem;
+  color: var(--paper);
+  border: 1px solid var(--line-hot);
+  background: rgba(255, 32, 41, 0.08);
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.headerAuthLinkSignUp:hover,
+.headerAuthLinkSignUp:focus-visible {
+  color: var(--paper);
+  border-color: var(--red);
+  background: var(--red);
+}
+
 .siteNav a:hover::after,
-.siteNav a:focus-visible::after {
+.siteNav a:focus-visible::after,
+.headerAuthLink:hover::after,
+.headerAuthLink:focus-visible::after {
   transform: scaleX(1);
   transform-origin: left;
 }

@@ -7,6 +7,10 @@
     display: none;
   }
 
+  .headerActions {
+    gap: 1.25rem;
+  }
+
   .heroSection {
     padding-top: 9rem;
     grid-template-columns: 1fr;
@@ -53,6 +57,20 @@
 
   .headerCta {
     font-size: 0;
+  }
+
+  .headerAuthLink {
+    display: none;
+  }
+
+  .headerAuthLinkSignUp {
+    display: inline-flex;
+    padding: 0.45rem 0.55rem;
+    font-size: 0.58rem;
+  }
+
+  .headerActions {
+    gap: 0.55rem;
   }
 
   .headerCta span {

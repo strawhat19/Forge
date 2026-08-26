@@ -1,20 +1,35 @@
 'use client';
 
 import gsap from 'gsap';
-import { useLayoutEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import AnvilMark from '@/app/components/brand/anvil-mark';
-import { markForgeLoaderDone } from './forge-loader-events';
+import {
+  isForgeLoaderDone,
+  markForgeLoaderDone,
+} from './forge-loader-events';
 
 const MAX_BLUR = 7;
+const NAVIGATION_FALLBACK_MS = 2400;
 
 export default function ForgeLoader() {
+  const pathname = usePathname();
+  const previousPathnameRef = useRef(pathname);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const coreRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
   const countRef = useRef<HTMLSpanElement | null>(null);
   const statusRef = useRef<HTMLSpanElement | null>(null);
+  const bottomRailRef = useRef<HTMLSpanElement | null>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement | null>(null);
   const tailRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const startReplayRef = useRef<() => void>(() => undefined);
+  const finishReplayRef = useRef<() => void>(() => undefined);
+  const replayActiveRef = useRef(false);
+  const replayFinishingRef = useRef(false);
+  const finishRequestedRef = useRef(false);
+  const fallbackTimerRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     const overlay = overlayRef.current;
@@ -22,16 +37,23 @@ export default function ForgeLoader() {
     const ring = ringRef.current;
     const count = countRef.current;
     const status = statusRef.current;
+    const bottomRail = bottomRailRef.current;
     const blurNode = blurRef.current;
     const tail = tailRef.current;
 
-    if (!overlay || !core || !ring || !count || !status || !blurNode || !tail) return;
+    if (!overlay || !core || !ring || !count || !status || !bottomRail || !blurNode || !tail) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const progress = { value: 0 };
     let lastValue = 0;
     let lastTime = performance.now();
     let blur = 0;
+
+    const clearFallbackTimer = () => {
+      if (fallbackTimerRef.current === null) return;
+      window.clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    };
 
     const renderProgress = () => {
       const now = performance.now();
@@ -50,18 +72,126 @@ export default function ForgeLoader() {
       lastTime = now;
     };
 
-    const ctx = gsap.context(() => {
+    const hideOverlay = () => {
+      gsap.set(overlay, { autoAlpha: 0, display: 'none', yPercent: -100 });
+    };
+
+    const finishReplay = () => {
+      if (!replayActiveRef.current || replayFinishingRef.current) return;
+
+      replayFinishingRef.current = true;
+      finishRequestedRef.current = true;
+      clearFallbackTimer();
+
+      const replayTimeline = timelineRef.current;
+      if (replayTimeline?.paused()) replayTimeline.resume();
+    };
+
+    const startReplay = () => {
+      if (replayActiveRef.current) return;
+
+      replayActiveRef.current = true;
+      replayFinishingRef.current = false;
+      finishRequestedRef.current = false;
+      clearFallbackTimer();
+      timelineRef.current?.kill();
+
+      progress.value = 0;
+      lastValue = 0;
+      lastTime = performance.now();
+      blur = 0;
+      status.textContent = 'Heating the next view';
+      blurNode.setAttribute('stdDeviation', '0 0.35');
+      gsap.set(overlay, { autoAlpha: 1, display: 'grid', yPercent: 100 });
+      gsap.set(core, { autoAlpha: 1, scale: 0.94, y: 12 });
+      gsap.set(bottomRail, { autoAlpha: 1 });
+      gsap.set(tail, { scaleY: 1 });
+      renderProgress();
+
+      const replayTimeline = gsap.timeline({
+        onComplete: () => {
+          clearFallbackTimer();
+          replayActiveRef.current = false;
+          replayFinishingRef.current = false;
+          finishRequestedRef.current = false;
+          timelineRef.current = null;
+          hideOverlay();
+        },
+      });
+      timelineRef.current = replayTimeline;
+
+      if (reducedMotion) {
+        replayTimeline
+          .to(overlay, { yPercent: 0, duration: 0.08 })
+          .set(progress, { value: 100, onComplete: renderProgress })
+          .set(status, { textContent: 'Ready to strike' })
+          .to(overlay, { autoAlpha: 0, duration: 0.12, delay: 0.08 });
+      } else {
+        replayTimeline
+          .to(overlay, { yPercent: 0, duration: 0.52, ease: 'power3.out' })
+          .to(core, { scale: 1, y: 0, duration: 0.42, ease: 'power3.out' }, '-=0.22')
+          .to(
+            progress,
+            {
+              value: 84,
+              duration: 1.1,
+              ease: 'power2.out',
+              onUpdate: renderProgress,
+            },
+            0.18,
+          )
+          .addPause(undefined, () => {
+            if (finishRequestedRef.current) replayTimeline.resume();
+          })
+          .to(
+            progress,
+            {
+              value: 100,
+              duration: 0.4,
+              ease: 'power2.inOut',
+              onUpdate: renderProgress,
+              onComplete: () => {
+                blurNode.setAttribute('stdDeviation', '0 0');
+                status.textContent = 'Ready to strike';
+              },
+            },
+          )
+          .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.26, ease: 'power2.in' }, '-=0.1')
+          .addLabel('lift')
+          .to(bottomRail, { autoAlpha: 0, duration: 0.12, ease: 'power2.out' }, 'lift')
+          .to(overlay, { yPercent: -100, duration: 0.82, ease: 'power3.inOut' }, 'lift')
+          .to(tail, { scaleY: 0, duration: 0.82, ease: 'power2.in' }, 'lift');
+      }
+
+      fallbackTimerRef.current = window.setTimeout(finishReplay, NAVIGATION_FALLBACK_MS);
+    };
+
+    startReplayRef.current = startReplay;
+    finishReplayRef.current = finishReplay;
+
+    const initialTimeline = gsap.context(() => {
       if (reducedMotion) {
         progress.value = 100;
         renderProgress();
         status.textContent = 'Ready';
-        gsap.timeline({ onComplete: markForgeLoaderDone })
+        gsap.timeline({
+          onComplete: () => {
+            markForgeLoaderDone();
+            hideOverlay();
+          },
+        })
+          .to(bottomRail, { autoAlpha: 0, duration: 0.08 })
           .to(overlay, { autoAlpha: 0, duration: 0.18, delay: 0.08 })
           .set(overlay, { display: 'none' });
         return;
       }
 
-      gsap.timeline({ onComplete: markForgeLoaderDone })
+      timelineRef.current = gsap.timeline({
+        onComplete: () => {
+          markForgeLoaderDone();
+          hideOverlay();
+        },
+      })
         .fromTo(
           core,
           { scale: 0.92, y: 12 },
@@ -83,12 +213,60 @@ export default function ForgeLoader() {
         )
         .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.32, ease: 'power2.in' }, '+=0.22')
         .addLabel('lift')
+        .to(bottomRail, { autoAlpha: 0, duration: 0.12, ease: 'power2.out' }, 'lift')
         .to(overlay, { yPercent: -100, duration: 1.15, ease: 'power3.inOut' }, 'lift')
         .to(tail, { scaleY: 0, duration: 1.15, ease: 'power2.in' }, 'lift')
         .set(overlay, { display: 'none' });
     }, overlay);
 
-    return () => ctx.revert();
+    return () => {
+      clearFallbackTimer();
+      timelineRef.current?.kill();
+      startReplayRef.current = () => undefined;
+      finishReplayRef.current = () => undefined;
+      initialTimeline.revert();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (previousPathnameRef.current === pathname) return;
+
+    previousPathnameRef.current = pathname;
+
+    if (!isForgeLoaderDone()) return;
+
+    if (replayActiveRef.current) {
+      finishReplayRef.current();
+      return;
+    }
+
+    startReplayRef.current();
+    finishReplayRef.current();
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleLinkIntent = (event: MouseEvent) => {
+      if (!isForgeLoaderDone() || event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const anchor = target.closest<HTMLAnchorElement>('a[href]');
+      if (!anchor || anchor.target && anchor.target !== '_self' || anchor.hasAttribute('download')) return;
+
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
+
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname === window.location.pathname && url.search === window.location.search) return;
+
+      startReplayRef.current();
+    };
+
+    document.addEventListener('click', handleLinkIntent, true);
+    return () => document.removeEventListener('click', handleLinkIntent, true);
   }, []);
 
   return (
@@ -135,7 +313,7 @@ export default function ForgeLoader() {
         </div>
       </div>
 
-      <span className="forgeLoaderRail forgeLoaderRailBottom">Heat / Shape / Strike</span>
+      <span ref={bottomRailRef} className="forgeLoaderRail forgeLoaderRailBottom">Heat / Shape / Strike</span>
       <div ref={tailRef} className="forgeLoaderTail" aria-hidden="true" />
     </div>
   );
