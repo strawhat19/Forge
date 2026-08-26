@@ -30,12 +30,13 @@ export default function ForgeLanding() {
           <span className="heroCoordinate heroCoordinateBottom">BUILT / 001</span>
           <div className="heroLogoPlate">
             <Image
-              src={`/${siteConfig.logo}`}
-              alt="Forge flame and gear logo"
-              width={460}
-              height={518}
-              sizes="(max-width: 720px) 62vw, 340px"
               priority
+              width={356}
+              height={433}
+              src={`/${siteConfig.logo}`}
+              className={`heroLogoPlateMark`}
+              alt="Forge flame and gear logo"
+              sizes="(max-width: 720px) 62vw, 340px"
             />
           </div>
           <div className="heroHeatLine" aria-hidden="true" />

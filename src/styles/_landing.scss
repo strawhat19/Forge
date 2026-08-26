@@ -3,8 +3,9 @@
 .section,
 .contactSection,
 .heroSection {
-  width: min(100%, var(--content-width));
   margin-inline: auto;
+  container-type: inline-size;
+  width: min(100%, var(--content-width));
 }
 
 .siteHeader {
@@ -35,18 +36,18 @@
 }
 
 .siteBrandMark {
+  width: 4rem;
+  height: 4rem;
   display: grid;
-  width: 2rem;
-  height: 2rem;
   overflow: hidden;
-  place-items: center;
-  border: 1px solid var(--line);
   border-radius: 50%;
+  place-items: center;
   background: #030407;
+  border: 1px solid var(--line);
 }
 
 .siteBrandMark img {
-  width: 1.3rem;
+  width: 2.2rem;
   height: auto;
 }
 
@@ -329,10 +330,10 @@
 
 .heroVisual {
   display: grid;
-  width: min(100%, 34rem);
   aspect-ratio: 1;
   justify-self: end;
   place-items: center;
+  width: min(100%, clamp(34rem, 43cqw, 50rem));
 }
 
 .heroOrbit {
@@ -395,18 +396,21 @@
 }
 
 .heroLogoPlate {
-  position: relative;
+  width: 58%;
   z-index: 2;
   display: grid;
-  width: 58%;
-  aspect-ratio: 0.89;
   overflow: hidden;
+  aspect-ratio: 0.89;
+  position: relative;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: #040509;
-  box-shadow:
-    0 2rem 5rem rgba(0, 0, 0, 0.5),
-    0 0 4rem rgba(255, 32, 41, 0.08);
+  // background: #040509;
+  // border: 1px solid rgba(255, 255, 255, 0.09);
+  // box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.5), 0 0 4rem rgba(255, 32, 41, 0.08);
+}
+
+.heroLogoPlateMark {
+  transform: scale(0.85);
+  transform-origin: center;
 }
 
 .heroLogoPlate::before,

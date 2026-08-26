@@ -1,8 +1,9 @@
 export const siteConfig = {
   title: 'Forge',
-  logo: 'forge-logo-transparent.png',
-  description: 'A digital foundry for bold products, systems, and experiences.',
   contactEmail: 'hello@forge.studio',
+  logo: 'icons-logos-graphics/logos/Forge_Vector.svg',
+  logoAlt: 'icons-logos-graphics/logos/forge-circle-black.png',
+  description: 'A digital foundry for bold products, systems, and experiences.',
   navigation: [
     { label: 'Expertise', href: '#expertise' },
     { label: 'Process', href: '#process' },

@@ -114,8 +114,12 @@ export default function ForgeLoader() {
       <div ref={coreRef} className="forgeLoaderCore">
         <div ref={ringRef} className="forgeLoaderRing">
           <div className="forgeLoaderRingInner">
-            <span className="forgeLoaderTrail forgeLoaderTrailOne"><AnvilMark /></span>
-            <span className="forgeLoaderTrail forgeLoaderTrailTwo"><AnvilMark /></span>
+            <span className="forgeLoaderTrail forgeLoaderTrailOne">
+              <AnvilMark />
+            </span>
+            <span className="forgeLoaderTrail forgeLoaderTrailTwo">
+              <AnvilMark />
+            </span>
             <AnvilMark className="forgeLoaderAnvil" />
           </div>
         </div>

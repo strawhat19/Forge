@@ -13,7 +13,9 @@ export default function SiteHeader() {
 
       <nav className="siteNav" aria-label="Primary navigation">
         {siteConfig.navigation.map((item) => (
-          <a key={item.href} href={item.href}>{item.label}</a>
+          <a key={item.href} href={item.href}>
+            {item.label}
+          </a>
         ))}
       </nav>
 

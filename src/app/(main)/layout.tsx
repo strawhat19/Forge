@@ -39,20 +39,20 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: `/${siteConfig.logo}`,
-    apple: `/${siteConfig.logo}`,
+    icon: `/${siteConfig.logoAlt}`,
+    apple: `/${siteConfig.logoAlt}`,
   },
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [{ url: `/${siteConfig.logo}`, width: 460, height: 518, alt: 'Forge' }],
+    images: [{ url: `/${siteConfig.logoAlt}`, width: 460, height: 518, alt: 'Forge' }],
     type: 'website',
   },
   twitter: {
     card: 'summary',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [`/${siteConfig.logo}`],
+    images: [`/${siteConfig.logoAlt}`],
   },
 };
 
