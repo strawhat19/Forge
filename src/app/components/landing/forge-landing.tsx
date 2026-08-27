@@ -51,9 +51,18 @@ export default function ForgeLanding() {
         </div>
 
         <div className="heroMetrics heroReveal" aria-label="Forge principles">
-          <div><strong>03</strong><span>Disciplines aligned</span></div>
-          <div><strong>01</strong><span>Relentless standard</span></div>
-          <div><strong>∞</strong><span>Built to evolve</span></div>
+          <div>
+            <strong>01</strong>
+            <span>Build Projects</span>
+          </div>
+          <div>
+            <strong>02</strong>
+            <span>Source Code</span>
+          </div>
+          <div>
+            <strong>03</strong>
+            <span>Deployment Pipelines</span>
+          </div>
         </div>
       </section>
 

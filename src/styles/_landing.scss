@@ -865,7 +865,7 @@
 
 .contactWidget {
   position: absolute;
-  top: clamp(2rem, 4vw, 4rem);
+  top: clamp(2rem, 16vw, 13rem);
   right: var(--page-gutter);
   z-index: 2;
   width: min(24.5rem, calc(100% - (var(--page-gutter) * 2)));
