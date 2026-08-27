@@ -23,19 +23,19 @@
   }
 
   .mobileMenuToggle {
-    position: relative;
-    display: grid;
+    padding: 0;
     width: 2rem;
     height: 2rem;
+    display: grid;
     flex: 0 0 2rem;
-    padding: 0;
-    place-items: center;
-    color: var(--paper);
     cursor: pointer;
     appearance: none;
-    border: 1px solid var(--line-hot);
+    position: relative;
+    place-items: center;
+    color: var(--paper);
     border-radius: 50%;
     background: transparent;
+    border: 1px solid var(--line-hot);
     transition:
       color 180ms ease,
       background 180ms ease,
