@@ -50,11 +50,11 @@ function MarqueeIcon({ name }: MarqueeIconProps) {
 }
 
 export default function TopMarquee({
+  speed = 18,
   autoplay = true,
   direction = 'rtl',
   fadeSides = true,
-  pauseonhover = true,
-  speed = 18,
+  pauseonhover = false,
   id = 'forge-top-marquee',
 }: TopMarqueeProps = {}) {
   const containerRef = useRef<HTMLDivElement | null>(null);

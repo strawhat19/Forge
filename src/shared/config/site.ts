@@ -21,6 +21,16 @@ export const siteConfig = {
     { icon: 'cloudformation', text: 'CloudFormation' },
     { icon: 'terraform', text: 'Terraform' },
     { icon: 'iac', text: 'Infrastructure as Code' },
+    { icon: 'applications', text: 'Next.js Applications' },
+    { icon: 'cloud', text: 'AWS Infrastructure' },
+    { icon: 'cloud', text: 'Serverless Functions' },
+    { icon: 'cloudformation', text: 'Container Workloads' },
+    { icon: 'pipeline', text: 'Source Control' },
+    { icon: 'build', text: 'Automated Testing' },
+    { icon: 'devops', text: 'Continuous Delivery' },
+    { icon: 'iac', text: 'Cloud Security' },
+    { icon: 'pipeline', text: 'Monitoring and Observability' },
+    { icon: 'terraform', text: 'Scalable Systems' },
   ],
   capabilities: [
     {
