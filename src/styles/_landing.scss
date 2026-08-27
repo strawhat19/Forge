@@ -81,13 +81,14 @@
 .siteNav a,
 .headerAuthLink,
 .headerCta {
+  cursor: pointer;
   position: relative;
-  color: var(--paper-soft);
-  font-family: var(--font-mono), monospace;
   font-size: 0.66rem;
   letter-spacing: 0.12em;
+  color: var(--paper-soft);
   text-transform: uppercase;
   transition: color 180ms ease;
+  font-family: var(--font-mono), monospace;
 }
 
 .siteNav a::after,
@@ -608,7 +609,7 @@
   border-bottom: 1px solid var(--line);
 }
 
-.expertiseSection {
+.exploreSection {
   display: grid;
   grid-template-columns: minmax(18rem, 0.78fr) minmax(30rem, 1.22fr);
   gap: 8vw;

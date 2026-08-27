@@ -1,7 +1,10 @@
+'use client';
+
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
 import HeroSplitTitle from '@/app/components/landing/hero-split-title';
+import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
 
 export default function ForgeLanding() {
   return (
@@ -18,10 +21,10 @@ export default function ForgeLanding() {
             engineering, and intelligent systems under one roof.
           </p>
           <div className="heroActions heroReveal">
-            <a className="button buttonPrimary" href="#contact">
+            <button className="button buttonPrimary" onClick={() => scrollToElement(`#contact`)}>
               Bring us a challenge <span aria-hidden="true">↗</span>
-            </a>
-            <a className="textLink" href="#expertise">
+            </button>
+            <a className="headerAuthLink" onClick={() => scrollToElement(`#explore`)}>
               Explore the forge <span aria-hidden="true">↓</span>
             </a>
           </div>
@@ -31,7 +34,7 @@ export default function ForgeLanding() {
           <div className="heroOrbit heroOrbitOuter" aria-hidden="true" />
           <div className="heroOrbit heroOrbitInner" aria-hidden="true" />
           <span className="heroCoordinate heroCoordinateTop">40.7128° N</span>
-          <span className="heroCoordinate heroCoordinateBottom">BUILT / 001</span>
+          <span className="heroCoordinate heroCoordinateBottom">BUILD / 001</span>
           <div className="heroLogoPlate">
             <Image
               priority
@@ -53,7 +56,7 @@ export default function ForgeLanding() {
         </div>
       </section>
 
-      <section id="expertise" className="section expertiseSection">
+      <section id="explore" className="section exploreSection">
         <div className="sectionHeading">
           <span className="eyebrow">What we forge</span>
           <h2>From first spark<br />to lasting system.</h2>

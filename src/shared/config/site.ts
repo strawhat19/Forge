@@ -8,7 +8,7 @@ export const siteConfig = {
   logoAlt: 'icons-logos-graphics/logos/forge-circle-black.png',
   description: 'A digital foundry for bold products, systems, and experiences.',
   navigation: [
-    { label: 'Expertise', href: '#expertise' },
+    { label: 'Explore', href: '#explore' },
     { label: 'Process', href: '#process' },
     { label: 'Studio', href: '#studio' },
   ],
