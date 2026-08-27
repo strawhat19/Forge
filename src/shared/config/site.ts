@@ -1,5 +1,7 @@
 export const siteConfig = {
   title: 'Forge',
+  titleLine1: 'Build anything.',
+  titleLine2: 'Deploy anywhere.',
   contactEmail: 'hello@forge.studio',
   titleAlt: `Forge // Official Home Page`,
   logo: 'icons-logos-graphics/logos/Forge_Vector.svg',

@@ -198,26 +198,26 @@
 }
 
 .scrollToTop.visible {
-  visibility: visible;
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
-  transform: translate3d(0, 0, 0) scale(1);
   transition-delay: 0s;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .scrollToTop svg {
+  fill: none;
   width: 1.15rem;
   height: 1.15rem;
-  fill: none;
-  stroke: currentColor;
   stroke-width: 1.9;
+  stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .scrollToTop:focus-visible {
-  outline: 2px solid var(--paper);
   outline-offset: 3px;
+  outline: 2px solid var(--paper);
 }
 
 .scrollToTop:active {
@@ -236,16 +236,16 @@
 }
 
 .heroSection {
-  position: relative;
+  gap: 2rem;
   display: grid;
-  min-height: 100svh;
-  padding: clamp(9rem, 16vh, 12rem) var(--page-gutter) 2.5rem;
   overflow: hidden;
-  grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
-  grid-template-rows: 1fr auto;
+  min-height: 100svh;
+  position: relative;
   align-items: center;
-  gap: 2rem 5vw;
+  grid-template-rows: 1fr auto;
   border-bottom: 1px solid var(--line);
+  padding: clamp(9rem,16vh,12rem) var(--page-gutter) 2.5rem;
+  grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
 }
 
 .heroSection::before,
@@ -294,13 +294,13 @@
 }
 
 .heroTitle {
-  max-width: 10ch;
+  width: 100%;
   font-weight: 700;
   line-height: 0.76;
   margin-top: 1.55rem;
   letter-spacing: -0.055em;
   text-transform: uppercase;
-  font-size: clamp(5.25rem, 9.7vw, 10.75rem);
+  font-size: clamp(4rem, 8vw, 9.85rem);
   font-family: var(--font-display), sans-serif;
 }
 
@@ -318,7 +318,7 @@
 
 .heroTitleWord,
 .heroTitleWord-mask {
-  padding: 0 5px 5px 0;
+  padding: 0 3px 2px 0;
   display: inline-block;
   vertical-align: bottom;
 }

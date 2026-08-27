@@ -3,12 +3,8 @@
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { useLayoutEffect, useRef } from 'react';
-import {
-  forgeLoaderDoneEvent,
-  forgeLoaderStartEvent,
-  isForgeLoaderDone,
-  isForgeLoaderReady,
-} from '@/app/components/loaders/forge-loader/forge-loader-events';
+import { siteConfig } from '@/shared/config/site';
+import { forgeLoaderDoneEvent, forgeLoaderStartEvent, isForgeLoaderDone, isForgeLoaderReady, } from '@/app/components/loaders/forge-loader/forge-loader-events';
 
 export default function HeroSplitTitle() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
@@ -77,8 +73,12 @@ export default function HeroSplitTitle() {
 
   return (
     <h1 ref={titleRef} className="heroTitle heroReveal">
-      <span className="heroTitleLine">Ideas enter.</span>{' '}
-      <span className="heroTitleLine heroTitleAccent">Products emerge.</span>
+      <span className="heroTitleLine">
+        {siteConfig.titleLine1}
+      </span>{' '}
+      <span className="heroTitleLine heroTitleAccent">
+        {siteConfig.titleLine2}
+      </span>
     </h1>
   );
 }
