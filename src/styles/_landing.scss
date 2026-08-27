@@ -13,13 +13,10 @@
   top: 0;
   left: 50%;
   z-index: 20;
-  display: grid;
+  display: block;
   width: min(100%, var(--content-width));
-  height: 6.25rem;
-  padding-inline: var(--page-gutter);
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  border-bottom: 1px solid var(--line);
+  height: 8.9rem;
+  padding: 0;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
@@ -28,6 +25,15 @@
     opacity 650ms ease,
     transform 750ms cubic-bezier(0.2, 0.85, 0.25, 1);
   will-change: opacity, transform;
+}
+
+.siteHeaderNav {
+  display: grid;
+  height: 6.25rem;
+  padding-inline: var(--page-gutter);
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
 }
 
 .forgeReady .siteHeader {

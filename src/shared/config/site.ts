@@ -12,6 +12,16 @@ export const siteConfig = {
     { label: 'Process', href: '#process' },
     { label: 'Studio', href: '#studio' },
   ],
+  marqueeItems: [
+    { icon: 'applications', text: 'Applications' },
+    { icon: 'cloud', text: 'Cloud Development' },
+    { icon: 'devops', text: 'DevOps' },
+    { icon: 'build', text: 'Build Projects' },
+    { icon: 'pipeline', text: 'CI / CD Pipelines' },
+    { icon: 'cloudformation', text: 'CloudFormation' },
+    { icon: 'terraform', text: 'Terraform' },
+    { icon: 'iac', text: 'Infrastructure as Code' },
+  ],
   capabilities: [
     {
       index: '01',

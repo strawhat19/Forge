@@ -1,0 +1,87 @@
+.topMarquee {
+  position: relative;
+  width: 100%;
+  height: 2.65rem;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 32, 41, 0.18);
+  border-bottom: 1px solid rgba(255, 32, 41, 0.32);
+  background:
+    linear-gradient(90deg, rgba(255, 32, 41, 0.055), transparent 28%, rgba(255, 103, 36, 0.045)),
+    rgba(5, 6, 8, 0.92);
+}
+
+.topMarqueeFadeSides::before,
+.topMarqueeFadeSides::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: clamp(2.5rem, 5vw, 5rem);
+  content: '';
+  pointer-events: none;
+}
+
+.topMarqueeFadeSides::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--ink), transparent);
+}
+
+.topMarqueeFadeSides::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--ink), transparent);
+}
+
+.topMarqueeTrack {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+.topMarqueeTrack.isDragging {
+  cursor: grabbing;
+}
+
+.topMarqueeItem {
+  display: inline-flex;
+  min-width: max-content;
+  margin-inline-end: 0.65rem;
+  padding: 0.35rem 0.72rem 0.35rem 0.4rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--paper-soft);
+  border: 1px solid rgba(255, 32, 41, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 32, 41, 0.055);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.topMarqueeIcon {
+  width: 10px;
+  height: 10px;
+  display: grid;
+  border-radius: 50%;
+  place-items: center;
+  color: var(--paper);
+  /* border: 1px solid var(--line-hot); */
+  /* background: linear-gradient(145deg, #ff672442, #ff20291f); */
+}
+
+.topMarqueeIcon svg {
+  fill: none;
+  width: 10px;
+  height: 10px;
+  stroke-width: 1.6;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

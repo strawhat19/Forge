@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { siteConfig } from '@/shared/config/site';
+import TopMarquee from '@/app/components/chrome/top-marquee';
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,47 +33,51 @@ export default function SiteHeader() {
 
   return (
     <header className={`siteHeader${menuOpen ? ' mobileMenuOpen' : ''}`}>
-      <Link className="siteBrand" href={`/`} aria-label="Forge home" onClick={closeMenu}>
-        <span className="siteBrandMark">
-          <Image src={`/${siteConfig.logo}`} alt="Forge logo" width={28} height={32} priority />
-        </span>
-        <span>Forge</span>
-      </Link>
+      <TopMarquee />
 
-      <nav className="siteNav" aria-label="Primary navigation">
-        {siteConfig.navigation.map((item) => (
-          <Link key={item.href} href={item.href.startsWith('#') ? `/${item.href}` : item.href}>
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-
-      <div className="headerActions">
-        <Link className="headerAuthLink" href="/sign-in">
-          Sign in
-        </Link>
-        <Link className="headerAuthLink headerAuthLinkSignUp" href="/sign-up">
-          Sign up
-        </Link>
-        <Link className="headerCta" href="/#contact">
-          Start a build
-          <span aria-hidden="true">↗</span>
-        </Link>
-
-        <button
-          className="mobileMenuToggle"
-          type="button"
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-primary-navigation"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span className="mobileMenuIcon" aria-hidden="true">
-            <span />
-            <span />
-            <span />
+      <div className="siteHeaderNav">
+        <Link className="siteBrand" href={`/`} aria-label="Forge home" onClick={closeMenu}>
+          <span className="siteBrandMark">
+            <Image src={`/${siteConfig.logo}`} alt="Forge logo" width={28} height={32} priority />
           </span>
-        </button>
+          <span>Forge</span>
+        </Link>
+
+        <nav className="siteNav" aria-label="Primary navigation">
+          {siteConfig.navigation.map((item) => (
+            <Link key={item.href} href={item.href.startsWith('#') ? `/${item.href}` : item.href}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="headerActions">
+          <Link className="headerAuthLink" href="/sign-in">
+            Sign in
+          </Link>
+          <Link className="headerAuthLink headerAuthLinkSignUp" href="/sign-up">
+            Sign up
+          </Link>
+          <Link className="headerCta" href="/#contact">
+            Start a build
+            <span aria-hidden="true">↗</span>
+          </Link>
+
+          <button
+            className="mobileMenuToggle"
+            type="button"
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-primary-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="mobileMenuIcon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
       </div>
 
       <nav
