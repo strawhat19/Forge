@@ -6,7 +6,9 @@ import { siteConfig } from '@/shared/config/site';
 import ForgeIcon from '@/app/components/brand/forge-icon';
 import TopMarquee from '@/app/components/chrome/top-marquee';
 import GitHubLinks from '@/app/components/product/github-links';
+import AccountMenu from '@/app/components/chrome/account-menu';
 import NotificationCenter from '@/app/components/chrome/notification-center';
+import { useGlobalContext } from '@/shared/global-context';
 import { forgeLoaderStartEvent } from '@/app/components/loaders/forge-loader/forge-loader-events';
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FocusEvent } from 'react';
 import {
@@ -20,14 +22,18 @@ type SiteHeaderProps = {
 };
 
 export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
+  const { user, onSignOut } = useGlobalContext();
+  const userId = user?.id ?? null;
   const scrolledRef = useRef(false);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openAccountUserId, setOpenAccountUserId] = useState<string | null>(null);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [activeMobileSection, setActiveMobileSection] = useState<string | null>(null);
-  const headerSurfaceOpen = menuOpen || Boolean(activeMegaMenu) || notificationsOpen;
+  const accountOpen = userId !== null && openAccountUserId === userId;
+  const headerSurfaceOpen = menuOpen || Boolean(activeMegaMenu) || notificationsOpen || accountOpen;
   const headerGlassFilter = isScrolled || headerSurfaceOpen ? `blur(22px) saturate(130%)` : `blur(0) saturate(100%)`;
   const headerGlassStyle = {
     backdropFilter: headerGlassFilter,
@@ -43,16 +49,30 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
 
   const closeHeaderSurfaces = useCallback(() => {
     closeNavigation();
+    setOpenAccountUserId(null);
     setNotificationsOpen(false);
   }, [closeNavigation]);
 
+  const signOutUser = () => {
+    onSignOut();
+    closeHeaderSurfaces();
+  };
+
   const changeNotifications = useCallback((open: boolean) => {
     if (open) closeNavigation();
+    setOpenAccountUserId(null);
     setNotificationsOpen(open);
   }, [closeNavigation]);
 
+  const changeAccountMenu = useCallback((open: boolean) => {
+    if (open) closeNavigation();
+    setNotificationsOpen(false);
+    setOpenAccountUserId(open ? userId : null);
+  }, [closeNavigation, userId]);
+
   const changeMegaMenu = (menuId: string | null) => {
     setMenuOpen(false);
+    setOpenAccountUserId(null);
     setNotificationsOpen(false);
     setActiveMobileSection(null);
     setActiveMegaMenu(menuId);
@@ -61,6 +81,7 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
   const toggleMobileMenu = () => {
     const nextOpen = !menuOpen;
     setActiveMegaMenu(null);
+    setOpenAccountUserId(null);
     setNotificationsOpen(false);
     setMenuOpen(nextOpen);
     if (!nextOpen) setActiveMobileSection(null);
@@ -98,10 +119,10 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
   }, [closeHeaderSurfaces]);
 
   useEffect(() => {
-    const overlayOpen = menuOpen || Boolean(activeMegaMenu) || notificationsOpen;
-    if (overlayOpen) showGaussianBlurOverlay(`site-header`, menuOpen || notificationsOpen ? 18 : 12);
+    const overlayOpen = menuOpen || Boolean(activeMegaMenu) || notificationsOpen || accountOpen;
+    if (overlayOpen) showGaussianBlurOverlay(`site-header`, menuOpen || notificationsOpen || accountOpen ? 18 : 12);
     else hideGaussianBlurOverlay(`site-header`);
-  }, [activeMegaMenu, menuOpen, notificationsOpen]);
+  }, [accountOpen, activeMegaMenu, menuOpen, notificationsOpen]);
 
   useEffect(() => () => hideGaussianBlurOverlay(`site-header`), []);
 
@@ -210,12 +231,18 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerAuthLink hideOnSmallMegaMenu" href="/sign-in"><ForgeIcon name="sign-in" />
-            Contact
-          </Link>
-          <Link className="headerAuthLink headerAuthLinkSignUp" href="/sign-up"><ForgeIcon name="sign-up" />
-            Register
-          </Link>
+          {user ? (
+            <AccountMenu open={accountOpen} onOpenChange={changeAccountMenu} onSignOut={signOutUser} />
+          ) : (
+            <>
+              <Link className="headerAuthLink hideOnSmallMegaMenu" href="/sign-in"><ForgeIcon name="sign-in" />
+                Sign in
+              </Link>
+              <Link className="headerAuthLink headerAuthLinkSignUp" href="/sign-up"><ForgeIcon name="sign-up" />
+                Register
+              </Link>
+            </>
+          )}
           <Link className="headerCta hideOnSmallMegaMenu" href="/download">
             <span className="headerCtaLabel">Download</span><span className="headerCtaIcon" aria-hidden="true"><ForgeIcon name="download" /></span>
           </Link>
@@ -273,6 +300,17 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
         </div>
 
         <div className="mobileNavActions">
+          {user ? (
+            <>
+              <Link href="/profile" tabIndex={menuOpen ? 0 : -1} onClick={closeNavigation}><ForgeIcon name="profile" />Profile</Link>
+              <Link className="mobileNavSignUp" href="/dashboard" tabIndex={menuOpen ? 0 : -1} onClick={closeNavigation}><ForgeIcon name="dashboard" />Dashboard</Link>
+            </>
+          ) : (
+            <>
+              <Link href="/sign-in" tabIndex={menuOpen ? 0 : -1} onClick={closeNavigation}><ForgeIcon name="sign-in" />Sign in</Link>
+              <Link className="mobileNavSignUp" href="/sign-up" tabIndex={menuOpen ? 0 : -1} onClick={closeNavigation}><ForgeIcon name="sign-up" />Register</Link>
+            </>
+          )}
           <Link className="mobileNavCta" href="/download" tabIndex={menuOpen ? 0 : -1} onClick={closeNavigation}><span className="mobileNavCtaLabel"><ForgeIcon name="download" />Download Forge</span><span className="mobileNavCtaIcon" aria-hidden="true"><ForgeIcon name="download" /></span></Link>
         </div>
       </nav>

@@ -497,6 +497,189 @@
   transform: translateY(-1px) rotateX(-14deg);
 }
 
+.accountMenu {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.accountMenuButton {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  place-items: center;
+  color: var(--paper);
+  border: 1px solid var(--line-hot);
+  border-radius: 50%;
+  background: transparent;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 240ms cubic-bezier(0.2, 0.85, 0.25, 1);
+}
+
+.accountMenuButton:hover,
+.accountMenuButton:focus-visible,
+.accountMenuButton[aria-expanded='true'] {
+  color: var(--paper);
+  border-color: var(--line-hot);
+  background: var(--red);
+  transform: translateY(-1px) rotateX(-14deg);
+}
+
+.accountPopover {
+  position: absolute;
+  top: calc(100% + 2rem);
+  right: 0;
+  z-index: 135;
+  width: min(calc(100vw - (var(--page-gutter) * 2)), 22rem);
+  overflow: hidden;
+  color: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255, 32, 41, 0.2), transparent 17rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.05), transparent 38%),
+    rgba(4, 5, 8, 0.985);
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.62), inset 0 1px rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  animation: notificationPopoverIn 280ms cubic-bezier(0.2, 0.85, 0.25, 1) both;
+}
+
+.accountPopoverHeader {
+  display: grid;
+  min-height: 6.4rem;
+  padding: 1.25rem;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.accountPopoverAvatar {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  color: var(--paper);
+  border: 1px solid var(--line-hot);
+  border-radius: 50%;
+  background: rgba(255, 32, 41, 0.12);
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.accountPopoverHeader > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.28rem;
+}
+
+.accountPopoverHeader small,
+.accountPopoverHeader > div > span,
+.accountPopoverLinks small,
+.accountPopoverSignOut small {
+  overflow: hidden;
+  color: var(--steel-light);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.accountPopoverHeader small {
+  color: var(--red);
+}
+
+.accountPopoverHeader strong {
+  overflow: hidden;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.accountPopoverLinks {
+  display: grid;
+}
+
+.accountPopoverLinks a,
+.accountPopoverSignOut {
+  display: grid;
+  width: 100%;
+  min-height: 4.75rem;
+  padding: 0.85rem 1.1rem;
+  grid-template-columns: 2.35rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--paper);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.accountPopoverLinks a:hover,
+.accountPopoverLinks a:focus-visible,
+.accountPopoverSignOut:hover,
+.accountPopoverSignOut:focus-visible {
+  color: var(--paper);
+  background: linear-gradient(90deg, rgba(255, 32, 41, 0.11), rgba(255, 255, 255, 0.025));
+}
+
+.accountPopoverLinks a > span:nth-child(2),
+.accountPopoverSignOut > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 0.28rem;
+}
+
+.accountPopoverLinks strong,
+.accountPopoverSignOut strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.98rem;
+  text-transform: uppercase;
+}
+
+.accountPopoverLinks a > span:last-child,
+.accountPopoverSignOut > span:last-child {
+  color: var(--red);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.5rem;
+}
+
+.accountPopoverIcon {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  color: var(--red);
+  border: 1px solid var(--line-hot);
+  border-radius: 50%;
+  background: rgba(255, 32, 41, 0.07);
+}
+
+.accountPopoverIcon .forgeIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.accountPopoverSignOut {
+  min-height: 4.25rem;
+  border-bottom: 0;
+  background: rgba(255, 255, 255, 0.025);
+}
+
 .notificationPopover {
   position: absolute;
   top: calc(100% + 2rem);
@@ -2663,6 +2846,14 @@
     -webkit-backdrop-filter: blur(18px);
   }
 
+  .accountPopover {
+    position: fixed;
+    top: 92px;
+    right: var(--page-gutter);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
   .mobileProductNav {
     max-height: calc(100svh - 10rem);
     overflow-y: auto;
@@ -2927,6 +3118,35 @@
 }
 
 @media (max-width: 680px) {
+  .notificationBell,
+  .accountMenuButton,
+  .mobileMenuToggle,
+  .headerCta .headerCtaIcon {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .mobileMenuToggle {
+    flex-basis: 2.2rem;
+  }
+
+  .notificationBell > .forgeIcon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .notificationBell > span {
+    top: -0.34rem;
+    right: -0.3rem;
+    min-width: 1.22rem;
+    height: 1.22rem;
+    font-size: 0.5rem;
+  }
+
+  .accountMenuButton {
+    font-size: 0.8rem;
+  }
+
   .mobileProductNav {
     max-height: calc(100svh - 8.5rem);
   }
@@ -2946,6 +3166,14 @@
     position: fixed;
     left: var(--page-gutter);
     right: var(--page-gutter);
+  }
+
+  .accountPopover {
+    position: fixed;
+    top: 92px;
+    right: var(--page-gutter);
+    left: var(--page-gutter);
+    width: auto;
   }
 
   .notificationPopoverList {
@@ -3364,7 +3592,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .notificationPopover {
+  .notificationPopover,
+  .accountPopover {
     animation: none;
   }
 

@@ -1,74 +1,56 @@
 import withPWA from 'next-pwa';
 import type { NextConfig } from 'next';
 
-// Keep page implementations under (main)/pages so they inherit the same
-// loader, header, footer, fonts, and global styles as the home page. Add a
-// folder name here when a new clean top-level page is introduced.
+type PageRoute = {
+  page?: string;
+  redirects: readonly string[];
+};
+
+// Add a public route key and its aliases here. The page folder defaults to the
+// route key; set `page` only when the implementation folder has a different name.
 const pageRoutes = {
-  docs: 'docs',
-  plans: 'plans',
-  product: 'product',
-  features: 'features',
-  download: 'download',
-  notifications: 'notifications',
-  workflows: 'workflows',
-  'sign-in': 'signin',
-  'sign-up': 'signup',
-} as const;
+  docs: { redirects: [] },
+  plans: { redirects: [] },
+  features: { redirects: [] },
+  download: { redirects: [] },
+  profile: { redirects: [] },
+  dashboard: { redirects: [] },
+  workflows: { redirects: [] },
+  notifications: { redirects: [] },
+  product: { redirects: ['overview'] },
+  'sign-in': { page: 'signin', redirects: ['signin', 'login'] },
+  'sign-up': { page: 'signup', redirects: ['signup', 'register'] },
+} as const satisfies Record<string, PageRoute>;
+
+const getPageFolder = (route: string, config: PageRoute) => config.page ?? route;
 
 const nextConfig: NextConfig = {
   turbopack: {},
   devIndicators: false,
   reactStrictMode: true,
   rewrites: async () => [
-    ...Object.entries(pageRoutes).map(([route, page]) => ({
+    ...Object.entries(pageRoutes).map(([route, config]) => ({
       source: `/${route}`,
-      destination: `/pages/${page}`,
+      destination: `/pages/${getPageFolder(route, config)}`,
     })),
   ],
   redirects: async () => [
-    {
-      source: '/signin',
-      destination: '/sign-in',
-      permanent: true,
-    },
-    {
-      source: '/signup',
-      destination: '/sign-up',
-      permanent: true,
-    },
-    {
-      source: '/login',
-      destination: '/sign-in',
-      permanent: true,
-    },
-    {
-      source: '/register',
-      destination: '/sign-up',
-      permanent: true,
-    },
-    {
-      source: '/overview',
-      destination: '/product',
-      permanent: true,
-    },
-    {
-      source: '/pages/signin',
-      destination: '/sign-in',
-      permanent: true,
-    },
-    {
-      source: '/pages/signup',
-      destination: '/sign-up',
-      permanent: true,
-    },
-    ...Object.entries(pageRoutes)
-      .filter(([route, page]) => route === page)
-      .map(([route, page]) => ({
-        source: `/pages/${page}`,
-        destination: `/${route}`,
-        permanent: true,
-      })),
+    ...Object.entries(pageRoutes).flatMap(([route, config]) => {
+      const page = getPageFolder(route, config);
+
+      return [
+        ...config.redirects.map(alias => ({
+          source: `/${alias}`,
+          destination: `/${route}`,
+          permanent: true,
+        })),
+        {
+          source: `/pages/${page}`,
+          destination: `/${route}`,
+          permanent: true,
+        },
+      ];
+    }),
   ],
   images: {
     remotePatterns: [

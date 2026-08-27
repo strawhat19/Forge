@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
+import { User } from '@/shared/models/User';
+import { useGlobalContext } from '@/shared/global-context';
+import { DataSources, Providers, Roles } from '@/shared/types/types';
 
 type AuthMode = 'sign-in' | 'sign-up';
 
@@ -31,20 +34,96 @@ const modeCopy = {
 
 export default function ForgeAuthForm({ mode, variant = 'page' }: ForgeAuthFormProps) {
   const [status, setStatus] = useState<string | null>(null);
+  const { authReady, user, users, setUser, onSignOut } = useGlobalContext();
   const copy = modeCopy[mode];
   const compact = variant === 'compact';
+  const cardClassName = `authCard${compact ? ' authCardCompact' : ''}`;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus(
-      mode === 'sign-in'
-        ? 'Your form is ready. Connect Forge to an authentication provider to finish signing in.'
-        : 'Your form is ready. Connect Forge to an authentication provider to finish creating your account.',
-    );
+    const form = event.currentTarget;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const name = String(formData.get(`name`) ?? ``).trim();
+    const email = String(formData.get(`email`) ?? ``).trim().toLowerCase();
+    const password = String(formData.get(`password`) ?? ``);
+    const passwordConfirmation = String(formData.get(`passwordConfirmation`) ?? ``);
+    const confirmationInput = form.elements.namedItem(`passwordConfirmation`);
+
+    if (mode === `sign-up` && password !== passwordConfirmation) {
+      if (confirmationInput instanceof HTMLInputElement) {
+        confirmationInput.setCustomValidity(`Passwords do not match.`);
+        confirmationInput.reportValidity();
+      }
+      setStatus(`Passwords do not match.`);
+      return;
+    }
+
+    const storedUser = users.find(item => item.email === email);
+    const nextUser = new User({
+      ...storedUser,
+      name: mode === `sign-up` ? name : storedUser?.name,
+      email,
+      role: storedUser?.role ?? Roles.Customer,
+      roles: storedUser?.roles?.length ? storedUser.roles : [Roles.Customer],
+      provider: Providers.Simulated,
+      dataSource: DataSources.Simulated,
+      providerId: `frontend-simulation`,
+      signedIn: true,
+    });
+
+    setUser(nextUser);
+    setStatus(null);
+    form.reset();
   };
 
+  const handleSignOut = () => {
+    onSignOut();
+    setStatus(`Simulated session signed out.`);
+  };
+
+  if (!authReady) {
+    return (
+      <div className={cardClassName} role="status" aria-live="polite">
+        <div className="authSession">
+          <span>Local session</span>
+          <strong>Restoring access</strong>
+          <small>Checking this browser</small>
+        </div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return (
+      <div className={cardClassName}>
+        {compact ? null : (
+          <div className="authCardHeader">
+            <span className="authCardIndex">01 / ACCESS</span>
+            <span className="authCardMark" aria-hidden="true">✓</span>
+          </div>
+        )}
+        <div className="authSession">
+          <span>Simulated session</span>
+          <strong>{user.name}</strong>
+          <small>{user.email}</small>
+          <small>Role / {user.role}</small>
+          <button className="authSubmit" type="button" onClick={handleSignOut}>
+            Sign out
+            <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <form className={`authCard${compact ? ' authCardCompact' : ''}`} onSubmit={handleSubmit}>
+    <form className={cardClassName} onSubmit={handleSubmit}>
       {compact ? null : (
         <div className="authCardHeader">
           <span className="authCardIndex">01 / ACCESS</span>
@@ -79,7 +158,15 @@ export default function ForgeAuthForm({ mode, variant = 'page' }: ForgeAuthFormP
       {mode === 'sign-up' ? (
         <label className="authField">
           <span>Confirm password</span>
-          <input name="passwordConfirmation" type="password" placeholder="Repeat your password" autoComplete="new-password" minLength={8} required />
+          <input
+            name="passwordConfirmation"
+            type="password"
+            placeholder="Repeat your password"
+            autoComplete="new-password"
+            minLength={8}
+            required
+            onInput={(event) => event.currentTarget.setCustomValidity(``)}
+          />
         </label>
       ) : null}
 

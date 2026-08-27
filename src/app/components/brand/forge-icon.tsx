@@ -39,8 +39,14 @@ export default function ForgeIcon({ name, className = ``, gradientId }: ForgeIco
         return <><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 6 2.5 8H3.5c0-2 2.5-2 2.5-8Z" /><path d="M10 20h4" /></>;
       case `sign-in`:
         return <><path d="M10 5H5v14h5M13 8l4 4-4 4m-6-4h10" /></>;
+      case `sign-out`:
+        return <><path d="M14 5h5v14h-5M11 8l-4 4 4 4m6-4H7" /></>;
       case `sign-up`:
         return <><circle cx="9" cy="8" r="3" /><path d="M3.5 19c.7-3.2 2.5-5 5.5-5s4.8 1.8 5.5 5M18 7v6m-3-3h6" /></>;
+      case `profile`:
+        return <><circle cx="12" cy="8" r="3.5" /><path d="M4.5 20c.8-4.2 3.3-6.5 7.5-6.5s6.7 2.3 7.5 6.5" /></>;
+      case `dashboard`:
+        return <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>;
       case `stage`:
         return <><path d="M4 18h16M6 14h12M8 10h8M10 6h4" /><circle cx="12" cy="4" r="1" /></>;
       case `inspect`:

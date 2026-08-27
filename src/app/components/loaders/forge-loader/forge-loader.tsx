@@ -5,15 +5,57 @@ import { SplitText } from 'gsap/SplitText';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import AnvilMark from '@/app/components/brand/anvil-mark';
+import Counter, { type CounterHandle } from '@/app/components/effects/counter';
 import {
   isForgeLoaderDone,
   markForgeLoaderLoading,
   markForgeLoaderDone,
 } from './forge-loader-events';
 
-const MAX_BLUR = 7;
 const NAVIGATION_COVER_DELAY_MS = 620;
 const NAVIGATION_FALLBACK_MS = 5000;
+
+const loaderStatusSteps = [
+  `Heating forge`,
+  `Reading templates`,
+  `Resolving inputs`,
+  `Comparing diffs`,
+  `Tracing stacks`,
+  `Staging changes`,
+  `Inspecting impact`,
+  `Checking drift`,
+  `Setting guardrails`,
+  `Recording history`,
+] as const;
+
+const routeLabels: Record<string, string> = {
+  '/': `Forge`,
+  '/product': `Product`,
+  '/features': `Features`,
+  '/workflows': `Workflows`,
+  '/notifications': `Notifications`,
+  '/docs': `Documentation`,
+  '/download': `Download`,
+  '/plans': `Plans`,
+  '/sign-in': `Sign in`,
+  '/sign-up': `Sign up`,
+  '/profile': `Profile`,
+  '/dashboard': `Dashboard`,
+  '/api': `API`,
+};
+
+const getRouteLabel = (path: string) => {
+  const normalizedPath = path.length > 1 ? path.replace(/\/$/, ``) : path;
+  const configuredLabel = routeLabels[normalizedPath];
+  if (configuredLabel) return configuredLabel;
+
+  const finalSegment = normalizedPath.split(`/`).filter(Boolean).at(-1);
+  if (!finalSegment) return `Forge`;
+
+  return decodeURIComponent(finalSegment)
+    .replaceAll(`-`, ` `)
+    .replace(/\b\w/g, character => character.toUpperCase());
+};
 
 export default function ForgeLoader() {
   const pathname = usePathname();
@@ -23,10 +65,11 @@ export default function ForgeLoader() {
   const coreRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
   const topRailRef = useRef<HTMLSpanElement | null>(null);
-  const countRef = useRef<HTMLSpanElement | null>(null);
+  const destinationShellRef = useRef<HTMLSpanElement | null>(null);
+  const destinationRef = useRef<HTMLSpanElement | null>(null);
+  const counterRef = useRef<CounterHandle | null>(null);
   const statusRef = useRef<HTMLSpanElement | null>(null);
   const bottomRailRef = useRef<HTMLSpanElement | null>(null);
-  const blurRef = useRef<SVGFEGaussianBlurElement | null>(null);
   const tailRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const startReplayRef = useRef<() => void>(() => undefined);
@@ -36,53 +79,72 @@ export default function ForgeLoader() {
   const finishRequestedRef = useRef(false);
   const fallbackTimerRef = useRef<number | null>(null);
   const navigationTimerRef = useRef<number | null>(null);
+  const destinationPathRef = useRef(pathname);
 
   useLayoutEffect(() => {
     const overlay = overlayRef.current;
     const core = coreRef.current;
     const ring = ringRef.current;
     const topRail = topRailRef.current;
-    const count = countRef.current;
+    const destinationShell = destinationShellRef.current;
+    const destination = destinationRef.current;
     const status = statusRef.current;
     const bottomRail = bottomRailRef.current;
-    const blurNode = blurRef.current;
     const tail = tailRef.current;
 
-    if (!overlay || !core || !ring || !topRail || !count || !status || !bottomRail || !blurNode || !tail) return;
+    if (!overlay || !core || !ring || !topRail || !destinationShell || !destination || !status || !bottomRail || !tail) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     gsap.registerPlugin(SplitText);
 
     const progress = { value: 0 };
-    let lastValue = 0;
-    let lastTime = performance.now();
-    let blur = 0;
     let topRailSplit: SplitText | null = null;
+    let destinationSplit: SplitText | null = null;
     let statusSplit: SplitText | null = null;
     let bottomRailSplit: SplitText | null = null;
+    let statusTween: gsap.core.Tween | null = null;
+    let activeStatusIndex = 0;
 
     const revertLoaderText = () => {
+      statusTween?.kill();
+      statusTween = null;
       topRailSplit?.revert();
+      destinationSplit?.revert();
       statusSplit?.revert();
       bottomRailSplit?.revert();
       topRailSplit = null;
+      destinationSplit = null;
       statusSplit = null;
       bottomRailSplit = null;
     };
 
-    const setStatusText = (text: string) => {
+    const setStatusText = (text: string, animate = false) => {
+      statusTween?.kill();
+      statusTween = null;
       statusSplit?.revert();
       statusSplit = null;
       status.textContent = text;
+
+      if (!animate || reducedMotion) return;
+
+      statusTween = gsap.fromTo(
+        status,
+        { autoAlpha: 0, rotateX: -24, yPercent: 65, transformOrigin: `50% 100%` },
+        { autoAlpha: 1, rotateX: 0, yPercent: 0, duration: 0.3, ease: `power3.out`, overwrite: true },
+      );
     };
 
     const prepareLoaderText = (statusText: string) => {
       revertLoaderText();
       status.textContent = statusText;
+      destination.textContent = getRouteLabel(destinationPathRef.current);
+      overlay.setAttribute(`aria-label`, `Loading ${destination.textContent}`);
 
       if (reducedMotion) {
-        return { top: [], status: [], bottom: [] };
+        return { top: [], destination: [], status: [], bottom: [] };
       }
+
+      gsap.set(destinationShell, { autoAlpha: 0, y: 8 });
 
       const splitOptions = {
         type: 'chars',
@@ -93,16 +155,18 @@ export default function ForgeLoader() {
       } as const;
 
       topRailSplit = SplitText.create(topRail, splitOptions);
+      destinationSplit = SplitText.create(destination, splitOptions);
       statusSplit = SplitText.create(status, splitOptions);
       bottomRailSplit = SplitText.create(bottomRail, splitOptions);
 
       const targets = {
         top: topRailSplit.chars,
+        destination: destinationSplit.chars,
         status: statusSplit.chars,
         bottom: bottomRailSplit.chars,
       };
 
-      gsap.set([...targets.top, ...targets.status, ...targets.bottom], {
+      gsap.set([...targets.top, ...targets.destination, ...targets.status, ...targets.bottom], {
         autoAlpha: 0,
         rotateX: -62,
         transformOrigin: '50% 100%',
@@ -117,6 +181,12 @@ export default function ForgeLoader() {
       targets: ReturnType<typeof prepareLoaderText>,
     ) => {
       timeline
+        .to(destinationShell, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.4,
+          ease: 'power3.out',
+        }, 0.12)
         .to(targets.top, {
           autoAlpha: 1,
           rotateX: 0,
@@ -133,6 +203,14 @@ export default function ForgeLoader() {
           ease: 'power4.out',
           stagger: 0.018,
         }, 0.16)
+        .to(targets.destination, {
+          autoAlpha: 1,
+          rotateX: 0,
+          yPercent: 0,
+          duration: 0.42,
+          ease: 'power4.out',
+          stagger: 0.025,
+        }, 0.2)
         .to(targets.bottom, {
           autoAlpha: 1,
           rotateX: 0,
@@ -150,20 +228,17 @@ export default function ForgeLoader() {
     };
 
     const renderProgress = () => {
-      const now = performance.now();
-      const elapsed = Math.max(now - lastTime, 1) / 1000;
-      const velocity = Math.abs(progress.value - lastValue) / elapsed;
-      const targetBlur = gsap.utils.clamp(0, MAX_BLUR, velocity * 0.045);
-
-      blur += (targetBlur - blur) * 0.3;
       const rounded = Math.round(progress.value);
+      const nextStatusIndex = Math.min(Math.floor(rounded / 10), loaderStatusSteps.length - 1);
+
+      if (nextStatusIndex !== activeStatusIndex) {
+        activeStatusIndex = nextStatusIndex;
+        setStatusText(loaderStatusSteps[nextStatusIndex], true);
+      }
 
       ring.style.setProperty('--loader-progress', `${progress.value * 3.6}deg`);
-      count.textContent = String(rounded).padStart(2, '0');
+      counterRef.current?.setValue(progress.value);
       overlay.setAttribute('aria-valuenow', String(rounded));
-      blurNode.setAttribute('stdDeviation', `${blur.toFixed(2)} 0.35`);
-      lastValue = progress.value;
-      lastTime = now;
     };
 
     const hideOverlay = () => {
@@ -198,11 +273,9 @@ export default function ForgeLoader() {
       markForgeLoaderLoading();
 
       progress.value = 0;
-      lastValue = 0;
-      lastTime = performance.now();
-      blur = 0;
-      const replayTextTargets = prepareLoaderText('Heating the next view');
-      blurNode.setAttribute('stdDeviation', '0 0.35');
+      counterRef.current?.reset();
+      activeStatusIndex = 0;
+      const replayTextTargets = prepareLoaderText(loaderStatusSteps[0]);
       gsap.set(overlay, { autoAlpha: 1, display: 'grid', yPercent: 100 });
       gsap.set(core, { autoAlpha: 1, scale: 0.94, y: 12 });
       gsap.set(bottomRail, { autoAlpha: 1 });
@@ -257,8 +330,8 @@ export default function ForgeLoader() {
               ease: 'power2.inOut',
               onUpdate: renderProgress,
               onComplete: () => {
-                blurNode.setAttribute('stdDeviation', '0 0');
-                setStatusText('Ready to strike');
+                counterRef.current?.settle();
+                setStatusText('Ready to strike', true);
               },
             },
           )
@@ -276,7 +349,8 @@ export default function ForgeLoader() {
     finishReplayRef.current = finishReplay;
 
     const initialTimeline = gsap.context(() => {
-      const initialTextTargets = prepareLoaderText('Heating the forge');
+      activeStatusIndex = 0;
+      const initialTextTargets = prepareLoaderText(loaderStatusSteps[0]);
 
       if (reducedMotion) {
         progress.value = 100;
@@ -319,8 +393,8 @@ export default function ForgeLoader() {
             ease: 'power3.inOut',
             onUpdate: renderProgress,
             onComplete: () => {
-              blurNode.setAttribute('stdDeviation', '0 0');
-              setStatusText('Ready to strike');
+              counterRef.current?.settle();
+              setStatusText('Ready to strike', true);
             },
           },
           0.18,
@@ -340,6 +414,7 @@ export default function ForgeLoader() {
         navigationTimerRef.current = null;
       }
       timelineRef.current?.kill();
+      statusTween?.kill();
       startReplayRef.current = () => undefined;
       finishReplayRef.current = () => undefined;
       initialTimeline.revert();
@@ -351,6 +426,7 @@ export default function ForgeLoader() {
     if (previousPathnameRef.current === pathname) return;
 
     previousPathnameRef.current = pathname;
+    destinationPathRef.current = pathname;
 
     if (navigationTimerRef.current !== null) {
       window.clearTimeout(navigationTimerRef.current);
@@ -391,6 +467,7 @@ export default function ForgeLoader() {
 
       event.preventDefault();
       event.stopPropagation();
+      destinationPathRef.current = url.pathname;
       startReplayRef.current();
 
       if (navigationTimerRef.current !== null) {
@@ -401,7 +478,7 @@ export default function ForgeLoader() {
       const nativeNavigation = url.pathname === `/api` || url.pathname.startsWith(`/api/`);
       navigationTimerRef.current = window.setTimeout(() => {
         navigationTimerRef.current = null;
-        if (nativeNavigation) window.location.assign(destination);
+        if (nativeNavigation) window.location.assign(url.href);
         else router.push(destination);
       }, NAVIGATION_COVER_DELAY_MS);
     };
@@ -416,6 +493,7 @@ export default function ForgeLoader() {
         window.clearTimeout(navigationTimerRef.current);
         navigationTimerRef.current = null;
       }
+      destinationPathRef.current = window.location.pathname;
       startReplayRef.current();
     };
 
@@ -433,14 +511,6 @@ export default function ForgeLoader() {
       aria-valuemax={100}
       aria-valuenow={0}
     >
-      <svg className="forgeLoaderFilter" aria-hidden="true" focusable="false">
-        <defs>
-          <filter id="forgeMotionBlur" x="-60%" y="-60%" width="220%" height="220%" colorInterpolationFilters="sRGB">
-            <feGaussianBlur ref={blurRef} in="SourceGraphic" stdDeviation="0 0" />
-          </filter>
-        </defs>
-      </svg>
-
       <span ref={topRailRef} className="forgeLoaderRail forgeLoaderRailTop">
         Forged in Fire
       </span>
@@ -455,15 +525,30 @@ export default function ForgeLoader() {
               <AnvilMark />
             </span>
             <AnvilMark className="forgeLoaderAnvil" />
+            <span ref={destinationShellRef} className="forgeLoaderDestination">
+              <small aria-hidden="true">Loading</small>
+              <span ref={destinationRef}>{getRouteLabel(pathname)}</span>
+            </span>
           </div>
         </div>
 
         <div className="forgeLoaderReadout">
           <span ref={statusRef} className="forgeLoaderStatus">Heating the forge</span>
-          <span className="forgeLoaderPercent">
-            <span ref={countRef} className="forgeLoaderNumber">00</span>
-            <span className="forgeLoaderUnit">%</span>
-          </span>
+          <Counter
+            ref={counterRef}
+            number={100}
+            autoplay={false}
+            interval={16}
+            blurIntensity={7}
+            blurVelocity={0.045}
+            blurSmoothing={0.3}
+            padStart={2}
+            suffix="%"
+            className="forgeLoaderPercent"
+            valueClassName="forgeLoaderNumber"
+            suffixClassName="forgeLoaderUnit"
+            ariaHidden
+          />
         </div>
       </div>
 

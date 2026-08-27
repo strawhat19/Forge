@@ -1,0 +1,34 @@
+.counter {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  line-height: inherit;
+}
+
+.counterFilter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.counterValue {
+  display: inline-block;
+  min-width: 1ch;
+  text-align: end;
+  will-change: filter;
+}
+
+.counterPrefix,
+.counterSuffix {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .counterValue {
+    filter: none !important;
+  }
+}

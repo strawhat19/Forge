@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/shared/config/site';
 import SiteHeader from '@/app/components/chrome/site-header';
 import SiteFooter from '@/app/components/chrome/site-footer';
+import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import GaussianBlurOverlay from '@/app/components/effects/gaussian-blur-overlay';
 import { Barlow_Condensed, Geist, Geist_Mono } from 'next/font/google';
@@ -71,12 +72,14 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
         <noscript>
           <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
-        <ForgeLoader />
-        <GaussianBlurOverlay />
-        <SiteHeader sticky />
-        <main>{children}</main>
-        <SiteFooter />
-        <ScrollToTop />
+        <GlobalProvider>
+          <ForgeLoader />
+          <GaussianBlurOverlay />
+          <SiteHeader sticky />
+          <main>{children}</main>
+          <SiteFooter />
+          <ScrollToTop />
+        </GlobalProvider>
       </body>
     </html>
   );

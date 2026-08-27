@@ -1,12 +1,14 @@
 @use '../styles/theme';
 @use '../styles/loader';
 @use '../styles/text-reveal';
+@use '../styles/counter';
 @use '../styles/blur-overlay';
 @use '../styles/marquee';
 @use '../styles/landing';
 @use '../styles/auth';
 @use '../styles/responsive';
 @use '../styles/product';
+@use '../styles/dashboard';
 
 // html, body {
 //   &:has(.forgeLoading) {
