@@ -543,36 +543,36 @@
 }
 
 .notificationPopoverHeader > button {
-  display: grid;
+  padding: 0;
   width: 2rem;
   height: 2rem;
-  padding: 0;
+  display: grid;
+  font-size: 1rem;
+  border-radius: 50%;
   place-items: center;
   color: var(--steel-light);
   border: 1px solid var(--line);
-  border-radius: 50%;
   background: rgba(255, 255, 255, 0.025);
-  font-size: 1rem;
   transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 
 .notificationPopoverHeader > button:hover,
 .notificationPopoverHeader > button:focus-visible {
   color: var(--paper);
+  transform: rotate(8deg);
   border-color: var(--line-hot);
   background: rgba(255, 32, 41, 0.1);
-  transform: rotate(8deg);
 }
 
 .notificationPopoverList {
-  max-height: min(28rem, calc(100svh - 20rem));
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  overscroll-behavior: contain;
   list-style: none;
-  scrollbar-color: var(--red) rgba(255, 255, 255, 0.04);
   scrollbar-width: thin;
+  overscroll-behavior: contain;
+  max-height: min(28rem, calc(100svh - 20rem));
+  scrollbar-color: var(--red) rgba(255, 255, 255, 0.04);
 }
 
 .notificationPopoverList li {
@@ -580,12 +580,12 @@
 }
 
 .notificationPopoverList a {
+  gap: 0.9rem;
   display: grid;
   min-height: 7rem;
+  align-items: start;
   padding: 1rem 1.25rem;
   grid-template-columns: 2.35rem minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 0.9rem;
   transition: color 180ms ease, background 180ms ease;
 }
 
