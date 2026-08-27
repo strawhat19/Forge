@@ -162,6 +162,11 @@
   transform: rotate(45deg);
 }
 
+.mobileMenuToggle,
+.mobileNav {
+  display: none;
+}
+
 .scrollToTop {
   position: fixed;
   right: max(1.25rem, calc(0.875rem + env(safe-area-inset-right, 0px)));

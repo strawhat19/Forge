@@ -46,7 +46,7 @@ html.forgeLoading body > :not(.forgeLoader) {
   aspect-ratio: 1;
   place-items: center;
   border-radius: 50%;
-  background: conic-gradient(from -90deg, var(--red) 0deg, var(--ember) var(--loader-progress), rgba(255, 255, 255, 0.09) var(--loader-progress), rgba(255, 255, 255, 0.09) 360deg);
+  background: conic-gradient(from 0deg, var(--red) 0deg, var(--ember) var(--loader-progress), rgba(255, 255, 255, 0.09) var(--loader-progress), rgba(255, 255, 255, 0.09) 360deg);
   box-shadow:
     0 0 4rem rgba(255, 32, 41, 0.08),
     inset 0 0 2rem rgba(0, 0, 0, 0.45);
