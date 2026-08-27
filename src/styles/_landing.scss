@@ -12,7 +12,7 @@
   position: absolute;
   top: 0;
   left: 50%;
-  z-index: 20;
+  z-index: 120;
   display: block;
   width: min(100%, var(--content-width));
   height: 8.9rem;
@@ -379,6 +379,10 @@
 .buttonPrimary {
   font-size: 14px;
   font-weight: 900;
+  color: var(--paper);
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-fill-color: currentColor;
   background: var(--red);
   transition: color 200ms ease, background 200ms ease, box-shadow 200ms ease;
 }

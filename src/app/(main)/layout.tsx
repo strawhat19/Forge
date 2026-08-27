@@ -5,6 +5,7 @@ import { siteConfig } from '@/shared/config/site';
 import SiteHeader from '@/app/components/chrome/site-header';
 import SiteFooter from '@/app/components/chrome/site-footer';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
+import GaussianBlurOverlay from '@/app/components/effects/gaussian-blur-overlay';
 import { Barlow_Condensed, Geist, Geist_Mono } from 'next/font/google';
 import ForgeLoader from '@/app/components/loaders/forge-loader/forge-loader';
 
@@ -71,6 +72,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
           <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending{visibility:visible!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
         <ForgeLoader />
+        <GaussianBlurOverlay />
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />

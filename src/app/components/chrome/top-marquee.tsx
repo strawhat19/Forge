@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useId, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { siteConfig } from '@/shared/config/site';
 
 type TopMarqueeProps = {
@@ -19,6 +19,7 @@ type MarqueeIconProps = {
 const dragThreshold = 6;
 
 function MarqueeIcon({ name }: MarqueeIconProps) {
+  const gradientId = `forge-marquee-icon-${useId().replaceAll(':', '')}`;
   const icon = (() => {
     switch (name) {
       case 'applications':
@@ -43,7 +44,18 @@ function MarqueeIcon({ name }: MarqueeIconProps) {
   })();
 
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg
+      viewBox="0 0 24 24"
+      stroke={`url(#${gradientId})`}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="var(--red)" />
+          <stop offset="1" stopColor="var(--ember)" />
+        </linearGradient>
+      </defs>
       {icon}
     </svg>
   );

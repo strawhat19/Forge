@@ -5,6 +5,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { siteConfig } from '@/shared/config/site';
 import TopMarquee from '@/app/components/chrome/top-marquee';
+import {
+  forgeGaussianBlurDismissEvent,
+  hideGaussianBlurOverlay,
+  showGaussianBlurOverlay,
+} from '@/app/components/effects/gaussian-blur-overlay-events';
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,14 +25,25 @@ export default function SiteHeader() {
       if (event.key === 'Escape') setMenuOpen(false);
     };
 
+    const closeFromBackdrop = () => setMenuOpen(false);
+
     desktopQuery.addEventListener('change', closeOnDesktop);
     window.addEventListener('keydown', closeOnEscape);
+    window.addEventListener(forgeGaussianBlurDismissEvent, closeFromBackdrop);
 
     return () => {
       desktopQuery.removeEventListener('change', closeOnDesktop);
       window.removeEventListener('keydown', closeOnEscape);
+      window.removeEventListener(forgeGaussianBlurDismissEvent, closeFromBackdrop);
     };
   }, []);
+
+  useEffect(() => {
+    if (menuOpen) showGaussianBlurOverlay('mobile-navigation', 18);
+    else hideGaussianBlurOverlay('mobile-navigation');
+
+    return () => hideGaussianBlurOverlay('mobile-navigation');
+  }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
 
