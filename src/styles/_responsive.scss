@@ -22,7 +22,7 @@
   }
 
   .heroTitle {
-    font-size: clamp(5rem, 16vw, 9rem);
+    font-size: clamp(5rem, 14.42vw, 8.88rem);
   }
 
   .heroVisual {
@@ -44,6 +44,10 @@
   .processList {
     margin-top: 2rem;
   }
+  
+  .button {
+    min-height: 2.5rem;
+  }
 }
 
 @media (max-width: 680px) {
@@ -64,9 +68,9 @@
   }
 
   .headerAuthLinkSignUp {
+    font-size: 0.58rem;
     display: inline-flex;
     padding: 0.45rem 0.55rem;
-    font-size: 0.58rem;
   }
 
   .headerActions {
@@ -83,16 +87,18 @@
   }
 
   .heroTitle {
-    font-size: clamp(4.2rem, 20vw, 6.5rem);
+    font-size: clamp(3.2rem, 13.7vw, 6.5rem);
   }
 
   .heroIntro {
+    margin-top: 24px;
     font-size: 0.95rem;
   }
 
   .heroActions {
-    align-items: flex-start;
+    margin-top: 24px;
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .heroVisual {
@@ -104,8 +110,8 @@
   }
 
   .heroMetrics > div {
-    padding: 1.1rem 0;
     border-right: 0;
+    padding: 1.1rem 0;
     border-bottom: 1px solid var(--line);
   }
 
@@ -120,16 +126,16 @@
   }
 
   .capabilityCard {
+    gap: 1.25rem;
     padding: 2rem 0;
     grid-template-columns: 2rem 1fr;
-    gap: 1.25rem;
   }
 
   .capabilityCard ul {
-    grid-column: 2;
     min-width: 0;
-    flex-direction: row;
+    grid-column: 2;
     flex-wrap: wrap;
+    flex-direction: row;
     align-items: flex-start;
   }
 
@@ -159,15 +165,15 @@
   }
 
   .siteFooter {
-    padding-right: var(--page-gutter);
-    grid-template-columns: 1fr;
-    align-items: start;
     gap: 1.25rem;
+    align-items: start;
+    grid-template-columns: 1fr;
+    padding-right: var(--page-gutter);
   }
 
   .siteFooter > div {
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .scrollToTop {

@@ -9,15 +9,21 @@ export default function ForgeLanding() {
       <section id="top" className="heroSection">
         <div className="heroNoise" aria-hidden="true" />
         <div className="heroCopy">
-          <span className="eyebrow heroReveal">Independent digital foundry</span>
+          <span className="eyebrow heroReveal">
+            Independent Cloud Solutions
+          </span>
           <HeroSplitTitle />
           <p className="heroIntro heroReveal">
             We shape bold ideas into precise digital products—strategy, design,
             engineering, and intelligent systems under one roof.
           </p>
           <div className="heroActions heroReveal">
-            <a className="button buttonPrimary" href="#contact">Bring us a challenge <span aria-hidden="true">↗</span></a>
-            <a className="textLink" href="#expertise">Explore the forge <span aria-hidden="true">↓</span></a>
+            <a className="button buttonPrimary" href="#contact">
+              Bring us a challenge <span aria-hidden="true">↗</span>
+            </a>
+            <a className="textLink" href="#expertise">
+              Explore the forge <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
 
