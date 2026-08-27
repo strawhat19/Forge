@@ -29,6 +29,7 @@ export default function HeroSplitTitle() {
       aria: `auto`,
     });
     let tween: ReturnType<typeof gsap.to> | undefined;
+    let inView = false;
     let revealed = false;
 
     const hiddenState = {
@@ -47,7 +48,7 @@ export default function HeroSplitTitle() {
     hideTitle();
 
     const revealTitle = () => {
-      if (revealed || !isForgeLoaderReady() || !isForgeLoaderDone()) return;
+      if (!inView || revealed || !isForgeLoaderReady() || !isForgeLoaderDone()) return;
       revealed = true;
       tween = gsap.to(split.words, {
         autoAlpha: 1,
@@ -61,12 +62,22 @@ export default function HeroSplitTitle() {
       });
     };
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? false;
+
+        if (inView) revealTitle();
+        else hideTitle();
+      },
+      { threshold: 0.12, rootMargin: `0px 0px -6%` },
+    );
+
+    observer.observe(title);
     window.addEventListener(forgeLoaderStartEvent, hideTitle);
     window.addEventListener(forgeLoaderDoneEvent, revealTitle);
 
-    if (isForgeLoaderReady() && isForgeLoaderDone()) revealTitle();
-
     return () => {
+      observer.disconnect();
       window.removeEventListener(forgeLoaderStartEvent, hideTitle);
       window.removeEventListener(forgeLoaderDoneEvent, revealTitle);
       tween?.kill();

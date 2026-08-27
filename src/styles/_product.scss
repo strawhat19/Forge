@@ -3345,7 +3345,7 @@
 
 @media (max-width: 980px) {
   .forgeDisplayHeading.forgeDisplayHeading {
-    font-size: clamp(5rem, 14.42vw, 8.88rem);
+    font-size: clamp(5rem, 14vw, 8.88rem);
   }
 
   .productReleaseCard > div:first-child strong {
@@ -3355,7 +3355,7 @@
 
 @media (max-width: 680px) {
   .forgeDisplayHeading.forgeDisplayHeading {
-    font-size: clamp(3.2rem, 13.7vw, 6.5rem);
+    font-size: clamp(3rem, 13.5vw, 6.5rem);
   }
 
   .productReleaseCard > div:first-child strong {
