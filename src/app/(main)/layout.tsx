@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: siteConfig.titleAlt,
-    template: `%s / ${siteConfig.titleAlt}`,
+    template: `%s // ${siteConfig.title}`,
   },
   manifest: '/manifest.json',
   description: siteConfig.description,

@@ -17,9 +17,9 @@ export type SiteNavigationItem = {
 };
 
 export const siteConfig = {
+  title: `Forge`,
   titleLine1: `Build anything.`,
   titleLine2: `Deploy anywhere.`,
-  title: `Forge`,
   contactEmail: `hello@forge.studio`,
   titleAlt: `Forge // Official Website`,
   logo: `icons-logos-graphics/logos/Forge_Vector.svg`,
