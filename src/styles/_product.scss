@@ -2655,6 +2655,14 @@
     display: none;
   }
 
+  .notificationPopover {
+    top: 92px;
+    position: fixed;
+    right: var(--page-gutter);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
   .mobileProductNav {
     max-height: calc(100svh - 10rem);
     overflow-y: auto;
@@ -2933,11 +2941,11 @@
   }
 
   .notificationPopover {
-    position: fixed;
-    top: 8.45rem;
-    right: var(--page-gutter);
-    left: var(--page-gutter);
+    top: 92px;
     width: auto;
+    position: fixed;
+    left: var(--page-gutter);
+    right: var(--page-gutter);
   }
 
   .notificationPopoverList {
