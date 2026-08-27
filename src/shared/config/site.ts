@@ -1,3 +1,5 @@
+import { forgeNotifications } from './notifications';
+
 export type SiteNavigationChild = {
   label: string;
   href: string;
@@ -28,30 +30,32 @@ export const siteConfig = {
   navigation: [
     {
       id: `product`,
-      label: `Product`,
-      href: `/product`,
-      icon: `product`,
+      icon: `overview`,
+      href: `/overview`,
+      label: `Overview`,
       description: `Understand every CloudFormation change before it becomes a release.`,
       children: [
-        { label: `Overview`, href: `/product`, icon: `overview`, description: `Meet the deployment intelligence layer between definitions and execution.` },
+        { label: `Product`, href: `/product`, icon: `product`, description: `Meet the deployment intelligence layer between definitions and execution.` },
         { label: `Features`, href: `/features`, icon: `diff`, description: `Explore nested diffs, parameter impact, lifecycle records, and preview tooling.` },
         { label: `Workflows`, href: `/workflows`, icon: `workflow`, description: `Follow the same controlled grammar across infrastructure and pipelines.` },
+        { label: `Notifications`, href: `/notifications`, icon: `bell`, description: `Follow Forge source, documentation, capability, API, and plan updates in one product feed.`, badge: String(forgeNotifications.length) },
       ],
     },
     {
-      id: `developers`,
-      label: `Developers`,
       href: `/docs`,
+      id: `developers`,
       icon: `terminal`,
+      label: `Developers`,
       description: `Install the Python CLI, learn the command surface, and inspect the source.`,
       children: [
         { label: `Documentation`, href: `/docs`, icon: `docs`, description: `Install Forge, configure environments, and run the first staged deployment.` },
         { label: `Download`, href: `/download`, icon: `download`, description: `Get the current source version and its declared Python requirements.`, badge: `v0.1.0` },
-        { label: `Server source`, href: `https://github.com/MJ66GA-Projects/cfn-forge`, icon: `github`, description: `Read the cfn-forge orchestration engine on GitHub.`, external: true },
+        { label: `Server`, href: `https://github.com/MJ66GA-Projects/cfn-forge`, icon: `github`, description: `Read the cfn-forge orchestration engine on GitHub.`, external: true },
+        { label: `API`, href: `/api`, icon: `api`, description: `Inspect the public product, feature, CLI, and plan manifests.`, badge: `v0.0.0.0` },
       ],
     },
     { id: `plans`, label: `Plans`, href: `/plans`, icon: `plans`, description: `Start from source today and preview the planned member tiers.` },
-    { id: `api`, label: `API`, href: `/api`, icon: `api`, description: `Inspect the public product, feature, CLI, and plan manifests.` },
+    // { id: `api`, label: `API`, href: `/api`, icon: `api`, description: `Inspect the public product, feature, CLI, and plan manifests.` },
   ] satisfies readonly SiteNavigationItem[],
   marqueeItems: [
     { icon: `cloudformation`, text: `CloudFormation` },

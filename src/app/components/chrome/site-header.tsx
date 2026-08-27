@@ -210,13 +210,15 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerAuthLink" href="/sign-in"><ForgeIcon name="sign-in" />
+          <Link className="headerAuthLink hideOnSmallMegaMenu" href="/sign-in"><ForgeIcon name="sign-in" />
             Contact
           </Link>
           <Link className="headerAuthLink headerAuthLinkSignUp" href="/sign-up"><ForgeIcon name="sign-up" />
             Register
           </Link>
-          <Link className="headerCta" href="/download"><span className="headerCtaLabel">Download</span><span className="headerCtaIcon" aria-hidden="true"><ForgeIcon name="download" /></span></Link>
+          <Link className="headerCta hideOnSmallMegaMenu" href="/download">
+            <span className="headerCtaLabel">Download</span><span className="headerCtaIcon" aria-hidden="true"><ForgeIcon name="download" /></span>
+          </Link>
           <NotificationCenter open={notificationsOpen} onOpenChange={changeNotifications} />
           <button
             type="button"

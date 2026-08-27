@@ -59,7 +59,7 @@ export default function DocsPage() {
         ]}
         actions={(
           <>
-            <a className="productButton productButtonPrimary" href="https://github.com/MJ66GA-Projects/cfn-forge" target="_blank" rel="noreferrer">Open server source<span aria-hidden="true">↗</span></a>
+            <a className="productButton productButtonPrimary" href="https://github.com/MJ66GA-Projects/cfn-forge" target="_blank" rel="noreferrer">Server<span aria-hidden="true">↗</span></a>
             <Link className="productButton" href="/api/cli">CLI manifest<span aria-hidden="true">→</span></Link>
           </>
         )}

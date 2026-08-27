@@ -48,6 +48,11 @@ const nextConfig: NextConfig = {
       permanent: true,
     },
     {
+      source: '/overview',
+      destination: '/product',
+      permanent: true,
+    },
+    {
       source: '/pages/signin',
       destination: '/sign-in',
       permanent: true,

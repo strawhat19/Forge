@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { forgeNotifications } from '@/shared/config/notifications';
 import ForgeIcon from '@/app/components/brand/forge-icon';
 import TextReveal from '@/app/components/effects/text-reveal';
 import SplitHeading from '@/app/components/effects/split-heading';
+import { forgeNotifications } from '@/shared/config/notifications';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import ProductPageHero from '@/app/components/product/product-page-hero';
 
