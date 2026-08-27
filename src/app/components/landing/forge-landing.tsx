@@ -5,6 +5,7 @@ import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
 import ContactWidget from '@/app/components/landing/contact-widget';
 import HeroSplitTitle from '@/app/components/landing/hero-split-title';
+import TextReveal from '@/app/components/effects/text-reveal';
 import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
 
 export default function ForgeLanding() {
@@ -69,7 +70,7 @@ export default function ForgeLanding() {
       <section id="explore" className="section exploreSection">
         <div className="sectionHeading">
           <span className="eyebrow">What we forge</span>
-          <h2>From first spark<br />to lasting system.</h2>
+          <TextReveal as="h2" text="From first spark<br />to lasting system." html />
           <p>Small senior teams. Close collaboration. No handoff gaps between the thinking and the making.</p>
         </div>
 
@@ -78,7 +79,7 @@ export default function ForgeLanding() {
             <article key={capability.index} className="capabilityCard">
               <span className="capabilityIndex">{capability.index}</span>
               <div>
-                <h3>{capability.title}</h3>
+                <TextReveal as="h3" text={capability.title} delay={0.04} />
                 <p>{capability.description}</p>
               </div>
               <ul aria-label={`${capability.title} services`}>
@@ -92,7 +93,7 @@ export default function ForgeLanding() {
       <section id="process" className="section processSection">
         <div className="processLead">
           <span className="eyebrow">The method</span>
-          <h2>Made under<br /><em>pressure.</em></h2>
+          <TextReveal as="h2" text="Made under<br /><em>pressure.</em>" html />
           <AnvilMark className="processAnvil" />
         </div>
 
@@ -100,7 +101,7 @@ export default function ForgeLanding() {
           {siteConfig.process.map((step, index) => (
             <li key={step.phase}>
               <span>0{index + 1}</span>
-              <h3>{step.phase}</h3>
+              <TextReveal as="h3" text={step.phase} delay={0.04} />
               <p>{step.detail}</p>
             </li>
           ))}
@@ -110,9 +111,11 @@ export default function ForgeLanding() {
       <section id="studio" className="section studioSection">
         <div className="studioCard">
           <span className="eyebrow">The studio</span>
-          <p className="studioStatement">
-            Built for people with something worth making—and the appetite to make it unmistakable.
-          </p>
+          <TextReveal
+            as="p"
+            className="studioStatement"
+            text="Built for people with something worth making—and the appetite to make it unmistakable."
+          />
           <div className="studioMeta">
             <span>Strategy / Design / Engineering</span>
             <span>Available worldwide</span>
@@ -122,7 +125,7 @@ export default function ForgeLanding() {
 
       <section id="contact" className="contactSection">
         <span className="eyebrow">Your move</span>
-        <h2>Let&apos;s make<br />something <em>hold.</em></h2>
+        <TextReveal as="h2" text="Let&apos;s make<br />something <em>hold.</em>" html />
         <a className="contactLink" href={`mailto:${siteConfig.contactEmail}`}>
           {siteConfig.contactEmail}
           <span aria-hidden="true">↗</span>

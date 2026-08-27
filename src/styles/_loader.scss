@@ -162,6 +162,12 @@ html.forgeLoading body > :not(.forgeLoader) {
   transform: translateX(-50%);
 }
 
+.forgeLoaderTextChar {
+  display: inline-block;
+  vertical-align: bottom;
+  will-change: transform, opacity, visibility;
+}
+
 .forgeLoaderRailTop {
   top: 2.8rem;
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import gsap from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import AnvilMark from '@/app/components/brand/anvil-mark';
@@ -21,6 +22,7 @@ export default function ForgeLoader() {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const coreRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
+  const topRailRef = useRef<HTMLSpanElement | null>(null);
   const countRef = useRef<HTMLSpanElement | null>(null);
   const statusRef = useRef<HTMLSpanElement | null>(null);
   const bottomRailRef = useRef<HTMLSpanElement | null>(null);
@@ -39,19 +41,107 @@ export default function ForgeLoader() {
     const overlay = overlayRef.current;
     const core = coreRef.current;
     const ring = ringRef.current;
+    const topRail = topRailRef.current;
     const count = countRef.current;
     const status = statusRef.current;
     const bottomRail = bottomRailRef.current;
     const blurNode = blurRef.current;
     const tail = tailRef.current;
 
-    if (!overlay || !core || !ring || !count || !status || !bottomRail || !blurNode || !tail) return;
+    if (!overlay || !core || !ring || !topRail || !count || !status || !bottomRail || !blurNode || !tail) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    gsap.registerPlugin(SplitText);
+
     const progress = { value: 0 };
     let lastValue = 0;
     let lastTime = performance.now();
     let blur = 0;
+    let topRailSplit: SplitText | null = null;
+    let statusSplit: SplitText | null = null;
+    let bottomRailSplit: SplitText | null = null;
+
+    const revertLoaderText = () => {
+      topRailSplit?.revert();
+      statusSplit?.revert();
+      bottomRailSplit?.revert();
+      topRailSplit = null;
+      statusSplit = null;
+      bottomRailSplit = null;
+    };
+
+    const setStatusText = (text: string) => {
+      statusSplit?.revert();
+      statusSplit = null;
+      status.textContent = text;
+    };
+
+    const prepareLoaderText = (statusText: string) => {
+      revertLoaderText();
+      status.textContent = statusText;
+
+      if (reducedMotion) {
+        return { top: [], status: [], bottom: [] };
+      }
+
+      const splitOptions = {
+        type: 'chars',
+        mask: 'chars',
+        charsClass: 'forgeLoaderTextChar',
+        tag: 'span',
+        aria: 'auto',
+      } as const;
+
+      topRailSplit = SplitText.create(topRail, splitOptions);
+      statusSplit = SplitText.create(status, splitOptions);
+      bottomRailSplit = SplitText.create(bottomRail, splitOptions);
+
+      const targets = {
+        top: topRailSplit.chars,
+        status: statusSplit.chars,
+        bottom: bottomRailSplit.chars,
+      };
+
+      gsap.set([...targets.top, ...targets.status, ...targets.bottom], {
+        autoAlpha: 0,
+        rotateX: -62,
+        transformOrigin: '50% 100%',
+        yPercent: 120,
+      });
+
+      return targets;
+    };
+
+    const addLoaderTextReveal = (
+      timeline: gsap.core.Timeline,
+      targets: ReturnType<typeof prepareLoaderText>,
+    ) => {
+      timeline
+        .to(targets.top, {
+          autoAlpha: 1,
+          rotateX: 0,
+          yPercent: 0,
+          duration: 0.52,
+          ease: 'power4.out',
+          stagger: 0.025,
+        }, 0.08)
+        .to(targets.status, {
+          autoAlpha: 1,
+          rotateX: 0,
+          yPercent: 0,
+          duration: 0.46,
+          ease: 'power4.out',
+          stagger: 0.018,
+        }, 0.16)
+        .to(targets.bottom, {
+          autoAlpha: 1,
+          rotateX: 0,
+          yPercent: 0,
+          duration: 0.48,
+          ease: 'power4.out',
+          stagger: 0.018,
+        }, 0.24);
+    };
 
     const clearFallbackTimer = () => {
       if (fallbackTimerRef.current === null) return;
@@ -111,7 +201,7 @@ export default function ForgeLoader() {
       lastValue = 0;
       lastTime = performance.now();
       blur = 0;
-      status.textContent = 'Heating the next view';
+      const replayTextTargets = prepareLoaderText('Heating the next view');
       blurNode.setAttribute('stdDeviation', '0 0.35');
       gsap.set(overlay, { autoAlpha: 1, display: 'grid', yPercent: 100 });
       gsap.set(core, { autoAlpha: 1, scale: 0.94, y: 12 });
@@ -141,7 +231,11 @@ export default function ForgeLoader() {
       } else {
         replayTimeline
           .to(overlay, { yPercent: 0, duration: 0.52, ease: 'power3.out' })
-          .to(core, { scale: 1, y: 0, duration: 0.42, ease: 'power3.out' }, '-=0.22')
+          .to(core, { scale: 1, y: 0, duration: 0.42, ease: 'power3.out' }, '-=0.22');
+
+        addLoaderTextReveal(replayTimeline, replayTextTargets);
+
+        replayTimeline
           .to(
             progress,
             {
@@ -164,7 +258,7 @@ export default function ForgeLoader() {
               onUpdate: renderProgress,
               onComplete: () => {
                 blurNode.setAttribute('stdDeviation', '0 0');
-                status.textContent = 'Ready to strike';
+                setStatusText('Ready to strike');
               },
             },
           )
@@ -182,10 +276,12 @@ export default function ForgeLoader() {
     finishReplayRef.current = finishReplay;
 
     const initialTimeline = gsap.context(() => {
+      const initialTextTargets = prepareLoaderText('Heating the forge');
+
       if (reducedMotion) {
         progress.value = 100;
         renderProgress();
-        status.textContent = 'Ready';
+        setStatusText('Ready');
         gsap.timeline({
           onComplete: () => {
             hideOverlay();
@@ -198,17 +294,23 @@ export default function ForgeLoader() {
         return;
       }
 
-      timelineRef.current = gsap.timeline({
+      const initialSequence = gsap.timeline({
         onComplete: () => {
           hideOverlay();
           markForgeLoaderDone();
         },
-      })
-        .fromTo(
-          core,
-          { scale: 0.92, y: 12 },
-          { scale: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-        )
+      });
+      timelineRef.current = initialSequence;
+
+      initialSequence.fromTo(
+        core,
+        { scale: 0.92, y: 12 },
+        { scale: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+      );
+
+      addLoaderTextReveal(initialSequence, initialTextTargets);
+
+      initialSequence
         .to(
           progress,
           {
@@ -218,7 +320,7 @@ export default function ForgeLoader() {
             onUpdate: renderProgress,
             onComplete: () => {
               blurNode.setAttribute('stdDeviation', '0 0');
-              status.textContent = 'Ready to strike';
+              setStatusText('Ready to strike');
             },
           },
           0.18,
@@ -241,6 +343,7 @@ export default function ForgeLoader() {
       startReplayRef.current = () => undefined;
       finishReplayRef.current = () => undefined;
       initialTimeline.revert();
+      revertLoaderText();
     };
   }, []);
 
@@ -336,7 +439,7 @@ export default function ForgeLoader() {
         </defs>
       </svg>
 
-      <span className="forgeLoaderRail forgeLoaderRailTop">
+      <span ref={topRailRef} className="forgeLoaderRail forgeLoaderRailTop">
         Forged in Fire
       </span>
 

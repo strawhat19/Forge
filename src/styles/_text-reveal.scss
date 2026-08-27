@@ -1,0 +1,10 @@
+.textRevealPending {
+  visibility: hidden;
+}
+
+.textRevealWord,
+.textRevealChar {
+  display: inline-block;
+  vertical-align: bottom;
+  will-change: transform, opacity, visibility;
+}
