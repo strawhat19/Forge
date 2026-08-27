@@ -11,6 +11,11 @@
     gap: 1.25rem;
   }
 
+  .headerActions > .headerAuthLink,
+  .heroActions > .headerAuthLink {
+    display: none;
+  }
+
   .mobileMenuToggle {
     position: relative;
     display: grid;
@@ -189,7 +194,7 @@
 
   .mobileNavActions {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
     gap: 0.75rem;
     opacity: 0;
@@ -206,6 +211,9 @@
   }
 
   .mobileNavActions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
     color: var(--paper-soft);
     font-family: var(--font-mono), monospace;
     font-size: 0.62rem;
@@ -213,6 +221,13 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+  }
+
+  .mobileNavActions a > .forgeIcon,
+  .mobileNavCtaLabel .forgeIcon {
+    width: 0.82rem;
+    height: 0.82rem;
+    color: var(--red);
   }
 
   .mobileNavActions a:hover,
@@ -236,12 +251,20 @@
 
   .mobileNavActions .mobileNavCta {
     display: inline-flex;
-    justify-self: end;
+    width: 100%;
+    justify-self: stretch;
+    justify-content: space-between;
     align-items: center;
     gap: 0.65rem;
   }
 
-  .mobileNavCta > span {
+  .mobileNavCtaLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+  }
+
+  .mobileNavCtaIcon {
     display: grid;
     width: 2rem;
     height: 2rem;
@@ -252,8 +275,13 @@
     transition: background 180ms ease, transform 180ms ease;
   }
 
-  .mobileNavCta:hover > span,
-  .mobileNavCta:focus-visible > span {
+  .mobileNavCtaIcon .forgeIcon {
+    width: 0.82rem;
+    height: 0.82rem;
+  }
+
+  .mobileNavCta:hover .mobileNavCtaIcon,
+  .mobileNavCta:focus-visible .mobileNavCtaIcon {
     background: var(--red);
     transform: rotate(45deg);
   }
@@ -334,16 +362,11 @@
 
   .headerCta {
     font-size: 0;
+    gap: 0;
   }
 
-  .headerAuthLink {
+  .headerCtaLabel {
     display: none;
-  }
-
-  .headerAuthLinkSignUp {
-    font-size: 0.58rem;
-    display: inline-flex;
-    padding: 0.45rem 0.55rem;
   }
 
   .headerActions {
@@ -367,7 +390,7 @@
   }
 
   .mobileNavActions {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .mobileNavActions .mobileNavCta {
@@ -377,7 +400,7 @@
     padding-top: 0.15rem;
   }
 
-  .headerCta span {
+  .headerCtaIcon {
     font-size: 0.75rem;
   }
 

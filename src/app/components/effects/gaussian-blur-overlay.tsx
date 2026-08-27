@@ -19,10 +19,10 @@ export default function GaussianBlurOverlay() {
   useEffect(() => {
     const syncBlurState = () => {
       const strengths = Array.from(sourcesRef.current.values());
-      setBlurState({
+      setBlurState((currentState) => ({
         open: strengths.length > 0,
-        strength: strengths.length > 0 ? Math.max(...strengths) : 18,
-      });
+        strength: strengths.length > 0 ? Math.max(...strengths) : currentState.strength,
+      }));
     };
 
     const handleBlurRequest = (event: Event) => {
@@ -39,9 +39,11 @@ export default function GaussianBlurOverlay() {
 
   const dismissBlur = () => {
     sourcesRef.current.clear();
-    setBlurState({ open: false, strength: 18 });
+    setBlurState((currentState) => ({ ...currentState, open: false }));
     window.dispatchEvent(new Event(forgeGaussianBlurDismissEvent));
   };
+
+  const overlayFilter = `blur(${blurState.strength}px) saturate(120%)`;
 
   return (
     <button
@@ -50,7 +52,11 @@ export default function GaussianBlurOverlay() {
       aria-hidden="true"
       onClick={dismissBlur}
       className={`gaussianBlurOverlay${blurState.open ? ' gaussianBlurOverlayOpen' : ''}`}
-      style={{ '--forge-gaussian-blur': `${blurState.strength}px` } as CSSProperties}
+      style={{
+        '--forge-gaussian-blur': `${blurState.strength}px`,
+        backdropFilter: overlayFilter,
+        WebkitBackdropFilter: overlayFilter,
+      } as CSSProperties}
     />
   );
 }

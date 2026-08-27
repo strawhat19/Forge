@@ -5,6 +5,13 @@ import type { NextConfig } from 'next';
 // loader, header, footer, fonts, and global styles as the home page. Add a
 // folder name here when a new clean top-level page is introduced.
 const pageRoutes = {
+  docs: 'docs',
+  plans: 'plans',
+  product: 'product',
+  features: 'features',
+  download: 'download',
+  notifications: 'notifications',
+  workflows: 'workflows',
   'sign-in': 'signin',
   'sign-up': 'signup',
 } as const;
@@ -50,6 +57,13 @@ const nextConfig: NextConfig = {
       destination: '/sign-up',
       permanent: true,
     },
+    ...Object.entries(pageRoutes)
+      .filter(([route, page]) => route === page)
+      .map(([route, page]) => ({
+        source: `/pages/${page}`,
+        destination: `/${route}`,
+        permanent: true,
+      })),
   ],
   images: {
     remotePatterns: [

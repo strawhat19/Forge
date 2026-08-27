@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
-import ContactWidget from '@/app/components/landing/contact-widget';
-import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 import TextReveal from '@/app/components/effects/text-reveal';
+import SplitHeading from '@/app/components/effects/split-heading';
+import ContactWidget from '@/app/components/landing/contact-widget';
+import ElementReveal from '@/app/components/effects/element-reveal';
+import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
 
 export default function ForgeLanding() {
@@ -14,28 +16,23 @@ export default function ForgeLanding() {
       <section id="top" className="heroSection">
         <div className="heroNoise" aria-hidden="true" />
         <div className="heroCopy">
-          <span className="eyebrow heroReveal">
-            Independent Cloud Solutions
-          </span>
+          <TextReveal as="span" className="eyebrow heroReveal" text="Cloud Deployment Intelligence" />
           <HeroSplitTitle />
-          <p className="heroIntro heroReveal">
-            We shape bold ideas into precise digital products—strategy, design,
-            engineering, and intelligent systems under one roof.
-          </p>
-          <div className="heroActions heroReveal">
-            <button className="button buttonPrimary" onClick={() => scrollToElement(`#contact`)}>
-              Bring us a challenge <span aria-hidden="true">↗</span>
+          <TextReveal as="p" className="heroIntro heroReveal" text="Forge turns existing CloudFormation definitions into inspectable, explainable deployment artifacts before anything reaches release." delay={0.08} />
+          <ElementReveal className="heroActions heroReveal" delay={0.14}>
+            <button className="button buttonPrimary" onClick={() => scrollToElement(`#explore`)}>
+              See what changes <span aria-hidden="true">↗</span>
             </button>
-            <a className="headerAuthLink" onClick={() => scrollToElement(`#explore`)}>
-              Explore the forge <span aria-hidden="true">↓</span>
+            <a className="headerAuthLink" href="#process">
+              Explore the lifecycle <span aria-hidden="true">↓</span>
             </a>
-          </div>
+          </ElementReveal>
         </div>
 
-        <div className="heroVisual heroReveal" aria-label="Forge brand mark">
+        <ElementReveal className="heroVisual heroReveal" role="img" ariaLabel="Forge brand mark" delay={0.04} scale={0.96}>
           <div className="heroOrbit heroOrbitOuter" aria-hidden="true" />
           <div className="heroOrbit heroOrbitInner" aria-hidden="true" />
-          <span className="heroCoordinate heroCoordinateTop">40.7128° N</span>
+          <span className="heroCoordinate heroCoordinateTop">AWS / CFN</span>
           <span className="heroCoordinate heroCoordinateBottom">BUILD / 001</span>
           <div className="heroLogoPlate">
             <Image
@@ -43,40 +40,31 @@ export default function ForgeLanding() {
               width={356}
               height={433}
               src={`/${siteConfig.logo}`}
-              className={`heroLogoPlateMark`}
+              className="heroLogoPlateMark"
               alt="Forge flame and gear logo"
               sizes="(max-width: 720px) 62vw, 340px"
             />
           </div>
           <div className="heroHeatLine" aria-hidden="true" />
-        </div>
+        </ElementReveal>
 
-        <div className="heroMetrics heroReveal" aria-label="Forge principles">
-          <div>
-            <strong>01</strong>
-            <span>Build Projects</span>
-          </div>
-          <div>
-            <strong>02</strong>
-            <span>Source Code</span>
-          </div>
-          <div>
-            <strong>03</strong>
-            <span>Deployment Pipelines</span>
-          </div>
-        </div>
+        <ElementReveal className="heroMetrics heroReveal" role="group" ariaLabel="Forge principles" delay={0.18}>
+          <div><strong>01</strong><span>Stage Artifacts</span></div>
+          <div><strong>02</strong><span>Nested Templates</span></div>
+          <div><strong>03</strong><span>Release History</span></div>
+        </ElementReveal>
       </section>
 
       <section id="explore" className="section exploreSection">
         <div className="sectionHeading">
-          <span className="eyebrow">What we forge</span>
-          <TextReveal as="h2" text="From first spark<br />to lasting system." html />
-          <p>Small senior teams. Close collaboration. No handoff gaps between the thinking and the making.</p>
+          <TextReveal as="span" className="eyebrow" text="Deployment intelligence" />
+          <SplitHeading text="From source tree<br />to certain release." />
+          <TextReveal as="p" text="See what changes, why it changes, and how it propagates before CloudFormation executes the plan." delay={0.05} />
         </div>
 
         <div className="capabilityList">
-          {siteConfig.capabilities.map((capability) => (
-            <article key={capability.index} className="capabilityCard">
+          {siteConfig.capabilities.map((capability, index) => (
+            <ElementReveal as="article" key={capability.index} className="capabilityCard" delay={index * 0.05}>
               <span className="capabilityIndex">{capability.index}</span>
               <div>
                 <TextReveal as="h3" text={capability.title} delay={0.04} />
@@ -85,51 +73,50 @@ export default function ForgeLanding() {
               <ul aria-label={`${capability.title} services`}>
                 {capability.tags.map((tag) => <li key={tag}>{tag}</li>)}
               </ul>
-            </article>
+            </ElementReveal>
           ))}
         </div>
       </section>
 
       <section id="process" className="section processSection">
         <div className="processLead">
-          <span className="eyebrow">The method</span>
-          <TextReveal as="h2" text="Made under<br /><em>pressure.</em>" html />
+          <TextReveal as="span" className="eyebrow" text="The lifecycle" />
+          <SplitHeading text="Stage. Inspect.<br /><em>Release.</em>" />
           <AnvilMark className="processAnvil" />
         </div>
 
         <ol className="processList">
           {siteConfig.process.map((step, index) => (
-            <li key={step.phase}>
+            <ElementReveal as="li" key={step.phase} delay={index * 0.06}>
               <span>0{index + 1}</span>
               <TextReveal as="h3" text={step.phase} delay={0.04} />
               <p>{step.detail}</p>
-            </li>
+            </ElementReveal>
           ))}
         </ol>
       </section>
 
       <section id="studio" className="section studioSection">
         <div className="studioCard">
-          <span className="eyebrow">The studio</span>
+          <span className="eyebrow">The release layer</span>
           <TextReveal
             as="p"
-            className="studioStatement"
-            text="Built for people with something worth making—and the appetite to make it unmistakable."
+            className="forgeDisplayHeading studioStatement"
+            text="Built for teams that already trust CloudFormation—and need to trust every release around it."
           />
           <div className="studioMeta">
-            <span>Strategy / Design / Engineering</span>
-            <span>Available worldwide</span>
+            <span>Infrastructure / Pipelines / History</span>
+            <span>Python 3.12+ / AWS</span>
           </div>
         </div>
       </section>
 
       <section id="contact" className="contactSection">
-        <span className="eyebrow">Your move</span>
-        <TextReveal as="h2" text="Let&apos;s make<br />something <em>hold.</em>" html />
-        <a className="contactLink" href={`mailto:${siteConfig.contactEmail}`}>
-          {siteConfig.contactEmail}
-          <span aria-hidden="true">↗</span>
-        </a>
+        <TextReveal as="span" className="eyebrow" text="Bring control to release" />
+        <SplitHeading text="Know the change.<br />Then <em>ship.</em>" />
+        <ElementReveal as="a" className="contactLink" href={`mailto:${siteConfig.contactEmail}`} delay={0.06}>
+          {siteConfig.contactEmail}<span aria-hidden="true">↗</span>
+        </ElementReveal>
         <ContactWidget />
       </section>
     </div>

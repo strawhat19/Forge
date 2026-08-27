@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server';
+import { productConfig } from '@/shared/config/product';
 
 export function GET() {
-  return NextResponse.json({
+  return Response.json({
     ok: true,
-    app: 'Forge',
-    status: 'Next App Ready',
+    app: productConfig.name,
+    package: productConfig.packageName,
+    version: productConfig.version,
+    status: `Product client ready`,
   });
 }

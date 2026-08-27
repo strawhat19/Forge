@@ -1,5 +1,18 @@
-.textRevealPending {
+.textRevealPending,
+.elementRevealPending {
   visibility: hidden;
+}
+
+.elementReveal {
+  backface-visibility: hidden;
+  will-change: transform, opacity, visibility, filter, clip-path;
+}
+
+.textRevealWord-mask,
+.textRevealChar-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
 }
 
 .textRevealWord,

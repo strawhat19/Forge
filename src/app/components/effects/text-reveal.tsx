@@ -15,19 +15,21 @@ type TextRevealProps = {
   as?: ElementType;
   className?: string;
   html?: boolean;
+  variant?: `standard` | `hero`;
   byLetter?: boolean;
   delay?: number;
   duration?: number;
   stagger?: number;
 };
 
-const pendingClass = 'textRevealPending';
+const pendingClass = `textRevealPending`;
 
 export default function TextReveal({
   text,
   as = 'span',
   className,
   html = false,
+  variant = `standard`,
   byLetter = false,
   delay = 0,
   duration,
@@ -70,7 +72,7 @@ export default function TextReveal({
       split = SplitText.create(element, {
         type: byLetter ? 'chars' : 'words',
         mask: byLetter ? 'chars' : 'words',
-        wordsClass: 'textRevealWord',
+        wordsClass: variant === `hero` ? `heroTitleWord` : `textRevealWord`,
         charsClass: 'textRevealChar',
         tag: 'span',
         aria: 'auto',
@@ -86,18 +88,18 @@ export default function TextReveal({
         targets,
         {
           autoAlpha: 0,
-          rotateX: byLetter ? -58 : -42,
+          rotateX: variant === `hero` ? -72 : byLetter ? -58 : -42,
           transformOrigin: '50% 100%',
-          yPercent: byLetter ? 120 : 108,
+          yPercent: variant === `hero` ? 115 : byLetter ? 120 : 108,
         },
         {
           autoAlpha: 1,
           rotateX: 0,
           yPercent: 0,
-          duration: duration ?? (byLetter ? 0.72 : 0.82),
+          duration: duration ?? (variant === `hero` ? 0.88 : byLetter ? 0.72 : 0.82),
           delay,
           ease: 'power4.out',
-          stagger: stagger ?? (byLetter ? 0.022 : 0.065),
+          stagger: stagger ?? (variant === `hero` ? 0.09 : byLetter ? 0.022 : 0.065),
           paused: true,
         },
       );
@@ -137,7 +139,7 @@ export default function TextReveal({
       revealTween?.kill();
       split?.revert();
     };
-  }, [text, byLetter, delay, duration, stagger]);
+  }, [text, variant, byLetter, delay, duration, stagger]);
 
   return createElement(as, {
     ref: elementRef,

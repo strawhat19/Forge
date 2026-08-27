@@ -398,9 +398,11 @@ export default function ForgeLoader() {
       }
 
       const destination = `${url.pathname}${url.search}${url.hash}`;
+      const nativeNavigation = url.pathname === `/api` || url.pathname.startsWith(`/api/`);
       navigationTimerRef.current = window.setTimeout(() => {
         navigationTimerRef.current = null;
-        router.push(destination);
+        if (nativeNavigation) window.location.assign(destination);
+        else router.push(destination);
       }, NAVIGATION_COVER_DELAY_MS);
     };
 

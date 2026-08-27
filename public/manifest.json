@@ -1,7 +1,7 @@
 {
-  "name": "Forge — Cloud Solutions",
+  "name": "Forge - CloudFormation Deployment Intelligence",
   "short_name": "Forge",
-  "description": "A digital foundry for bold products, systems, and experiences in cloud solutions.",
+  "description": "Deployment intelligence and lifecycle control for AWS CloudFormation infrastructure and pipeline stacks.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

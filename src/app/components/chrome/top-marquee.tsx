@@ -1,73 +1,36 @@
 'use client';
 
-import { useEffect, useId, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { siteConfig } from '@/shared/config/site';
+import ForgeIcon from '@/app/components/brand/forge-icon';
+import { useEffect, useId, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 
 type TopMarqueeProps = {
   id?: string;
+  style?: CSSProperties;
   speed?: number;
+  sticky?: boolean;
   autoplay?: boolean;
   fadeSides?: boolean;
   pauseonhover?: boolean;
-  direction?: 'rtl' | 'ltr';
-};
-
-type MarqueeIconProps = {
-  name: string;
+  direction?: `rtl` | `ltr`;
 };
 
 const dragThreshold = 6;
 
-function MarqueeIcon({ name }: MarqueeIconProps) {
-  const gradientId = `forge-marquee-icon-${useId().replaceAll(':', '')}`;
-  const icon = (() => {
-    switch (name) {
-      case 'applications':
-        return <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 8h18M7 12h3v3H7zM14 12h3v3h-3z" /></>;
-      case 'cloud':
-        return <><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 8.7 4.7 4.7 0 0 0 7 18Z" /><path d="m10 12-2 2 2 2m4-4 2 2-2 2" /></>;
-      case 'devops':
-        return <><path d="M8.2 7.1A5.5 5.5 0 0 1 17 8l1.5 2.2M15.8 16.9A5.5 5.5 0 0 1 7 16l-1.5-2.2" /><path d="M18.5 6.5v3.7h-3.7M5.5 17.5v-3.7h3.7" /></>;
-      case 'build':
-        return <><path d="m14.5 5.5 4 4M13 7l4 4M5 19l8.8-8.8" /><path d="m3.8 17.2 3 3-3.8.8zM13.8 4.2l2.7-1.2 4.5 4.5-1.2 2.7" /></>;
-      case 'pipeline':
-        return <><circle cx="5" cy="6" r="2" /><circle cx="19" cy="12" r="2" /><circle cx="5" cy="18" r="2" /><path d="M7 6h3a4 4 0 0 1 4 4v0a2 2 0 0 0 2 2h1M7 18h3a4 4 0 0 0 4-4v0" /></>;
-      case 'cloudformation':
-        return <><path d="m12 3 8 4-8 4-8-4zM4 12l8 4 8-4M4 17l8 4 8-4" /><path d="M8 9v5m8-5v5" /></>;
-      case 'terraform':
-        return <><path d="m4 5 6 3.5V15l-6-3.5zM11 9l6 3.5V19l-6-3.5zM11 3l6 3.5V11l-6-3.5z" /><path d="m18 12 2-1.2v6.5L18 19z" /></>;
-      case 'iac':
-        return <><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M8 7h8M8 17h8m-5-7-2 2 2 2m2-4 2 2-2 2" /></>;
-      default:
-        return <><path d="m8 9-4 3 4 3m8-6 4 3-4 3M14 5l-4 14" /></>;
-    }
-  })();
-
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      stroke={`url(#${gradientId})`}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <linearGradient id={gradientId} x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="var(--red)" />
-          <stop offset="1" stopColor="var(--ember)" />
-        </linearGradient>
-      </defs>
-      {icon}
-    </svg>
-  );
+function MarqueeIcon({ name }: { name: string }) {
+  const gradientId = `forge-marquee-icon-${useId().replaceAll(`:`, ``)}`;
+  return <ForgeIcon name={name} gradientId={gradientId} />;
 }
 
 export default function TopMarquee({
   speed = 18,
+  sticky = false,
   autoplay = true,
-  direction = 'rtl',
+  direction = `rtl`,
   fadeSides = true,
   pauseonhover = false,
-  id = 'forge-top-marquee',
+  id = `forge-top-marquee`,
+  style,
 }: TopMarqueeProps = {}) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -142,9 +105,9 @@ export default function TopMarquee({
   useEffect(() => {
     const track = trackRef.current;
     const container = containerRef.current;
-    if (!track || !container || typeof track.animate !== 'function') return;
+    if (!track || !container || typeof track.animate !== `function`) return;
 
-    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    reducedMotionRef.current = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
     let builtWidth = 0;
     let rebuildFrame = 0;
 
@@ -161,28 +124,28 @@ export default function TopMarquee({
       let progress = 0;
       if (previous) {
         const timing = previous.effect?.getComputedTiming();
-        const previousDuration = typeof timing?.duration === 'number' ? timing.duration : 0;
-        const currentTime = typeof previous.currentTime === 'number' ? previous.currentTime : 0;
+        const previousDuration = typeof timing?.duration === `number` ? timing.duration : 0;
+        const currentTime = typeof previous.currentTime === `number` ? previous.currentTime : 0;
         if (previousDuration > 0) progress = (currentTime % previousDuration) / previousDuration;
         previous.cancel();
       }
 
       builtWidth = setWidth;
       const duration = (setWidth / speed) * 1000;
-      const keyframes = direction === 'ltr'
+      const keyframes = direction === `ltr`
         ? [
             { transform: `translate3d(-${setWidth}px, 0, 0)` },
-            { transform: 'translate3d(0, 0, 0)' },
+            { transform: `translate3d(0, 0, 0)` },
           ]
         : [
-            { transform: 'translate3d(0, 0, 0)' },
+            { transform: `translate3d(0, 0, 0)` },
             { transform: `translate3d(-${setWidth}px, 0, 0)` },
           ];
 
       const animation = track.animate(keyframes, {
         duration,
         iterations: Infinity,
-        easing: 'linear',
+        easing: `linear`,
       });
 
       animation.currentTime = progress * duration;
@@ -203,20 +166,20 @@ export default function TopMarquee({
     });
     intersectionObserver.observe(container);
 
-    const resizeObserver = typeof ResizeObserver === 'undefined'
+    const resizeObserver = typeof ResizeObserver === `undefined`
       ? null
       : new ResizeObserver(scheduleRebuild);
     resizeObserver?.observe(track);
 
     const handleVisibilityChange = () => updatePlayState();
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('resize', scheduleRebuild);
+    document.addEventListener(`visibilitychange`, handleVisibilityChange);
+    window.addEventListener(`resize`, scheduleRebuild);
 
     return () => {
       intersectionObserver.disconnect();
       resizeObserver?.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('resize', scheduleRebuild);
+      document.removeEventListener(`visibilitychange`, handleVisibilityChange);
+      window.removeEventListener(`resize`, scheduleRebuild);
       window.cancelAnimationFrame(rebuildFrame);
       window.cancelAnimationFrame(playStateFrameRef.current);
       animationRef.current?.cancel();
@@ -242,20 +205,20 @@ export default function TopMarquee({
 
       draggingRef.current = true;
       setDragging(true);
-      dragStartTimeRef.current = typeof animation.currentTime === 'number' ? animation.currentTime : 0;
+      dragStartTimeRef.current = typeof animation.currentTime === `number` ? animation.currentTime : 0;
       dragStartXRef.current = event.clientX;
       tweenPlaybackRate(0, true);
       event.currentTarget.setPointerCapture?.(event.pointerId);
     }
 
     const timing = animation.effect?.getComputedTiming();
-    const duration = typeof timing?.duration === 'number' ? timing.duration : 0;
+    const duration = typeof timing?.duration === `number` ? timing.duration : 0;
     const setWidth = track.scrollWidth / 2;
     if (duration <= 0 || setWidth <= 0) return;
 
     const deltaX = event.clientX - dragStartXRef.current;
     const deltaTime = (deltaX / setWidth) * duration;
-    let nextTime = direction === 'ltr'
+    let nextTime = direction === `ltr`
       ? dragStartTimeRef.current + deltaTime
       : dragStartTimeRef.current - deltaTime;
     nextTime = ((nextTime % duration) + duration) % duration;
@@ -289,15 +252,16 @@ export default function TopMarquee({
     <div
       ref={containerRef}
       id={id}
-      className={`topMarquee${fadeSides ? ' topMarqueeFadeSides' : ''}`}
-      aria-label="Forge cloud and delivery capabilities"
+      style={style}
+      className={`topMarquee${fadeSides ? ` topMarqueeFadeSides` : ``}${sticky ? ` topMarqueeSticky` : ``}`}
+      aria-label="Forge CloudFormation deployment capabilities"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
         ref={trackRef}
         role="list"
-        className={`topMarqueeTrack${dragging ? ' isDragging' : ''}`}
+        className={`topMarqueeTrack${dragging ? ` isDragging` : ``}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
