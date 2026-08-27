@@ -44,6 +44,28 @@
   .processList {
     margin-top: 2rem;
   }
+
+  .contactSection {
+    min-height: auto;
+    padding-block: 7rem 5rem;
+    align-content: start;
+  }
+
+  .contactSection h2 {
+    max-width: none;
+  }
+
+  .contactLink {
+    width: min(100%, 52rem);
+  }
+
+  .contactWidget {
+    position: relative;
+    inset: auto;
+    width: min(100%, 27rem);
+    margin-top: 4rem;
+    justify-self: end;
+  }
   
   .button {
     min-height: 2.5rem;
@@ -158,6 +180,24 @@
 
   .contactSection {
     min-height: 68svh;
+  }
+
+  .contactWidget {
+    width: 100%;
+    padding: 0.85rem;
+  }
+
+  .contactWidgetFieldRow {
+    grid-template-columns: 1fr;
+  }
+
+  .contactWidgetActionRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .contactWidgetActionRow button {
+    justify-content: space-between;
   }
 
   .contactSection::after {

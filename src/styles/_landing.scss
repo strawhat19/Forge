@@ -821,6 +821,10 @@
   box-shadow: 0 0 0 4rem rgba(255, 32, 41, 0.025), 0 0 0 8rem rgba(255, 32, 41, 0.018);
 }
 
+.contactSection h2 {
+  max-width: calc(100% - 27rem);
+}
+
 .contactLink {
   z-index: 2;
   display: flex;
@@ -828,7 +832,7 @@
   padding: 1.5rem 0;
   position: relative;
   align-items: center;
-  width: min(100%, 52rem);
+  width: min(52rem, calc(100% - 27rem));
   color: var(--paper-soft);
   justify-content: space-between;
   border-top: 1px solid var(--line);
@@ -852,6 +856,206 @@
 .contactLink:hover span,
 .contactLink:focus-visible span {
   transform: rotate(45deg);
+}
+
+.contactWidget {
+  position: absolute;
+  top: clamp(2rem, 4vw, 4rem);
+  right: var(--page-gutter);
+  z-index: 2;
+  width: min(24.5rem, calc(100% - (var(--page-gutter) * 2)));
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 32%),
+    rgba(10, 12, 16, 0.92);
+  box-shadow:
+    0 1.5rem 4rem rgba(0, 0, 0, 0.32),
+    0 0 2.5rem rgba(255, 32, 41, 0.07);
+  backdrop-filter: blur(18px);
+}
+
+.contactWidget::before {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 2.75rem;
+  height: 2.75rem;
+  content: '';
+  pointer-events: none;
+  border-top: 1px solid var(--red);
+  border-right: 1px solid var(--red);
+  border-top-right-radius: 0.7rem;
+}
+
+.contactWidgetHeader,
+.contactWidgetActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contactWidgetHeader {
+  font-size: 0.56rem;
+  letter-spacing: 0.13em;
+  color: var(--paper-soft);
+  text-transform: uppercase;
+  padding: 0.05rem 0.1rem 0.65rem;
+  font-family: var(--font-mono), monospace;
+}
+
+.contactWidgetHeader span:last-child {
+  color: var(--red);
+}
+
+.authWidgetActions {
+  gap: 15px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.contactWidgetSegments {
+  gap: 0.2rem;
+  display: grid;
+  padding: 0.16rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  background: rgba(5, 6, 8, 0.7);
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.contactWidgetSegment {
+  display: grid;
+  cursor: pointer;
+  font-weight: 900;
+  min-height: 2.1rem;
+  font-size: 0.55rem;
+  text-align: center;
+  place-items: center;
+  border-radius: 0.34rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.42rem;
+  background: transparent;
+  color: var(--paper-soft);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  font-family: var(--font-mono), monospace;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.contactWidgetSegment:hover,
+.contactWidgetSegment:focus-visible {
+  color: var(--paper);
+  border-color: var(--line-hot);
+}
+
+.contactWidgetSegmentActive {
+  color: var(--paper);
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.contactWidgetForm {
+  gap: 0.65rem;
+  display: grid;
+}
+
+.contactWidgetPanel {
+  margin-top: 0.75rem;
+}
+
+.contactWidgetFieldRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.contactWidgetField {
+  display: grid;
+  gap: 0.34rem;
+}
+
+.contactWidgetField > span {
+  color: var(--paper-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.contactWidgetField input,
+.contactWidgetField textarea {
+  width: 100%;
+  padding: 0.55rem 0.62rem;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  outline: 0;
+  background: rgba(5, 6, 8, 0.78);
+  font: inherit;
+  font-size: 0.73rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.contactWidgetField input {
+  min-height: 2.4rem;
+}
+
+.contactWidgetField textarea {
+  min-height: 4.4rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.contactWidgetField input::placeholder,
+.contactWidgetField textarea::placeholder {
+  color: rgba(169, 171, 176, 0.42);
+}
+
+.contactWidgetField input:focus,
+.contactWidgetField textarea:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(255, 32, 41, 0.1);
+}
+
+.contactWidgetActionRow {
+  gap: 1rem;
+}
+
+.contactWidgetActionRow > span {
+  color: var(--paper-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.contactWidgetActionRow button {
+  display: flex;
+  min-height: 2.4rem;
+  padding: 0.3rem 0.75rem;
+  align-items: center;
+  gap: 1.25rem;
+  color: var(--paper);
+  cursor: pointer;
+  border: 1px solid var(--red);
+  border-radius: 0.4rem;
+  background: var(--red);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.contactWidgetActionRow button:hover,
+.contactWidgetActionRow button:focus-visible {
+  color: var(--red);
+  background: transparent;
+  box-shadow: 0 0 1.5rem rgba(255, 32, 41, 0.14);
 }
 
 .siteFooter {

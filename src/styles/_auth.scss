@@ -56,17 +56,17 @@
 
 .authIntro p {
   max-width: 28rem;
+  line-height: 1.7;
   margin-top: 2.5rem;
   color: var(--paper-soft);
   font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.7;
 }
 
 .authCard {
-  display: grid;
   gap: 1.35rem;
-  padding: clamp(1.5rem, 4vw, 2.75rem);
+  display: grid;
   border: 1px solid var(--line);
+  padding: clamp(1.5rem, 4vw, 2.75rem);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.075), transparent 32%),
     rgba(13, 15, 20, 0.88);
@@ -76,63 +76,63 @@
 }
 
 .authCard::before {
-  position: absolute;
   top: -1px;
   right: -1px;
+  content: '';
   width: 3.5rem;
   height: 3.5rem;
-  content: '';
+  position: absolute;
   border-top: 1px solid var(--red);
   border-right: 1px solid var(--red);
 }
 
 .authCardHeader {
   display: flex;
-  padding-bottom: 1.1rem;
   align-items: center;
+  padding-bottom: 1.1rem;
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
 }
 
 .authCardIndex {
-  color: var(--paper-soft);
-  font-family: var(--font-mono), monospace;
   font-size: 0.62rem;
   letter-spacing: 0.14em;
+  color: var(--paper-soft);
+  font-family: var(--font-mono), monospace;
 }
 
 .authCardMark {
-  display: grid;
   width: 2rem;
   height: 2rem;
-  place-items: center;
+  display: grid;
   color: var(--red);
-  border: 1px solid var(--line-hot);
   border-radius: 50%;
+  place-items: center;
+  border: 1px solid var(--line-hot);
 }
 
 .authField {
-  display: grid;
   gap: 0.55rem;
+  display: grid;
 }
 
 .authField span {
-  color: var(--paper-soft);
-  font-family: var(--font-mono), monospace;
   font-size: 0.62rem;
   letter-spacing: 0.12em;
+  color: var(--paper-soft);
   text-transform: uppercase;
+  font-family: var(--font-mono), monospace;
 }
 
 .authField input {
-  width: 100%;
-  min-height: 3.2rem;
-  padding: 0.7rem 0.85rem;
-  color: var(--paper);
-  border: 1px solid var(--line);
   outline: 0;
-  background: rgba(5, 6, 8, 0.72);
+  width: 100%;
   font: inherit;
+  min-height: 3.2rem;
+  color: var(--paper);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  background: rgba(5, 6, 8, 0.72);
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
@@ -147,20 +147,20 @@
 
 .authSubmit {
   display: flex;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.67rem;
   min-height: 3.35rem;
   margin-top: 0.35rem;
-  padding: 0.25rem 1.25rem;
-  align-items: center;
-  justify-content: space-between;
   color: var(--paper);
-  cursor: pointer;
-  border: 1px solid var(--red);
+  align-items: center;
   background: var(--red);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.67rem;
-  font-weight: 600;
   letter-spacing: 0.09em;
+  padding: 0.25rem 1.25rem;
   text-transform: uppercase;
+  border: 1px solid var(--red);
+  justify-content: space-between;
+  font-family: var(--font-mono), monospace;
   transition: color 200ms ease, background 200ms ease, box-shadow 200ms ease;
 }
 
@@ -173,29 +173,87 @@
 
 .authStatus {
   margin: 0;
-  padding: 0.8rem 0.9rem;
   color: #ffb4a7;
+  line-height: 1.5;
+  font-size: 0.78rem;
+  padding: 0.8rem 0.9rem;
   border-left: 2px solid var(--red);
   background: rgba(255, 32, 41, 0.08);
-  font-size: 0.78rem;
-  line-height: 1.5;
 }
 
 .authSwitch {
   margin: 0.4rem 0 0;
-  color: var(--paper-soft);
   font-size: 0.78rem;
+  color: var(--paper-soft);
 }
 
 .authSwitch a {
   color: var(--paper);
-  border-bottom: 1px solid var(--red);
   transition: color 180ms ease;
 }
 
 .authSwitch a:hover,
 .authSwitch a:focus-visible {
   color: var(--red);
+}
+
+.authCard.authCardCompact {
+  border: 0;
+  padding: 0;
+  gap: 0.65rem;
+  z-index: auto;
+  position: static;
+  box-shadow: none;
+  background: transparent;
+}
+
+.authCardCompact::before {
+  display: none;
+}
+
+.authCardCompact .authField {
+  gap: 0.34rem;
+}
+
+.authCardCompact .authField span {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+}
+
+.authCardCompact .authField input {
+  min-height: 2.4rem;
+  padding: 0.55rem 0.62rem;
+  border-radius: 0.4rem;
+  font-size: 0.73rem;
+}
+
+.authCardCompact .authSubmit {
+  min-height: 2.4rem;
+  margin-top: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.58rem;
+  font-weight: 900;
+}
+
+.authCardCompact .authStatus {
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.35rem;
+  font-size: 0.68rem;
+}
+
+.authCardCompact .authSwitch {
+  margin-top: 0.05rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.authCardCompact .authSwitch a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 @media (max-width: 980px) {

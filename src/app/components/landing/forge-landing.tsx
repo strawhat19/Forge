@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
+import ContactWidget from '@/app/components/landing/contact-widget';
 import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
 
@@ -117,6 +118,7 @@ export default function ForgeLanding() {
           {siteConfig.contactEmail}
           <span aria-hidden="true">↗</span>
         </a>
+        <ContactWidget />
       </section>
     </div>
   );

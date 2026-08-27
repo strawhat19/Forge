@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 
 type AuthMode = 'sign-in' | 'sign-up';
 
 type ForgeAuthFormProps = {
   mode: AuthMode;
+  variant?: 'page' | 'compact';
 };
 
 const modeCopy = {
@@ -15,20 +16,25 @@ const modeCopy = {
     alternatePrompt: 'Need an account?',
     alternateLabel: 'Create one',
     alternateHref: '/sign-up',
+    fullPageLabel: 'Open full sign-in',
+    fullPageHref: '/sign-in',
   },
   'sign-up': {
     action: 'Create account',
     alternatePrompt: 'Already have access?',
     alternateLabel: 'Sign in',
     alternateHref: '/sign-in',
+    fullPageLabel: 'Open full sign-up',
+    fullPageHref: '/sign-up',
   },
 } as const;
 
-export default function ForgeAuthForm({ mode }: ForgeAuthFormProps) {
+export default function ForgeAuthForm({ mode, variant = 'page' }: ForgeAuthFormProps) {
   const [status, setStatus] = useState<string | null>(null);
   const copy = modeCopy[mode];
+  const compact = variant === 'compact';
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus(
       mode === 'sign-in'
@@ -38,11 +44,13 @@ export default function ForgeAuthForm({ mode }: ForgeAuthFormProps) {
   };
 
   return (
-    <form className="authCard" onSubmit={handleSubmit}>
-      <div className="authCardHeader">
-        <span className="authCardIndex">01 / ACCESS</span>
-        <span className="authCardMark" aria-hidden="true">↗</span>
-      </div>
+    <form className={`authCard${compact ? ' authCardCompact' : ''}`} onSubmit={handleSubmit}>
+      {compact ? null : (
+        <div className="authCardHeader">
+          <span className="authCardIndex">01 / ACCESS</span>
+          <span className="authCardMark" aria-hidden="true">↗</span>
+        </div>
+      )}
 
       {mode === 'sign-up' ? (
         <label className="authField">
@@ -75,17 +83,32 @@ export default function ForgeAuthForm({ mode }: ForgeAuthFormProps) {
         </label>
       ) : null}
 
-      <button className="authSubmit" type="submit">
-        {copy.action}
-        <span aria-hidden="true">↗</span>
-      </button>
+      <div className={`authWidgetActions`}>
+        <button className="authSubmit" type="submit">
+          {copy.action}
+          <span aria-hidden="true">↗</span>
+        </button>
+        {status ? (
+          <p className="authStatus" role="status">
+            {status}
+          </p>
+        ) : null}
+        <p className="authSwitch">
+          {compact ? (
+            <Link className={`headerAuthLink`} href={copy.fullPageHref}>
+              {copy.fullPageLabel} <span aria-hidden="true">↗</span>
+            </Link>
+          ) : (
+            <>
+              {copy.alternatePrompt}{' '}
+              <Link href={copy.alternateHref}>
+                {copy.alternateLabel}
+              </Link>
+            </>
+          )}
+        </p>
+      </div>
 
-      {status ? <p className="authStatus" role="status">{status}</p> : null}
-
-      <p className="authSwitch">
-        {copy.alternatePrompt}{' '}
-        <Link href={copy.alternateHref}>{copy.alternateLabel}</Link>
-      </p>
     </form>
   );
 }
