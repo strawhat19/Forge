@@ -148,6 +148,55 @@ html.forgeLoading body > :not(.forgeLoader) {
   transform-origin: top center;
 }
 
+@media (min-width: 800px) and (orientation: landscape) {
+  .forgeLoaderCore {
+    width: min(calc(100vw - 7rem), 92rem);
+    grid-template-columns: minmax(16rem, 0.95fr) minmax(18rem, 1.05fr);
+    align-items: center;
+    justify-items: stretch;
+    gap: clamp(3rem, 8vw, 9rem);
+  }
+
+  .forgeLoaderCore > .forgeAnvilOrbit {
+    --forge-anvil-orbit-size: min(100%, clamp(16rem, 31vw, 29rem));
+    justify-self: end;
+  }
+
+  .forgeLoaderReadout {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    align-items: start;
+    justify-items: start;
+    gap: clamp(1.75rem, 6vh, 4rem);
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .forgeLoaderStatus {
+    width: 100%;
+    min-height: 2.15em;
+    padding-bottom: clamp(1rem, 2.5vh, 1.75rem);
+    align-items: flex-start;
+    font-size: clamp(1.6rem, 3vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    line-height: 0.92;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .forgeLoaderNumber {
+    min-width: 2.4ch;
+    font-size: clamp(5.25rem, 10vw, 9.5rem);
+  }
+
+  .forgeLoaderUnit {
+    margin-left: 0.7rem;
+    font-size: clamp(1rem, 1.6vw, 1.5rem);
+  }
+}
+
 @media (max-width: 680px) {
   .forgeLoaderCore {
     gap: 1.6rem;
