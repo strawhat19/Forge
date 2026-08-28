@@ -36,8 +36,8 @@ export default function FeaturesPage() {
       <ProductPageHero
         icon="diff"
         eyebrow="Features / 02"
-        title="A Change Set is only the start."
-        accent="Forge builds the explanation."
+        title="Change Sets."
+        accent="Forge Builds."
         description="Combine CloudFormation resource actions with nested template trees, body-level diffs, parameter provenance, dependencies, lifecycle state, and release readiness."
         metrics={[
           { value: `6`, label: `Core capability lanes` },

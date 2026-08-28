@@ -141,8 +141,8 @@ export default function ForgeDashboard() {
       <section className="dashboardHero">
         <div>
           <TextReveal as="span" className="eyebrow" text="CFN Forge / Command workspace" />
-          <h1>
-            <TextReveal as="span" text="Good to see you," variant="hero" />
+          <h1 style={{ letterSpacing: `-5px` }}>
+            <TextReveal as="span" text="Welcome back," variant="hero" />
             <br />
             <TextReveal as="em" text={`${firstName}.`} variant="hero" delay={0.08} />
           </h1>

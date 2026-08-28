@@ -49,8 +49,8 @@ export default function DocsPage() {
       <ProductPageHero
         icon="docs"
         eyebrow="Developers / 04"
-        title="Install from source."
-        accent="Understand every step."
+        title="Source Install."
+        accent="Documented Steps."
         description="cfn-forge is currently a Python 3.12+ developer preview distributed through its public GitHub repository with a requirements file and an editable package entry point."
         metrics={[
           { value: productConfig.runtime, label: `Runtime` },

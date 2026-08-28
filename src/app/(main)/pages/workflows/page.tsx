@@ -36,8 +36,8 @@ export default function WorkflowsPage() {
       <ProductPageHero
         icon="workflow"
         eyebrow="Workflows / 03"
-        title="Deployment is a lifecycle."
-        accent="Not a one-shot command."
+        title="Deploy Cycle."
+        accent="CLI Commands."
         description="Forge separates analysis from execution, gives every stage an identity, and preserves the release outcome so operators can inspect the exact artifact they are approving."
         metrics={[
           { value: `STAGED`, label: `Before execution` },

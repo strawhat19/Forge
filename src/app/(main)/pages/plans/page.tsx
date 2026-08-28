@@ -15,8 +15,8 @@ export default function PlansPage() {
       <ProductPageHero
         icon="plans"
         eyebrow="Plans / 06"
-        title="Start from source."
-        accent="Scale with control."
+        title="Source Start."
+        accent="Control Scale."
         description="Use the public source today. Operator, Team, and Enterprise tiers show the intended subscription direction while member downloads, billing, role-based access, and checkout are still being built."
         metrics={[
           { value: `$0`, label: `Starter source access` },

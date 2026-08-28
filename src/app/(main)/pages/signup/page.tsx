@@ -4,16 +4,16 @@ import TextReveal from '@/app/components/effects/text-reveal';
 import SplitHeading from '@/app/components/effects/split-heading';
 
 export const metadata: Metadata = {
-  title: 'Sign up',
+  title: 'Sign Up',
 };
 
 export default function SignUpPage() {
   return (
     <section className="authPage">
       <div className="authIntro">
-        <TextReveal as="span" className="eyebrow" text="Join the forge" />
+        <TextReveal as="span" className="eyebrow" text="Access Anvil" />
         <SplitHeading as="h1" text="Sign <em>up.</em>" />
-        <TextReveal as="p" text="Create your Forge access and bring the next idea into focus." delay={0.06} />
+        <TextReveal as="p" text="Forge your Success." delay={0.06} />
       </div>
       <ForgeAuthForm mode="sign-up" />
     </section>

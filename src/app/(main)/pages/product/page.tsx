@@ -37,8 +37,8 @@ export default function ProductPage() {
       <ProductPageHero
         icon="cloudformation"
         eyebrow="Product / 01"
-        title="CloudFormation tells you what."
-        accent="Forge tells you why."
+        title="Cloud = What."
+        accent="Forge = Why."
         description="Forge sits between the infrastructure definitions you already own and the CloudFormation execution engine—turning every potential deployment into a staged, explainable, operator-controlled artifact."
         metrics={[
           { value: `2`, label: `Deployment targets` },

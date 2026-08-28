@@ -617,10 +617,10 @@
   display: grid;
   width: 100%;
   min-height: 4.75rem;
-  padding: 0.85rem 1.1rem;
+  padding: 0.85rem 1.1rem 0.85rem 1.5rem;
   grid-template-columns: 2.35rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1.4rem;
   color: var(--paper);
   border: 0;
   border-bottom: 1px solid var(--line);
