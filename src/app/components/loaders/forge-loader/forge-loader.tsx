@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import AnvilMark from '@/app/components/brand/anvil-mark';
+import ForgeAnvilOrbit from '@/app/components/brand/forge-anvil-orbit';
 import Counter, { type CounterHandle } from '@/app/components/effects/counter';
 import {
   isForgeLoaderDone,
@@ -236,7 +236,7 @@ export default function ForgeLoader() {
         setStatusText(loaderStatusSteps[nextStatusIndex], true);
       }
 
-      ring.style.setProperty('--loader-progress', `${progress.value * 3.6}deg`);
+      ring.style.setProperty('--forge-anvil-progress', `${progress.value * 3.6}deg`);
       counterRef.current?.setValue(progress.value);
       overlay.setAttribute('aria-valuenow', String(rounded));
     };
@@ -516,21 +516,12 @@ export default function ForgeLoader() {
       </span>
 
       <div ref={coreRef} className="forgeLoaderCore">
-        <div ref={ringRef} className="forgeLoaderRing">
-          <div className="forgeLoaderRingInner">
-            <span className="forgeLoaderTrail forgeLoaderTrailOne">
-              <AnvilMark />
-            </span>
-            <span className="forgeLoaderTrail forgeLoaderTrailTwo">
-              <AnvilMark />
-            </span>
-            <AnvilMark className="forgeLoaderAnvil" />
-            <span ref={destinationShellRef} className="forgeLoaderDestination">
-              <small aria-hidden="true">Loading</small>
-              <span ref={destinationRef}>{getRouteLabel(pathname)}</span>
-            </span>
-          </div>
-        </div>
+        <ForgeAnvilOrbit ringRef={ringRef}>
+          <span ref={destinationShellRef} className="forgeLoaderDestination">
+            <small aria-hidden="true">Loading</small>
+            <span ref={destinationRef}>{getRouteLabel(pathname)}</span>
+          </span>
+        </ForgeAnvilOrbit>
 
         <div className="forgeLoaderReadout">
           <span ref={statusRef} className="forgeLoaderStatus">Heating the forge</span>

@@ -20,6 +20,7 @@ export default function FooterParallax({ children }: { children: ReactNode }) {
       footer.style.setProperty(`--footer-parallax-scale`, `1`);
       footer.style.setProperty(`--footer-parallax-grid-scale`, `1`);
       footer.style.setProperty(`--footer-parallax-lead-x`, `0px`);
+      footer.style.setProperty(`--footer-parallax-contact-x`, `0px`);
       footer.style.setProperty(`--footer-parallax-signal-x`, `0px`);
       footer.style.setProperty(`--footer-parallax-utility-x`, `0px`);
       footer.style.setProperty(`--footer-parallax-utility-y`, `0px`);
@@ -52,7 +53,8 @@ export default function FooterParallax({ children }: { children: ReactNode }) {
       footer.style.setProperty(`--footer-parallax-backdrop`, `${offset * -0.55}px`);
       footer.style.setProperty(`--footer-parallax-scale`, `${0.94 + progress * 0.06}`);
       footer.style.setProperty(`--footer-parallax-grid-scale`, `${1 + progress * 0.075}`);
-      footer.style.setProperty(`--footer-parallax-lead-x`, `${(1 - progress) * -28}px`);
+      footer.style.setProperty(`--footer-parallax-lead-x`, `${(1 - progress) * 12}px`);
+      footer.style.setProperty(`--footer-parallax-contact-x`, `${(1 - progress) * -12}px`);
       footer.style.setProperty(`--footer-parallax-signal-x`, `${(1 - progress) * 20}px`);
       footer.style.setProperty(`--footer-parallax-utility-x`, `${(1 - progress) * 24}px`);
       footer.style.setProperty(`--footer-parallax-utility-y`, `${offset * 0.16}px`);

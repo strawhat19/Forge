@@ -33,7 +33,7 @@ export default function SiteFooter({ parallax = false }: SiteFooterProps) {
         <span>Release Control / 01</span>
       </div>
       <div className="footerContent">
-        <ElementReveal className="footerContentReveal footerContentRevealLead" x={-18} y={18} duration={0.72}>
+        <ElementReveal className="footerContentReveal footerContentRevealLead" x={18} y={0} duration={0.72}>
           <div className="footerLead">
             <TextReveal as="span" className="eyebrow" text="The final release gate" />
             <h2 style={{ letterSpacing: `-2px`, }}>
@@ -42,7 +42,7 @@ export default function SiteFooter({ parallax = false }: SiteFooterProps) {
             </h2>
           </div>
         </ElementReveal>
-        <ElementReveal className="footerContentReveal footerContentRevealContact" x={18} y={18} delay={0.1} duration={0.72}>
+        <ElementReveal className="footerContentReveal footerContentRevealContact" x={-18} y={0} delay={0.1} duration={0.72}>
           <div className="footerContact">
             <ContactWidget />
           </div>

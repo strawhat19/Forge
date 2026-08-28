@@ -6,6 +6,7 @@ import AnvilMark from '@/app/components/brand/anvil-mark';
 import TextReveal from '@/app/components/effects/text-reveal';
 import SplitHeading from '@/app/components/effects/split-heading';
 import ElementReveal from '@/app/components/effects/element-reveal';
+import ForgeAnvilOrbit from '@/app/components/brand/forge-anvil-orbit';
 import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
 
@@ -120,17 +121,7 @@ export default function ForgeLanding() {
             </ElementReveal>
           </div>
           <div className={`landingCtaEnd`}>
-            <div className="forgeLoaderRing">
-              <div className="forgeLoaderRingInner">
-                <span className="forgeLoaderTrail forgeLoaderTrailOne">
-                  <AnvilMark />
-                </span>
-                <span className="forgeLoaderTrail forgeLoaderTrailTwo">
-                  <AnvilMark />
-                </span>
-                <AnvilMark className="forgeLoaderAnvil" />
-              </div>
-            </div>
+            <ForgeAnvilOrbit className="landingCtaAnvilOrbit" />
           </div>
         </div>
       </section>
