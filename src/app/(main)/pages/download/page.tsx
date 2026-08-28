@@ -32,8 +32,8 @@ export default function DownloadPage() {
       <ProductPageHero
         icon="download"
         eyebrow="Download / 05"
-        title="Take the source."
-        accent="Keep the release visible."
+        title="Pull From Source."
+        accent="Release Visibility."
         description="The current cfn-forge developer preview is available directly from GitHub. Clone the server repository, install its declared requirements, and expose the local forge command in a Python virtual environment."
         metrics={[
           { value: `v${productConfig.version}`, label: `Current package` },

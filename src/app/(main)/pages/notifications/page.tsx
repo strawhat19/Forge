@@ -18,8 +18,8 @@ export default function NotificationsPage() {
       <ProductPageHero
         icon="bell"
         eyebrow="Notifications / 07"
-        title="Every signal."
-        accent="No release noise."
+        title="Updates &"
+        accent="Critical Alerts."
         description="Track the product surface around cfn-forge: source availability, documentation, preview boundaries, API manifests, and planned member paths."
         metrics={[
           { value: String(forgeNotifications.length), label: `Current updates` },
