@@ -33,7 +33,7 @@ export const siteConfig = {
       icon: `overview`,
       href: `/overview`,
       label: `Overview`,
-      description: `Understand every CloudFormation change before it becomes a release.`,
+      description: `Understand Cloud Changes Before Release.`,
       children: [
         { label: `Product`, href: `/product`, icon: `product`, description: `Meet the deployment intelligence layer between definitions and execution.` },
         { label: `Features`, href: `/features`, icon: `diff`, description: `Explore nested diffs, parameter impact, lifecycle records, and preview tooling.` },
@@ -46,7 +46,7 @@ export const siteConfig = {
       id: `developers`,
       icon: `terminal`,
       label: `Developers`,
-      description: `Install the Python CLI, learn the command surface, and inspect the source.`,
+      description: `Inspect, Stage, and Release Changes.`,
       children: [
         { label: `Documentation`, href: `/docs`, icon: `docs`, description: `Install Forge, configure environments, and run the first staged deployment.` },
         { label: `Download`, href: `/download`, icon: `download`, description: `Get the current source version and its declared Python requirements.`, badge: `v0.1.0` },

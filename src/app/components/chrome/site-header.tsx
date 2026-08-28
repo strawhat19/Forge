@@ -222,7 +222,14 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
                   })}
                 </div>
 
-                <div className="megaMenuFooter"><span>Source / transparent by design</span><GitHubLinks compact /></div>
+                <div className="megaMenuFooter">
+                  <span>
+                    <Link href={`https://piratechs.com`} target={`_blank`}>
+                      Site Design // Piratechs
+                    </Link>
+                  </span>
+                  <GitHubLinks compact />
+                </div>
               </div>
             </div>
           ) : (

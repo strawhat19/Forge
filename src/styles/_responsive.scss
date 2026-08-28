@@ -199,11 +199,11 @@
   }
 
   .mobileNavActions {
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    gap: 0.75rem;
     opacity: 0;
+    gap: 0.75rem;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
     transform: translateY(-0.35rem);
     transition:
       opacity 220ms ease,
@@ -400,10 +400,12 @@
   }
 
   .mobileNavActions .mobileNavCta {
+    padding-top: 10px;
     grid-column: 1 / -1;
+    padding-top: 0.15rem;
     justify-self: stretch;
     justify-content: space-between;
-    padding-top: 0.15rem;
+    border-top: 1px solid var(--line);
   }
 
   .headerCtaIcon {

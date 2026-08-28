@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ForgeIcon from '@/app/components/brand/forge-icon';
 
@@ -22,7 +23,11 @@ export default function Clock() {
 
   return (
     <time className="forgeClock" dateTime={now?.toISOString()} title={fullDate} aria-label={now ? `Current local date and time: ${fullDate}` : fullDate}>
-      <span className="forgeClockIdentity"><ForgeIcon name="clock" /><span>Local system time</span></span>
+      <span className="forgeClockIdentity"><ForgeIcon name="github" /><span>
+        <Link href={`https://piratechs.com`} target={`_blank`}>
+          Site Design // Piratechs
+        </Link>
+      </span></span>
       <span className="forgeClockValue forgeClockFull">{now ? fullDate : `--`}</span>
       <span className="forgeClockValue forgeClockLong">{now ? `${fullFormatter.format(now)} / ${localTimeZone}` : `--`}</span>
       <span className="forgeClockValue forgeClockMedium">{now ? longFormatter.format(now) : `--`}</span>

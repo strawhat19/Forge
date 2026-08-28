@@ -227,10 +227,10 @@
 }
 
 .megaMenuItems {
-  position: relative;
   z-index: 1;
+  padding: 0;
   display: grid;
-  padding: 0.65rem;
+  position: relative;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -334,10 +334,10 @@
   grid-column: 1 / -1;
   align-items: center;
   justify-content: space-between;
-  color: var(--steel-light);
+  // color: var(--steel-light);
   border-top: 1px solid var(--line);
   font-family: var(--font-mono), monospace;
-  font-size: 0.56rem;
+  // font-size: 0.56rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -848,6 +848,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  border-top: 1px solid var(--line);
   transition: color 180ms ease, background 180ms ease;
 }
 
@@ -2873,8 +2874,8 @@
   .mobileProductNavGroup,
   .mobileProductNavDirect {
     opacity: 0;
-    border-bottom: 1px solid var(--line);
     transform: translateY(-0.45rem);
+    border-bottom: 1px solid var(--line) !important;
     transition:
       color 180ms ease,
       opacity 220ms ease var(--nav-delay),
