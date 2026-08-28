@@ -131,10 +131,14 @@ export default function ForgeDashboard() {
   const stagedPath = getSmoothPath(stagedPoints);
   const releasedPath = getSmoothPath(releasedPoints);
   const impactTotal = activeChartData.resourceImpact.reduce((total, item) => total + item.value, 0);
+  const impactSegments = activeChartData.resourceImpact.map((item, index, items) => ({
+    ...item,
+    offset: (items.slice(0, index).reduce((total, segment) => total + segment.value, 0) / impactTotal) * 100,
+    percentage: (item.value / impactTotal) * 100,
+  }));
   const driftValues = activeChartData.drift[chartRange];
   const driftMax = Math.max(...driftValues, 1);
   const chartKey = `${selectedEnvironment}-${chartRange}`;
-  let impactOffset = 0;
 
   return (
     <div className="forgeDashboard">
@@ -180,8 +184,8 @@ export default function ForgeDashboard() {
           <section id="overview" className="dashboardMetrics" aria-label="Forge environment metrics">
             <ElementReveal as="article"><span>Managed stacks</span><strong><Counter number={97} speed={1.15} interval={18} blurIntensity={3.4} /></strong><small>+4 this month</small><ForgeIcon name="cloudformation" /></ElementReveal>
             <ElementReveal as="article" delay={0.045}><span>Nested templates</span><strong><Counter number={253} speed={1.3} interval={18} blurIntensity={3.8} delay={0.045} /></strong><small>Across 3 environments</small><ForgeIcon name="reconcile" /></ElementReveal>
-            <ElementReveal as="article" delay={0.09}><span>Staged changes</span><strong><Counter number={6} speed={0.9} interval={22} blurIntensity={2.8} padStart={2} delay={0.09} /></strong><small>1 production-ready</small><ForgeIcon name="stage" /></ElementReveal>
-            <ElementReveal as="article" delay={0.135}><span>Drift findings</span><strong><Counter number={7} speed={0.95} interval={22} blurIntensity={2.8} padStart={2} delay={0.135} /></strong><small>0 production drift</small><ForgeIcon name="drift" /></ElementReveal>
+            <ElementReveal as="article" delay={0.09}><span>Staged changes</span><strong><Counter number={36} speed={0.9} interval={22} blurIntensity={2.8} padStart={2} delay={0.09} /></strong><small>1 production-ready</small><ForgeIcon name="stage" /></ElementReveal>
+            <ElementReveal as="article" delay={0.135}><span>Drift findings</span><strong><Counter number={81} speed={0.95} interval={22} blurIntensity={2.8} padStart={2} delay={0.135} /></strong><small>0 production drift</small><ForgeIcon name="drift" /></ElementReveal>
           </section>
 
           <section className="dashboardPanel dashboardChartsPanel" aria-label="Forge telemetry">
@@ -208,7 +212,7 @@ export default function ForgeDashboard() {
             </div>
 
             <div key={chartKey} className="dashboardChartsGrid">
-              <ElementReveal as="article" className="dashboardChartCard dashboardThroughputChart" slide>
+              <ElementReveal as="article" className="dashboardChartCard dashboardThroughputChart">
                 <header>
                   <div><span>Change Set throughput</span><small>{environment.label} / {activeRange.label}</small></div>
                   <strong><Counter number={stagedValues.reduce((total, value) => total + value, 0)} speed={0.9} blurIntensity={2.6} /><small> staged</small></strong>
@@ -247,27 +251,22 @@ export default function ForgeDashboard() {
                     <svg viewBox="0 0 42 42" role="img" aria-label={`${impactTotal} impacted resources split by operation`}>
                       <title>Resource impact mix for {environment.label}</title>
                       <circle className="dashboardDonutTrack" cx="21" cy="21" r="15.9155" pathLength="100" />
-                      {activeChartData.resourceImpact.map((item, index) => {
-                        const percentage = (item.value / impactTotal) * 100;
-                        const segmentOffset = impactOffset;
-                        impactOffset += percentage;
-                        return (
-                          <circle
-                            key={item.label}
-                            className="dashboardDonutSegment"
-                            data-tone={item.tone}
-                            cx="21"
-                            cy="21"
-                            r="15.9155"
-                            pathLength="100"
-                            strokeDashoffset={-segmentOffset}
-                            style={{
-                              '--chart-segment': `${percentage} ${100 - percentage}`,
-                              '--chart-delay': `${index * 120}ms`,
-                            } as CSSProperties}
-                          />
-                        );
-                      })}
+                      {impactSegments.map((segment, index) => (
+                        <circle
+                          key={segment.label}
+                          className="dashboardDonutSegment"
+                          data-tone={segment.tone}
+                          cx="21"
+                          cy="21"
+                          r="15.9155"
+                          pathLength="100"
+                          strokeDashoffset={-segment.offset}
+                          style={{
+                            '--chart-segment': `${segment.percentage} ${100 - segment.percentage}`,
+                            '--chart-delay': `${index * 120}ms`,
+                          } as CSSProperties}
+                        />
+                      ))}
                     </svg>
                     <div><strong><Counter number={impactTotal} speed={0.95} blurIntensity={2.2} /></strong><span>Resources</span></div>
                   </div>
