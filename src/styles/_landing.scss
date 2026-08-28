@@ -666,44 +666,44 @@
 
 .forgeReady .heroTitle { transition-delay: 90ms; }
 .forgeReady .heroIntro { transition-delay: 180ms; }
-.forgeReady .heroActions { transition-delay: 260ms; }
 .forgeReady .heroVisual { transition-delay: 150ms; }
+.forgeReady .heroActions { transition-delay: 260ms; }
 .forgeReady .heroMetrics { transition-delay: 330ms; }
 
 .section {
-  padding: clamp(6rem, 10vw, 10rem) var(--page-gutter);
   border-bottom: 1px solid var(--line);
+  padding: clamp(6rem, 10vw, 10rem) var(--page-gutter);
 }
 
 .exploreSection {
+  gap: 8vw;
   display: grid;
   grid-template-columns: minmax(18rem, 0.78fr) minmax(30rem, 1.22fr);
-  gap: 8vw;
 }
 
 .sectionHeading {
-  position: sticky;
   top: 3rem;
+  position: sticky;
   height: fit-content;
 }
 
 .sectionHeading h2,
 .processLead h2,
 .contactSection h2 {
-  margin-top: 1.25rem;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(4rem, 7.5vw, 8.2rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
   line-height: 0.8;
+  margin-top: 1.25rem;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
+  font-size: clamp(4rem, 7.5vw, 8.2rem);
+  font-family: var(--font-display), sans-serif;
 }
 
 .sectionHeading > p {
   max-width: 28rem;
   margin-top: 2rem;
-  color: var(--paper-soft);
   line-height: 1.7;
+  color: var(--paper-soft);
 }
 
 .capabilityList {
@@ -711,12 +711,12 @@
 }
 
 .capabilityCard {
+  gap: 2rem;
   display: grid;
   padding: 2.6rem 0;
-  grid-template-columns: 3.5rem 1fr auto;
-  gap: 2rem;
-  border-bottom: 1px solid var(--line);
   transition: border-color 180ms ease;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: 3.5rem 1fr auto;
 }
 
 .capabilityCard:hover {
@@ -725,34 +725,34 @@
 
 .capabilityIndex {
   color: var(--red);
-  font-family: var(--font-mono), monospace;
   font-size: 0.65rem;
+  font-family: var(--font-mono), monospace;
 }
 
 .capabilityCard h3 {
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 3.2vw, 3.4rem);
   font-weight: 600;
   line-height: 0.95;
   text-transform: uppercase;
+  font-size: clamp(2rem, 3.2vw, 3.4rem);
+  font-family: var(--font-display), sans-serif;
 }
 
 .capabilityCard p {
   max-width: 36rem;
   margin-top: 1rem;
-  color: var(--paper-soft);
   line-height: 1.65;
+  color: var(--paper-soft);
 }
 
 .capabilityCard ul {
-  display: flex;
-  min-width: 8rem;
   margin: 0;
   padding: 0;
-  flex-direction: column;
-  align-items: flex-end;
   gap: 0.6rem;
+  display: flex;
+  min-width: 8rem;
   list-style: none;
+  align-items: flex-end;
+  flex-direction: column;
 }
 
 .capabilityCard li {
@@ -810,7 +810,6 @@
 .processList span {
   color: var(--red);
   font-family: var(--font-mono), monospace;
-  font-size: 0.65rem;
 }
 
 .processList h3 {
@@ -887,10 +886,6 @@
   box-shadow: 0 0 0 4rem rgba(255, 32, 41, 0.025), 0 0 0 8rem rgba(255, 32, 41, 0.018);
 }
 
-.contactSection h2 {
-  max-width: calc(100% - 27rem);
-}
-
 .contactLink {
   z-index: 2;
   display: flex;
@@ -898,12 +893,12 @@
   padding: 1.5rem 0;
   position: relative;
   align-items: center;
-  width: min(52rem, calc(100% - 27rem));
   color: var(--paper-soft);
   justify-content: space-between;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   font-size: clamp(1.1rem, 2vw, 1.6rem);
+  // width: min(52rem, calc(100% - 27rem));
   transition: color 180ms ease, border-color 180ms ease;
 }
 
@@ -926,20 +921,35 @@
 
 .footerContact {
   width: 100%;
-  height: stretch;
+  height: 100%;
+  min-width: 0;
   position: relative;
+
   .contactWidget {
     top: 0;
     right: 0;
     width: 100%;
     height: 100%;
+    display: grid;
+    margin-top: 0;
     position: relative;
+    justify-self: stretch;
+    grid-template-rows: auto auto minmax(0, 1fr);
+
+    .contactWidgetPanel {
+      min-height: 0;
+    }
+
     .contactWidgetForm {
-      display: grid;
-      grid-template-rows: auto 100% auto;
+      height: 100%;
+      grid-template-rows: auto minmax(5rem, 1fr) auto;
+
       .contactWidgetField {
-        display: grid;
         grid-template-rows: auto 1fr;
+      }
+
+      .contactWidgetField textarea {
+        height: 100%;
       }
     }
   }
@@ -1262,16 +1272,36 @@ body:has(.siteFooterParallax) > main {
   will-change: transform;
 }
 
-.siteFooterParallax > .footerLead {
+.siteFooterParallax > .footerContent {
   position: relative;
   display: grid;
+  width: 100%;
   grid-column: 1 / -1;
-  align-content: end;
-  align-items: start;
-  gap: 1.6rem;
+  grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
+  align-items: stretch;
+  gap: clamp(2rem, 5vw, 6rem);
   transform: translate3d(var(--footer-parallax-lead-x), var(--footer-parallax-offset), 0) scale(var(--footer-parallax-scale));
   transform-origin: 0 100%;
   will-change: transform;
+}
+
+.footerContentReveal {
+  min-width: 0;
+  align-self: stretch;
+}
+
+.footerContentRevealContact {
+  height: 100%;
+}
+
+.footerContent .footerLead {
+  position: relative;
+  display: grid;
+  height: 100%;
+  min-width: 0;
+  align-content: end;
+  align-items: start;
+  gap: 1.6rem;
 }
 
 .siteFooterParallax > .footerUtilityLayer {

@@ -1,6 +1,7 @@
 'use client';
 
-import { Fragment, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import RevealReplayContext from '@/app/components/effects/reveal-replay-context';
 
 export default function FooterParallax({ children }: { children: ReactNode }) {
   const [replayKey, setReplayKey] = useState(0);
@@ -89,7 +90,7 @@ export default function FooterParallax({ children }: { children: ReactNode }) {
     <>
       <span ref={sentinelRef} className="footerParallaxSentinel" aria-hidden="true" />
       <footer ref={footerRef} className="siteFooter siteProductFooter siteFooterParallax">
-        <Fragment key={replayKey}>{children}</Fragment>
+        <RevealReplayContext.Provider value={replayKey}>{children}</RevealReplayContext.Provider>
       </footer>
     </>
   );

@@ -1,7 +1,8 @@
 'use client';
 
 import gsap from 'gsap';
-import { createElement, useLayoutEffect, useRef, type AriaRole, type ElementType, type ReactNode } from 'react';
+import RevealReplayContext from '@/app/components/effects/reveal-replay-context';
+import { createElement, useContext, useLayoutEffect, useRef, type AriaRole, type ElementType, type ReactNode } from 'react';
 import {
   forgeLoaderDoneEvent,
   forgeLoaderStartEvent,
@@ -45,10 +46,12 @@ export default function ElementReveal({
   duration = 0.62,
 }: ElementRevealProps) {
   const elementRef = useRef<HTMLElement | null>(null);
+  const revealReplayKey = useContext(RevealReplayContext);
 
   useLayoutEffect(() => {
     const element = elementRef.current;
     if (!element) return;
+    element.classList.add(pendingClass);
 
     const showElement = () => element.classList.remove(pendingClass);
 
@@ -117,7 +120,7 @@ export default function ElementReveal({
       window.removeEventListener(forgeLoaderDoneEvent, handleLoaderDone);
       revealTween?.kill();
     };
-  }, [x, y, blur, delay, scale, slide, duration]);
+  }, [x, y, blur, delay, scale, slide, duration, revealReplayKey]);
 
   return createElement(as, {
     ref: elementRef,

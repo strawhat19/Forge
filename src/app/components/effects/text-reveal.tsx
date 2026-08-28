@@ -2,7 +2,8 @@
 
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
-import { createElement, useLayoutEffect, useRef, type ElementType } from 'react';
+import RevealReplayContext from '@/app/components/effects/reveal-replay-context';
+import { createElement, useContext, useLayoutEffect, useRef, type ElementType } from 'react';
 import {
   forgeLoaderDoneEvent,
   forgeLoaderStartEvent,
@@ -36,10 +37,12 @@ export default function TextReveal({
   stagger,
 }: TextRevealProps) {
   const elementRef = useRef<HTMLElement | null>(null);
+  const revealReplayKey = useContext(RevealReplayContext);
 
   useLayoutEffect(() => {
     const element = elementRef.current;
     if (!element) return;
+    element.classList.add(pendingClass);
 
     const showElement = () => element.classList.remove(pendingClass);
 
@@ -139,7 +142,7 @@ export default function TextReveal({
       revealTween?.kill();
       split?.revert();
     };
-  }, [text, variant, byLetter, delay, duration, stagger]);
+  }, [text, variant, byLetter, delay, duration, stagger, revealReplayKey]);
 
   return createElement(as, {
     ref: elementRef,

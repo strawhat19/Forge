@@ -15,16 +15,17 @@ const widgetTabs: ReadonlyArray<{ id: WidgetTab; label: string; index: string }>
 
 export default function ContactWidget() {
   const { user } = useGlobalContext();
-  
-  const [activeTab, setActiveTab] = useState<WidgetTab>('contact');
+
+  const [selectedTab, setSelectedTab] = useState<WidgetTab>('contact');
+  const activeTab: WidgetTab = user ? `contact` : selectedTab;
   const activeTabIndex = widgetTabs.find((tab) => tab.id === activeTab)?.index ?? '01';
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const name = String(formData.get('name') ?? '').trim();
-    const email = String(formData.get('email') ?? '').trim();
+    const name = String(formData.get('name') ?? user?.name ?? '').trim();
+    const email = String(formData.get('email') ?? user?.email ?? '').trim();
     const message = String(formData.get('message') ?? '').trim();
     const subject = encodeURIComponent(`Forge inquiry from ${name}`);
     const body = encodeURIComponent([
@@ -44,19 +45,16 @@ export default function ContactWidget() {
         <span aria-hidden="true">{activeTabIndex} / 03</span>
       </div>
 
-      <div className="contactWidgetSegments" role="tablist" aria-label="Contact options">
+      <div className="contactWidgetSegments" role="group" aria-label="Contact options">
         {(user ? [widgetTabs[0]] : widgetTabs).map((tab) => {
           const active = tab.id === activeTab;
           return (
             <button
               key={tab.id}
-              id={`contact-widget-tab-${tab.id}`}
               className={`contactWidgetSegmentButton_${tab?.id} contactWidgetSegment${active ? ' contactWidgetSegmentActive' : ''}`}
               type="button"
-              role="tab"
-              aria-selected={active}
-              aria-controls="contact-widget-panel"
-              onClick={() => setActiveTab(tab.id)}
+              aria-pressed={active}
+              onClick={() => setSelectedTab(tab.id)}
             >
               {tab.label}
             </button>
@@ -64,12 +62,7 @@ export default function ContactWidget() {
         })}
       </div>
 
-      <div
-        id="contact-widget-panel"
-        className="contactWidgetPanel"
-        role="tabpanel"
-        aria-labelledby={`contact-widget-tab-${activeTab}`}
-      >
+      <div className="contactWidgetPanel">
         {(activeTab === 'contact' || user != null) ? (
           <form className="contactWidgetForm" onSubmit={handleSubmit}>
             <div className="contactWidgetFieldRow">

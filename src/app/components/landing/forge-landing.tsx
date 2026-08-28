@@ -111,11 +111,28 @@ export default function ForgeLanding() {
       </section>
 
       <section id="contact" className="contactSection">
-        <TextReveal as="span" className="eyebrow" text="Bring control to release" />
-        <SplitHeading text="Know the change.<br />Then <em>ship.</em>" />
-        <ElementReveal as="a" className="contactLink" href={`mailto:${siteConfig.contactEmail}`} delay={0.06}>
-          {siteConfig.contactEmail}<span aria-hidden="true">↗</span>
-        </ElementReveal>
+        <div className={`landingCtaContent ctaContent`}>
+          <div className={`landingCtaStart`}>
+            <TextReveal as="span" className="eyebrow" text="Bring control to release" />
+            <SplitHeading text="Know the change.<br />Then <em>ship.</em>" />
+            <ElementReveal as="a" className="contactLink" href={`mailto:${siteConfig.contactEmail}`} delay={0.06}>
+              {siteConfig.contactEmail}<span aria-hidden="true">↗</span>
+            </ElementReveal>
+          </div>
+          <div className={`landingCtaEnd`}>
+            <div className="forgeLoaderRing">
+              <div className="forgeLoaderRingInner">
+                <span className="forgeLoaderTrail forgeLoaderTrailOne">
+                  <AnvilMark />
+                </span>
+                <span className="forgeLoaderTrail forgeLoaderTrailTwo">
+                  <AnvilMark />
+                </span>
+                <AnvilMark className="forgeLoaderAnvil" />
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
