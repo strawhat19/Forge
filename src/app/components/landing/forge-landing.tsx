@@ -121,7 +121,9 @@ export default function ForgeLanding() {
             </ElementReveal>
           </div>
           <div className={`landingCtaEnd`}>
-            <ForgeAnvilOrbit className="landingCtaAnvilOrbit" />
+            <ElementReveal className="landingCtaAnvilReveal" x={28} y={18} scale={0.82} blur delay={0.1} duration={0.9}>
+              <ForgeAnvilOrbit className="landingCtaAnvilOrbit" />
+            </ElementReveal>
           </div>
         </div>
       </section>
