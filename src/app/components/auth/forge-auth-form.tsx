@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { User } from '@/shared/models/User';
 import { useGlobalContext } from '@/shared/global-context';
 import { DataSources, Providers, Roles } from '@/shared/types/types';
@@ -11,6 +11,7 @@ type AuthMode = 'sign-in' | 'sign-up';
 type ForgeAuthFormProps = {
   mode: AuthMode;
   variant?: 'page' | 'compact';
+  toolMark?: ReactNode;
 };
 
 const modeCopy = {
@@ -32,7 +33,7 @@ const modeCopy = {
   },
 } as const;
 
-export default function ForgeAuthForm({ mode, variant = 'page' }: ForgeAuthFormProps) {
+export default function ForgeAuthForm({ mode, variant = 'page', toolMark }: ForgeAuthFormProps) {
   const [status, setStatus] = useState<string | null>(null);
   const { authReady, user, users, setUser, onSignOut } = useGlobalContext();
   const copy = modeCopy[mode];
@@ -123,79 +124,93 @@ export default function ForgeAuthForm({ mode, variant = 'page' }: ForgeAuthFormP
   }
 
   return (
-    <form className={cardClassName} onSubmit={handleSubmit}>
-      {compact ? null : (
-        <div className="authCardHeader">
-          <span className="authCardIndex">01 / ACCESS</span>
-          <span className="authCardMark" aria-hidden="true">↗</span>
-        </div>
-      )}
+    <form className={`${cardClassName}${toolMark && !compact ? ' authCardWithTool' : ''}`} onSubmit={handleSubmit}>
+      <div className="authCardContent">
+        {compact ? null : (
+          <div className="authCardHeader">
+            <span className="authCardIndex">01 / ACCESS</span>
+            <span className="authCardMark" aria-hidden="true">↗</span>
+          </div>
+        )}
 
-      {mode === 'sign-up' ? (
+        {mode === 'sign-up' ? (
+          <label className="authField">
+            <span>Name</span>
+            <input name="name" type="text" placeholder="Your name" autoComplete="name" required />
+          </label>
+        ) : null}
+
         <label className="authField">
-          <span>Name</span>
-          <input name="name" type="text" placeholder="Your name" autoComplete="name" required />
+          <span>Email</span>
+          <input name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
         </label>
-      ) : null}
 
-      <label className="authField">
-        <span>Email</span>
-        <input name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-      </label>
-
-      <label className="authField">
-        <span>Password</span>
-        <input
-          name="password"
-          type="password"
-          placeholder="At least 8 characters"
-          autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'}
-          minLength={8}
-          required
-        />
-      </label>
-
-      {mode === 'sign-up' ? (
         <label className="authField">
-          <span>Confirm password</span>
+          <span>Password</span>
           <input
-            name="passwordConfirmation"
+            name="password"
             type="password"
-            placeholder="Repeat your password"
-            autoComplete="new-password"
+            placeholder="At least 8 characters"
+            autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'}
             minLength={8}
             required
-            onInput={(event) => event.currentTarget.setCustomValidity(``)}
           />
         </label>
-      ) : null}
 
-      <div className={`authWidgetActions`}>
-        <button className="authSubmit" type="submit">
-          {copy.action}
-          <span aria-hidden="true">↗</span>
-        </button>
-        {status ? (
-          <p className="authStatus" role="status">
-            {status}
-          </p>
+        {mode === 'sign-up' ? (
+          <label className="authField">
+            <span>Confirm password</span>
+            <input
+              name="passwordConfirmation"
+              type="password"
+              placeholder="Repeat your password"
+              autoComplete="new-password"
+              minLength={8}
+              required
+              onInput={(event) => event.currentTarget.setCustomValidity(``)}
+            />
+          </label>
         ) : null}
-        <p className="authSwitch">
-          {compact ? (
-            <Link className={`headerAuthLink`} href={copy.fullPageHref}>
-              {copy.fullPageLabel} <span aria-hidden="true">↗</span>
-            </Link>
-          ) : (
-            <>
-              {copy.alternatePrompt}{' '}
-              <Link href={copy.alternateHref}>
-                {copy.alternateLabel}
+
+        <div className={`authWidgetActions`}>
+          <button className="authSubmit" type="submit">
+            {copy.action}
+            <span aria-hidden="true">↗</span>
+          </button>
+          {status ? (
+            <p className="authStatus" role="status">
+              {status}
+            </p>
+          ) : null}
+          <p className="authSwitch">
+            {compact ? (
+              <Link className={`headerAuthLink`} href={copy.fullPageHref}>
+                {copy.fullPageLabel} <span aria-hidden="true">↗</span>
               </Link>
-            </>
-          )}
-        </p>
+            ) : (
+              <>
+                {copy.alternatePrompt}{' '}
+                <Link href={copy.alternateHref}>
+                  {copy.alternateLabel}
+                </Link>
+              </>
+            )}
+          </p>
+        </div>
       </div>
 
+      {toolMark && !compact ? (
+        <div className="authToolPanel" aria-hidden="true">
+          <span className="authToolLabel">Heat / shape / strike</span>
+          <div className="authToolStage">
+            <span className="authToolOrbit authToolOrbitOuter" />
+            <span className="authToolOrbit authToolOrbitInner" />
+            <span className="authToolArc" />
+            <span className="authToolGraphic">{toolMark}</span>
+          </div>
+          <span className="authToolLabel">{mode === 'sign-up' ? 'Access anvil' : 'Forge hammer'}</span>
+        </div>
+      ) : null}
     </form>
   );
 }

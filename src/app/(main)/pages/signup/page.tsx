@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ForgeAuthForm from '@/app/components/auth/forge-auth-form';
+import AnvilMark from '@/app/components/brand/anvil-mark';
 import TextReveal from '@/app/components/effects/text-reveal';
 import SplitHeading from '@/app/components/effects/split-heading';
 
@@ -15,7 +16,7 @@ export default function SignUpPage() {
         <SplitHeading as="h1" text="Sign <em>up.</em>" />
         <TextReveal as="p" text="Forge your Success." delay={0.06} />
       </div>
-      <ForgeAuthForm mode="sign-up" />
+      <ForgeAuthForm mode="sign-up" toolMark={<AnvilMark />} />
     </section>
   );
 }

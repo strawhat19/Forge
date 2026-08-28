@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import TextReveal from '@/app/components/effects/text-reveal';
 import ForgeAuthForm from '@/app/components/auth/forge-auth-form';
+import HammerMark from '@/app/components/brand/hammer-mark';
 import SplitHeading from '@/app/components/effects/split-heading';
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export default function SignInPage() {
         <SplitHeading as="h1" text="Sign <em>in.</em>" />
         <TextReveal as="p" text="Return to the workbench." delay={0.06} />
       </div>
-      <ForgeAuthForm mode="sign-in" />
+      <ForgeAuthForm mode="sign-in" toolMark={<HammerMark />} />
     </section>
   );
 }
