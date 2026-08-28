@@ -209,8 +209,22 @@
 }
 
 .authSession {
-  display: grid;
   gap: 0.65rem;
+  display: grid;
+}
+
+.authSessionIdentity {
+  gap: 1rem;
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  .authSessionStats {
+    gap: 0.35rem;
+    display: grid;
+    align-items: center;
+    grid-template-rows: auto;
+    justify-content: flex-end;
+  }
 }
 
 .authSession > span:first-child,
@@ -222,7 +236,8 @@
   text-transform: uppercase;
 }
 
-.authSession > span:first-child {
+.authSession span {
+  font-size: 1rem;
   color: var(--red);
 }
 

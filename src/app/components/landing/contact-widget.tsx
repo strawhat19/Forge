@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { siteConfig } from '@/shared/config/site';
+import { useGlobalContext } from '@/shared/global-context';
 import ForgeAuthForm from '@/app/components/auth/forge-auth-form';
 
 type WidgetTab = 'contact' | 'sign-in' | 'sign-up';
@@ -13,6 +14,8 @@ const widgetTabs: ReadonlyArray<{ id: WidgetTab; label: string; index: string }>
 ];
 
 export default function ContactWidget() {
+  const { user } = useGlobalContext();
+  
   const [activeTab, setActiveTab] = useState<WidgetTab>('contact');
   const activeTabIndex = widgetTabs.find((tab) => tab.id === activeTab)?.index ?? '01';
 
@@ -42,14 +45,13 @@ export default function ContactWidget() {
       </div>
 
       <div className="contactWidgetSegments" role="tablist" aria-label="Contact options">
-        {widgetTabs.map((tab) => {
+        {(user ? [widgetTabs[0]] : widgetTabs).map((tab) => {
           const active = tab.id === activeTab;
-
           return (
             <button
               key={tab.id}
               id={`contact-widget-tab-${tab.id}`}
-              className={`contactWidgetSegment${active ? ' contactWidgetSegmentActive' : ''}`}
+              className={`contactWidgetSegmentButton_${tab?.id} contactWidgetSegment${active ? ' contactWidgetSegmentActive' : ''}`}
               type="button"
               role="tab"
               aria-selected={active}
@@ -68,16 +70,16 @@ export default function ContactWidget() {
         role="tabpanel"
         aria-labelledby={`contact-widget-tab-${activeTab}`}
       >
-        {activeTab === 'contact' ? (
+        {(activeTab === 'contact' || user != null) ? (
           <form className="contactWidgetForm" onSubmit={handleSubmit}>
             <div className="contactWidgetFieldRow">
               <label className="contactWidgetField">
                 <span>Name</span>
-                <input name="name" type="text" autoComplete="name" placeholder="Your name" required />
+                <input name="name" type="text" autoComplete="name" placeholder={user ? user?.name : `Your name`} disabled={user != null} required />
               </label>
               <label className="contactWidgetField">
                 <span>Email</span>
-                <input name="email" type="email" autoComplete="email" placeholder="you@example.com" required />
+                <input name="email" type="email" autoComplete="email" placeholder={user ? user?.email : `you@example.com`} disabled={user != null} required />
               </label>
             </div>
 

@@ -5,7 +5,6 @@ import { siteConfig } from '@/shared/config/site';
 import AnvilMark from '@/app/components/brand/anvil-mark';
 import TextReveal from '@/app/components/effects/text-reveal';
 import SplitHeading from '@/app/components/effects/split-heading';
-import ContactWidget from '@/app/components/landing/contact-widget';
 import ElementReveal from '@/app/components/effects/element-reveal';
 import HeroSplitTitle from '@/app/components/landing/hero-split-title';
 import { scrollToElement } from '@/shared/scripts/functions/navigation/navigation';
@@ -117,7 +116,6 @@ export default function ForgeLanding() {
         <ElementReveal as="a" className="contactLink" href={`mailto:${siteConfig.contactEmail}`} delay={0.06}>
           {siteConfig.contactEmail}<span aria-hidden="true">↗</span>
         </ElementReveal>
-        <ContactWidget />
       </section>
     </div>
   );

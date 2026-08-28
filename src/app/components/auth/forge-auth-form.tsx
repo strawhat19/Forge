@@ -110,10 +110,14 @@ export default function ForgeAuthForm({ mode, variant = 'page', toolMark }: Forg
           </div>
         )}
         <div className="authSession">
-          <span>Simulated session</span>
-          <strong>{user.name}</strong>
-          <small>{user.email}</small>
-          <small>Role / {user.role}</small>
+          <div className={`authSessionIdentity`}>
+            <strong>{user.name}</strong>
+            <div className={`authSessionStats`}>
+              <span>{user.email}</span>
+              <small>Role / {user.role}</small>
+            </div>
+            
+          </div>
           <button className="authSubmit" type="button" onClick={handleSignOut}>
             Sign out
             <span aria-hidden="true">↗</span>

@@ -924,6 +924,27 @@
   transform: rotate(45deg);
 }
 
+.footerContact {
+  width: 100%;
+  height: stretch;
+  position: relative;
+  .contactWidget {
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    .contactWidgetForm {
+      display: grid;
+      grid-template-rows: auto 100% auto;
+      .contactWidgetField {
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+    }
+  }
+}
+
 .contactWidget {
   position: absolute;
   top: clamp(2rem, 16vw, 13rem);
@@ -989,7 +1010,9 @@
   border-radius: 0.5rem;
   border: 1px solid var(--line);
   background: rgba(5, 6, 8, 0.7);
-  grid-template-columns: repeat(3, 1fr);
+  &:has(.contactWidgetSegmentButton_sign-in) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .contactWidgetSegment {
@@ -1148,23 +1171,43 @@ body:has(.siteFooterParallax) > main {
 }
 
 .siteFooterParallax {
-  --footer-parallax-offset: 4.5rem;
-  --footer-parallax-backdrop: -1.9rem;
-  position: sticky;
+  --footer-parallax-offset: 7rem;
+  --footer-parallax-backdrop: -3.85rem;
+  --footer-parallax-scale: 0.94;
+  --footer-parallax-grid-scale: 1;
+  --footer-parallax-lead-x: -1.75rem;
+  --footer-parallax-signal-x: 1.25rem;
+  --footer-parallax-utility-x: 1.5rem;
+  --footer-parallax-utility-y: 1.12rem;
+  --footer-parallax-orbit-rotation: 0deg;
   bottom: 0;
   z-index: 0;
-  isolation: isolate;
+  position: sticky;
   overflow: hidden;
-  min-height: clamp(34rem, 72svh, 48rem);
-  padding: clamp(4rem, 7vw, 7rem) var(--page-gutter) 2.5rem;
-  padding-right: max(var(--page-gutter), 7rem);
-  grid-template-columns: minmax(18rem, 1fr) auto auto;
+  isolation: isolate;
   align-content: space-between;
-  gap: clamp(1.5rem, 4vw, 3rem);
+  // gap: clamp(1.5rem, 4vw, 3rem);
   border-top: 1px solid var(--line-hot);
+  // min-height: clamp(34rem, 72svh, 48rem);
+  // padding-right: max(var(--page-gutter), 7rem);
+  // grid-template-columns: minmax(18rem, 1fr) auto auto;
+  padding: clamp(4rem, 7vw, 7rem) var(--page-gutter) 2.5rem;
   background:
     radial-gradient(circle at 78% 30%, rgba(255, 32, 41, 0.18), transparent 28rem),
     linear-gradient(160deg, #08090c 0%, var(--ink) 62%);
+
+    min-height: auto;
+    align-items: center;
+    gap: 50px !important;
+    grid-template-columns: 1fr;
+}
+
+.footerParallaxSentinel {
+  display: block;
+  width: 1px;
+  height: 1px;
+  margin-top: -1px;
+  pointer-events: none;
 }
 
 .siteFooterParallax::before {
@@ -1178,7 +1221,8 @@ body:has(.siteFooterParallax) > main {
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 5rem 5rem;
   mask-image: linear-gradient(to bottom, #000, transparent 78%);
-  transform: translate3d(0, var(--footer-parallax-backdrop), 0);
+  transform: translate3d(0, var(--footer-parallax-backdrop), 0) scale(var(--footer-parallax-grid-scale));
+  transform-origin: 50% 100%;
   will-change: transform;
 }
 
@@ -1192,8 +1236,10 @@ body:has(.siteFooterParallax) > main {
   content: '';
   border: 1px solid rgba(255, 32, 41, 0.2);
   border-radius: 50%;
+  background: conic-gradient(from 30deg, transparent 0 70%, rgba(255, 32, 41, 0.2) 76%, rgba(255, 103, 36, 0.08) 80%, transparent 86%);
   box-shadow: 0 0 7rem rgba(255, 32, 41, 0.1), inset 0 0 5rem rgba(255, 32, 41, 0.04);
-  transform: translate3d(0, var(--footer-parallax-offset), 0);
+  transform: translate3d(0, var(--footer-parallax-offset), 0) scale(var(--footer-parallax-scale)) rotate(var(--footer-parallax-orbit-rotation));
+  transform-origin: center;
   will-change: transform;
 }
 
@@ -1212,7 +1258,7 @@ body:has(.siteFooterParallax) > main {
   justify-content: space-between;
   color: var(--steel-light);
   pointer-events: none;
-  transform: translate3d(0, var(--footer-parallax-backdrop), 0);
+  transform: translate3d(var(--footer-parallax-signal-x), var(--footer-parallax-backdrop), 0);
   will-change: transform;
 }
 
@@ -1223,7 +1269,20 @@ body:has(.siteFooterParallax) > main {
   align-content: end;
   align-items: start;
   gap: 1.6rem;
-  transform: translate3d(0, var(--footer-parallax-offset), 0);
+  transform: translate3d(var(--footer-parallax-lead-x), var(--footer-parallax-offset), 0) scale(var(--footer-parallax-scale));
+  transform-origin: 0 100%;
+  will-change: transform;
+}
+
+.siteFooterParallax > .footerUtilityLayer {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(18rem, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  transform: translate3d(var(--footer-parallax-utility-x), var(--footer-parallax-utility-y), 0);
   will-change: transform;
 }
 

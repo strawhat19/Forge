@@ -302,7 +302,7 @@ export default function ForgeDashboard() {
               <Link href="/workflows">Manage workflows<span aria-hidden="true">→</span></Link>
             </div>
 
-            <ElementReveal className="dashboardEnvironmentLayout" slide>
+            <div className="dashboardEnvironmentLayout">
               <div className="dashboardEnvironmentList" role="group" aria-label="CloudFormation environments">
                 {environments.map(item => (
                   <button
@@ -332,7 +332,7 @@ export default function ForgeDashboard() {
                   <span>Root</span><i /><span>Network</span><i /><span>Services</span><i /><span>Data</span>
                 </div>
               </div>
-            </ElementReveal>
+            </div>
           </section>
 
           <section id="changes" className="dashboardPanel dashboardChangesPanel">
@@ -340,7 +340,7 @@ export default function ForgeDashboard() {
               <div><TextReveal as="span" className="eyebrow" text="Release queue" /><TextReveal as="h2" text="Staged Change Sets" variant="hero" /></div>
               <span>3 awaiting action</span>
             </div>
-            <ElementReveal className="dashboardTableWrap" slide>
+            <div className="dashboardTableWrap">
               <table>
                 <thead><tr><th>Change Set</th><th>Stack / Environment</th><th>Resources</th><th>Impact</th><th>Status</th><th>Age</th></tr></thead>
                 <tbody>
@@ -356,7 +356,7 @@ export default function ForgeDashboard() {
                   ))}
                 </tbody>
               </table>
-            </ElementReveal>
+            </div>
           </section>
 
           <div className="dashboardSplitPanels">

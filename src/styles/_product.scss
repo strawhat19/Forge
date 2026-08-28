@@ -882,20 +882,20 @@
 }
 
 .siteProductFooter {
-  grid-template-columns: minmax(18rem, 1fr) auto auto;
   align-items: center;
+  grid-template-columns: 1fr;
 }
 
 .siteProductFooter .footerIdentity {
+  gap: 1rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
 .siteProductFooter .footerBrand {
-  display: inline-flex;
-  align-items: center;
   gap: 0.55rem;
+  align-items: center;
+  display: inline-flex;
 }
 
 .siteProductFooter .footerBrand img {
@@ -914,15 +914,21 @@
 }
 
 .siteProductFooter .footerBottom {
-  display: grid;
   width: 100%;
-  min-width: 0;
-  padding-top: 1.35rem;
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
   gap: 1.5rem;
+  min-width: 0;
+  display: grid;
+  grid-column: 1 / -1;
+  align-items: center;
+  padding-top: 1.35rem;
   border-top: 1px solid var(--line);
+  grid-template-columns: minmax(0, 1fr) auto;
+  @media (min-width: 680px) {
+    padding-right: 60px;
+  }
+  @media (min-width: 1366px) {
+    padding-right: 40px;
+  }
 }
 
 .footerBottom > span:last-child {
@@ -3113,6 +3119,10 @@
     grid-template-columns: 1fr auto;
   }
 
+  .siteFooterParallax > .footerUtilityLayer {
+    grid-template-columns: 1fr auto;
+  }
+
   .siteProductFooter .footerRepositories {
     justify-self: end;
   }
@@ -3473,6 +3483,11 @@
 
   .siteProductFooter {
     grid-template-columns: 1fr;
+  }
+
+  .siteFooterParallax > .footerUtilityLayer {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .siteProductFooter .footerIdentity {
