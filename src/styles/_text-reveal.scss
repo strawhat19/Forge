@@ -10,13 +10,14 @@
 
 .textRevealWord-mask,
 .textRevealChar-mask {
-  display: inline-block;
   overflow: hidden;
+  display: inline-block;
   vertical-align: bottom;
 }
 
 .textRevealWord,
 .textRevealChar {
+  padding: 0 3px 2px 0;
   display: inline-block;
   vertical-align: bottom;
   will-change: transform, opacity, visibility;

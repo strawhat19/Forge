@@ -400,9 +400,8 @@
   }
 
   .mobileNavActions .mobileNavCta {
-    padding-top: 10px;
+    padding-top: 13px;
     grid-column: 1 / -1;
-    padding-top: 0.15rem;
     justify-self: stretch;
     justify-content: space-between;
     border-top: 1px solid var(--line);
@@ -520,9 +519,26 @@
     padding-right: var(--page-gutter);
   }
 
+  .siteFooterParallax {
+    min-height: min(46rem, 88svh);
+  }
+
   .siteFooter > div {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .siteFooterParallax > .footerSignal {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .siteFooterParallax > .footerLead {
+    gap: 1.25rem;
+  }
+
+  .footerLead h2 {
+    font-size: clamp(3.5rem, 16vw, 5.5rem);
   }
 
   .scrollToTop {

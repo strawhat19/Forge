@@ -212,7 +212,7 @@ export default function ForgeDashboard() {
             </div>
 
             <div key={chartKey} className="dashboardChartsGrid">
-              <ElementReveal as="article" className="dashboardChartCard dashboardThroughputChart">
+              <article className="dashboardChartCard dashboardThroughputChart">
                 <header>
                   <div><span>Change Set throughput</span><small>{environment.label} / {activeRange.label}</small></div>
                   <strong><Counter number={stagedValues.reduce((total, value) => total + value, 0)} speed={0.9} blurIntensity={2.6} /><small> staged</small></strong>
@@ -239,9 +239,9 @@ export default function ForgeDashboard() {
                     {activeRange.axis.map(label => <span key={label}>{label}</span>)}
                   </div>
                 </div>
-              </ElementReveal>
+              </article>
 
-              <ElementReveal as="article" className="dashboardChartCard dashboardImpactChart" delay={0.07}>
+              <article className="dashboardChartCard dashboardImpactChart">
                 <header>
                   <div><span>Resource impact</span><small>Next staged release</small></div>
                   <strong><Counter number={impactTotal} speed={0.85} blurIntensity={2.4} /><small> resources</small></strong>
@@ -276,9 +276,9 @@ export default function ForgeDashboard() {
                     ))}
                   </ul>
                 </div>
-              </ElementReveal>
+              </article>
 
-              <ElementReveal as="article" className="dashboardChartCard dashboardDriftChart" delay={0.12}>
+              <article className="dashboardChartCard dashboardDriftChart">
                 <header>
                   <div><span>Drift findings</span><small>Open findings trend</small></div>
                   <strong><Counter number={driftValues[driftValues.length - 1]} speed={0.75} blurIntensity={2.2} /><small> open</small></strong>
@@ -292,7 +292,7 @@ export default function ForgeDashboard() {
                     </div>
                   ))}
                 </div>
-              </ElementReveal>
+              </article>
             </div>
           </section>
 

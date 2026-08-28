@@ -1,18 +1,49 @@
 import Image from 'next/image';
 import { siteConfig } from '@/shared/config/site';
 import Clock from '@/app/components/chrome/clock';
+import TextReveal from '@/app/components/effects/text-reveal';
 import GitHubLinks from '@/app/components/product/github-links';
+import ElementReveal from '@/app/components/effects/element-reveal';
+import FooterParallax from '@/app/components/chrome/footer-parallax';
 
-export default function SiteFooter() {
+type SiteFooterProps = {
+  parallax?: boolean;
+};
+
+export default function SiteFooter({ parallax = false }: SiteFooterProps) {
+  if (!parallax) {
+    return (
+      <footer className="siteFooter siteProductFooter">
+        <div className="footerIdentity">
+          <span className="footerBrand"><Image src={`/${siteConfig.logo}`} alt="" width={18} height={21} />Forge</span>
+          <span className="footerNote">Cloud Forged Controlled Releases.</span>
+        </div>
+        <GitHubLinks compact className="footerRepositories" />
+        <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+        <div className="footerBottom"><Clock /><span>© {new Date().getFullYear()} Forge</span></div>
+      </footer>
+    );
+  }
+
   return (
-    <footer className="siteFooter siteProductFooter">
-      <div className="footerIdentity">
+    <FooterParallax>
+      <div className="footerSignal" aria-hidden="true"><span>CFN / Forge</span><span>Release Control / 01</span></div>
+      <div className="footerLead">
+        <TextReveal as="span" className="eyebrow" text="The final release gate" />
+        <h2 style={{ letterSpacing: `-2px`, }}>
+          <TextReveal as="span" className="footerTitleLine" text="Inspect. Stage." variant="hero" />
+          <TextReveal as="span" className="footerTitleLine footerTitleAccent" text="Release." variant="hero" delay={0.08} />
+        </h2>
+      </div>
+      <ElementReveal className="footerIdentity" y={12}>
         <span className="footerBrand"><Image src={`/${siteConfig.logo}`} alt="" width={18} height={21} />Forge</span>
         <span className="footerNote">Cloud Forged Controlled Releases.</span>
-      </div>
-      <GitHubLinks compact className="footerRepositories" />
-      <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
-      <div className="footerBottom"><Clock /><span>© {new Date().getFullYear()} Forge</span></div>
-    </footer>
+      </ElementReveal>
+      <ElementReveal className="footerRepositoryReveal" y={12} delay={0.08}>
+        <GitHubLinks compact className="footerRepositories" />
+      </ElementReveal>
+      <ElementReveal as="a" className="footerEmail" href={`mailto:${siteConfig.contactEmail}`} y={12} delay={0.12}>{siteConfig.contactEmail}</ElementReveal>
+      <ElementReveal className="footerBottom" y={12} delay={0.16}><Clock /><span>© {new Date().getFullYear()} Forge</span></ElementReveal>
+    </FooterParallax>
   );
 }

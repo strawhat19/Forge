@@ -77,7 +77,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
           <GaussianBlurOverlay />
           <SiteHeader sticky />
           <main>{children}</main>
-          <SiteFooter />
+          <SiteFooter parallax />
           <ScrollToTop />
         </GlobalProvider>
       </body>
