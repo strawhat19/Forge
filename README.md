@@ -1,5 +1,7 @@
 # Forge
 
+![Forge](./public/versions/Forge_v000_17.gif)
+
 Forge is the product, marketing, documentation, and future member-portal client for [cfn-forge](https://github.com/MJ66GA-Projects/cfn-forge), a CloudFormation deployment intelligence and lifecycle CLI.
 
 The current site introduces the CLI through the same staged workflow the engine implements: resolve an environment, compare deployed and desired nested template trees, create an unexecuted Change Set, inspect the full impact, and release only after an explicit operator decision.
