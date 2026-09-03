@@ -28,7 +28,7 @@ export default function PlansPage() {
       <section className="productSection productPlansSection">
         <div className="productSectionHeading">
           <span className="eyebrow">Preview pricing</span>
-          <SplitHeading text="Choose the level of<br /><em>operational support.</em>" />
+          <SplitHeading text="Choose Level of<br /><em>Operational Support.</em>" />
           <p>The pricing component is ready for the future member portal. For now, Starter links to the public server source and paid-plan calls to action open a direct conversation.</p>
         </div>
         <ElementReveal><PricingTable /></ElementReveal>

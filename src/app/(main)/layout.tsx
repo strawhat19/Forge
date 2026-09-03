@@ -73,7 +73,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
           <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
         <GlobalProvider>
-          <ForgeLoader />
+          <ForgeLoader doneDelayBeforeLeave={0} />
           <GaussianBlurOverlay />
           <SiteHeader sticky />
           <main>{children}</main>

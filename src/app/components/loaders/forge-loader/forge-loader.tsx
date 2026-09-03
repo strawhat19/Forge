@@ -2,21 +2,24 @@
 
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
+import { siteConfig } from '@/shared/config/site';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import ForgeAnvilOrbit from '@/app/components/brand/forge-anvil-orbit';
 import Counter, { type CounterHandle } from '@/app/components/effects/counter';
-import {
-  isForgeLoaderDone,
-  markForgeLoaderLoading,
-  markForgeLoaderDone,
-} from './forge-loader-events';
+import { isForgeLoaderDone, markForgeLoaderLoading, markForgeLoaderDone } from './forge-loader-events';
 
-const NAVIGATION_COVER_DELAY_MS = 620;
+const ANVIL_END_SCALE = 1.12;
+const ANVIL_START_SCALE = 1.06;
 const NAVIGATION_FALLBACK_MS = 5000;
+const NAVIGATION_COVER_DELAY_MS = 620;
+
+type ForgeLoaderProps = {
+  doneDelayBeforeLeave?: number;
+};
 
 const loaderStatusSteps = [
-  `Heating forge`,
+  siteConfig?.title ?? `Forge`,
   `Reading templates`,
   `Resolving inputs`,
   `Comparing diffs`,
@@ -29,7 +32,7 @@ const loaderStatusSteps = [
 ] as const;
 
 const routeLabels: Record<string, string> = {
-  '/': `Forge`,
+  '/': siteConfig?.title ?? `Forge`,
   '/product': `Product`,
   '/features': `Features`,
   '/workflows': `Workflows`,
@@ -57,9 +60,10 @@ const getRouteLabel = (path: string) => {
     .replace(/\b\w/g, character => character.toUpperCase());
 };
 
-export default function ForgeLoader() {
+export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const doneDelayBeforeLeaveSeconds = Number.isFinite(doneDelayBeforeLeave) ? Math.max(0, doneDelayBeforeLeave) : 0;
   const previousPathnameRef = useRef(pathname);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const coreRef = useRef<HTMLDivElement | null>(null);
@@ -230,6 +234,7 @@ export default function ForgeLoader() {
     const renderProgress = () => {
       const rounded = Math.round(progress.value);
       const nextStatusIndex = Math.min(Math.floor(rounded / 10), loaderStatusSteps.length - 1);
+      const anvilScale = ANVIL_START_SCALE + (ANVIL_END_SCALE - ANVIL_START_SCALE) * progress.value / 100;
 
       if (nextStatusIndex !== activeStatusIndex) {
         activeStatusIndex = nextStatusIndex;
@@ -237,6 +242,7 @@ export default function ForgeLoader() {
       }
 
       ring.style.setProperty('--forge-anvil-progress', `${progress.value * 3.6}deg`);
+      ring.style.setProperty(`--forge-anvil-load-scale`, `${anvilScale}`);
       counterRef.current?.setValue(progress.value);
       overlay.setAttribute('aria-valuenow', String(rounded));
     };
@@ -335,7 +341,7 @@ export default function ForgeLoader() {
               },
             },
           )
-          .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.26, ease: 'power2.in' }, '-=0.1')
+          .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.26, ease: 'power2.in' }, `+=${doneDelayBeforeLeaveSeconds}`)
           .addLabel('lift')
           .to(bottomRail, { autoAlpha: 0, duration: 0.12, ease: 'power2.out' }, 'lift')
           .to(overlay, { yPercent: -100, duration: 0.82, ease: 'power3.inOut' }, 'lift')
@@ -351,6 +357,7 @@ export default function ForgeLoader() {
     const initialTimeline = gsap.context(() => {
       activeStatusIndex = 0;
       const initialTextTargets = prepareLoaderText(loaderStatusSteps[0]);
+      renderProgress();
 
       if (reducedMotion) {
         progress.value = 100;
@@ -399,7 +406,7 @@ export default function ForgeLoader() {
           },
           0.18,
         )
-        .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.32, ease: 'power2.in' }, '+=0.22')
+        .to(core, { scale: 0.97, autoAlpha: 0, duration: 0.32, ease: 'power2.in' }, `+=${doneDelayBeforeLeaveSeconds}`)
         .addLabel('lift')
         .to(bottomRail, { autoAlpha: 0, duration: 0.12, ease: 'power2.out' }, 'lift')
         .to(overlay, { yPercent: -100, duration: 1.15, ease: 'power3.inOut' }, 'lift')
@@ -420,7 +427,7 @@ export default function ForgeLoader() {
       initialTimeline.revert();
       revertLoaderText();
     };
-  }, []);
+  }, [doneDelayBeforeLeaveSeconds]);
 
   useLayoutEffect(() => {
     if (previousPathnameRef.current === pathname) return;
@@ -524,7 +531,9 @@ export default function ForgeLoader() {
         </ForgeAnvilOrbit>
 
         <div className="forgeLoaderReadout">
-          <span ref={statusRef} className="forgeLoaderStatus">Heating the forge</span>
+          <span ref={statusRef} className="forgeLoaderStatus">
+            {siteConfig?.title ?? `Forge`}
+          </span>
           <Counter
             ref={counterRef}
             number={100}

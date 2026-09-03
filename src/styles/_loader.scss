@@ -31,6 +31,10 @@ html.forgeLoading body > :not(.forgeLoader) {
   gap: 2rem;
 }
 
+.forgeLoader .forgeAnvilOrbitMark {
+  scale: var(--forge-anvil-load-scale, 1.06);
+}
+
 .forgeLoaderDestination {
   position: absolute;
   bottom: 13%;
