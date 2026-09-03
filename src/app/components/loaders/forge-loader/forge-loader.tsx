@@ -14,12 +14,23 @@ const ANVIL_START_SCALE = 1.06;
 const NAVIGATION_FALLBACK_MS = 5000;
 const NAVIGATION_COVER_DELAY_MS = 620;
 
+export const loaderStatusStepLabels = {
+  begin: siteConfig?.title ?? `Forge`,
+  ready: `Release`,
+};
+
 type ForgeLoaderProps = {
   doneDelayBeforeLeave?: number;
 };
 
+type ForgeLoaderRampWindow = Window & {
+  __forgeLoaderFrame?: number;
+  __forgeLoaderProgress?: number;
+  __forgeLoaderRampDone?: boolean;
+};
+
 const loaderStatusSteps = [
-  siteConfig?.title ?? `Forge`,
+  loaderStatusStepLabels?.begin ?? `Forge`,
   `Reading templates`,
   `Resolving inputs`,
   `Comparing diffs`,
@@ -28,11 +39,11 @@ const loaderStatusSteps = [
   `Inspecting impact`,
   `Checking drift`,
   `Setting guardrails`,
-  `Recording history`,
+  `Inspect. Stage.`,
 ] as const;
 
 const routeLabels: Record<string, string> = {
-  '/': siteConfig?.title ?? `Forge`,
+  '/': loaderStatusStepLabels?.begin ?? `Forge`,
   '/product': `Product`,
   '/features': `Features`,
   '/workflows': `Workflows`,
@@ -101,13 +112,25 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     gsap.registerPlugin(SplitText);
 
-    const progress = { value: 0 };
+    const rampWindow = window as ForgeLoaderRampWindow;
+    const rampProgress = rampWindow.__forgeLoaderProgress;
+    const initialProgress = typeof rampProgress === `number` && Number.isFinite(rampProgress)
+      ? gsap.utils.clamp(0, 100, rampProgress)
+      : 0;
+    rampWindow.__forgeLoaderRampDone = true;
+
+    if (typeof rampWindow.__forgeLoaderFrame === `number`) {
+      window.cancelAnimationFrame(rampWindow.__forgeLoaderFrame);
+      delete rampWindow.__forgeLoaderFrame;
+    }
+
+    const progress = { value: initialProgress };
     let topRailSplit: SplitText | null = null;
     let destinationSplit: SplitText | null = null;
     let statusSplit: SplitText | null = null;
     let bottomRailSplit: SplitText | null = null;
     let statusTween: gsap.core.Tween | null = null;
-    let activeStatusIndex = 0;
+    let activeStatusIndex = Math.min(Math.floor(Math.round(progress.value) / 10), loaderStatusSteps.length - 1);
 
     const revertLoaderText = () => {
       statusTween?.kill();
@@ -231,7 +254,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
       fallbackTimerRef.current = null;
     };
 
-    const renderProgress = () => {
+    const renderProgress = (forceCounterPaint = false) => {
       const rounded = Math.round(progress.value);
       const nextStatusIndex = Math.min(Math.floor(rounded / 10), loaderStatusSteps.length - 1);
       const anvilScale = ANVIL_START_SCALE + (ANVIL_END_SCALE - ANVIL_START_SCALE) * progress.value / 100;
@@ -241,9 +264,9 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
         setStatusText(loaderStatusSteps[nextStatusIndex], true);
       }
 
-      ring.style.setProperty('--forge-anvil-progress', `${progress.value * 3.6}deg`);
-      ring.style.setProperty(`--forge-anvil-load-scale`, `${anvilScale}`);
-      counterRef.current?.setValue(progress.value);
+      overlay.style.setProperty(`--forge-loader-progress`, `${progress.value * 3.6}deg`);
+      overlay.style.setProperty(`--forge-loader-anvil-scale`, `${anvilScale}`);
+      counterRef.current?.setValue(progress.value, forceCounterPaint ? { force: true } : undefined);
       overlay.setAttribute('aria-valuenow', String(rounded));
     };
 
@@ -305,7 +328,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
         replayTimeline
           .to(overlay, { yPercent: 0, duration: 0.08 })
           .set(progress, { value: 100, onComplete: renderProgress })
-          .set(status, { textContent: 'Ready to strike' })
+          .set(status, { textContent: loaderStatusStepLabels?.ready })
           .to(overlay, { autoAlpha: 0, duration: 0.12, delay: 0.08 });
       } else {
         replayTimeline
@@ -337,7 +360,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
               onUpdate: renderProgress,
               onComplete: () => {
                 counterRef.current?.settle();
-                setStatusText('Ready to strike', true);
+                setStatusText(loaderStatusStepLabels?.ready, true);
               },
             },
           )
@@ -355,9 +378,8 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
     finishReplayRef.current = finishReplay;
 
     const initialTimeline = gsap.context(() => {
-      activeStatusIndex = 0;
-      const initialTextTargets = prepareLoaderText(loaderStatusSteps[0]);
-      renderProgress();
+      const initialTextTargets = prepareLoaderText(loaderStatusSteps[activeStatusIndex]);
+      renderProgress(true);
 
       if (reducedMotion) {
         progress.value = 100;
@@ -372,9 +394,11 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
           .to(bottomRail, { autoAlpha: 0, duration: 0.08 })
           .to(overlay, { autoAlpha: 0, duration: 0.18, delay: 0.08 })
           .set(overlay, { display: 'none' });
+        overlay.classList.remove(`forgeLoaderPending`);
         return;
       }
 
+      const initialProgressDuration = Math.max(0.4, 2.05 * (1 - progress.value / 100));
       const initialSequence = gsap.timeline({
         onComplete: () => {
           hideOverlay();
@@ -396,12 +420,12 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
           progress,
           {
             value: 100,
-            duration: 2.05,
+            duration: initialProgressDuration,
             ease: 'power3.inOut',
             onUpdate: renderProgress,
             onComplete: () => {
               counterRef.current?.settle();
-              setStatusText('Ready to strike', true);
+              setStatusText(loaderStatusStepLabels?.ready, true);
             },
           },
           0.18,
@@ -412,6 +436,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
         .to(overlay, { yPercent: -100, duration: 1.15, ease: 'power3.inOut' }, 'lift')
         .to(tail, { scaleY: 0, duration: 1.15, ease: 'power2.in' }, 'lift')
         .set(overlay, { display: 'none' });
+      overlay.classList.remove(`forgeLoaderPending`);
     }, overlay);
 
     return () => {
@@ -424,6 +449,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
       statusTween?.kill();
       startReplayRef.current = () => undefined;
       finishReplayRef.current = () => undefined;
+      overlay.classList.add(`forgeLoaderPending`);
       initialTimeline.revert();
       revertLoaderText();
     };
@@ -440,15 +466,12 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
       navigationTimerRef.current = null;
     }
 
-    if (!isForgeLoaderDone()) {
-      startReplayRef.current();
-      return;
-    }
-
     if (replayActiveRef.current) {
       finishReplayRef.current();
       return;
     }
+
+    if (!isForgeLoaderDone()) return;
 
     startReplayRef.current();
     finishReplayRef.current();
@@ -511,12 +534,14 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
   return (
     <div
       ref={overlayRef}
-      className="forgeLoader"
+      data-forge-loader
+      className="forgeLoader forgeLoaderPending"
       role="progressbar"
       aria-label="Preparing Forge"
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={0}
+      suppressHydrationWarning
     >
       <span ref={topRailRef} className="forgeLoaderRail forgeLoaderRailTop">
         Forged in Fire
@@ -532,7 +557,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
 
         <div className="forgeLoaderReadout">
           <span ref={statusRef} className="forgeLoaderStatus">
-            {siteConfig?.title ?? `Forge`}
+            {loaderStatusStepLabels?.begin ?? `Forge`}
           </span>
           <Counter
             ref={counterRef}
@@ -546,6 +571,7 @@ export default function ForgeLoader({ doneDelayBeforeLeave = 0 }: ForgeLoaderPro
             suffix="%"
             className="forgeLoaderPercent"
             valueClassName="forgeLoaderNumber"
+            suppressValueHydrationWarning
             suffixClassName="forgeLoaderUnit"
             ariaHidden
           />

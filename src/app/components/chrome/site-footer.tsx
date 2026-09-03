@@ -37,7 +37,7 @@ export default function SiteFooter({ parallax = false }: SiteFooterProps) {
           <div className="footerLead">
             <TextReveal as="span" className="eyebrow" text="The final release gate" />
             <h2 style={{ letterSpacing: `-2px`, }}>
-              <TextReveal as="span" className="footerTitleLine" text="Inspect. Stage." variant="hero" />
+              <TextReveal as="span" className="footerTitleLine footerTitleLineTop" text="Inspect. Stage." variant="hero" />
               <TextReveal as="span" className="footerTitleLine footerTitleAccent" text="Release." variant="hero" delay={0.08} />
             </h2>
           </div>

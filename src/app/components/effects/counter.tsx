@@ -55,6 +55,7 @@ export type CounterProps = {
   waitForLoader?: boolean;
   className?: string;
   valueClassName?: string;
+  suppressValueHydrationWarning?: boolean;
   prefixClassName?: string;
   suffixClassName?: string;
   ariaLabel?: string;
@@ -98,6 +99,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(function Counter({
   waitForLoader = true,
   className = ``,
   valueClassName = ``,
+  suppressValueHydrationWarning = false,
   prefixClassName = ``,
   suffixClassName = ``,
   ariaLabel,
@@ -259,6 +261,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(function Counter({
         ref={valueRef}
         className={`counterValue ${valueClassName}`.trim()}
         style={{ filter: `url(#${filterId})`, minWidth: `${Math.max(initialValue.length, targetValue.length)}ch` }}
+        suppressHydrationWarning={suppressValueHydrationWarning}
         aria-hidden="true"
       >
         {initialValue}

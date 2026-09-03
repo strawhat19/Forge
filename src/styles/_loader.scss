@@ -31,8 +31,24 @@ html.forgeLoading body > :not(.forgeLoader) {
   gap: 2rem;
 }
 
+.forgeLoader .forgeAnvilOrbit {
+  --forge-anvil-progress: var(--forge-loader-progress, 0deg);
+}
+
 .forgeLoader .forgeAnvilOrbitMark {
-  scale: var(--forge-anvil-load-scale, 1.06);
+  scale: var(--forge-loader-anvil-scale, 1.06);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .forgeLoaderPending .forgeLoaderCore {
+    transform: translateY(12px) scale(0.92);
+  }
+
+  .forgeLoaderPending .forgeLoaderDestination,
+  .forgeLoaderPending .forgeLoaderStatus,
+  .forgeLoaderPending .forgeLoaderRail {
+    visibility: hidden;
+  }
 }
 
 .forgeLoaderDestination {

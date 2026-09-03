@@ -1336,6 +1336,10 @@ body:has(.siteFooterParallax) > main {
   display: block;
 }
 
+.footerTitleLineTop {
+  color: var(--paper);
+}
+
 .footerTitleAccent {
   color: var(--red);
 }

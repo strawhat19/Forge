@@ -27,6 +27,7 @@ const mono = Geist_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const LOADER_RAMP_SCRIPT = `(function(){try{var w=window,s=performance.now(),m=w.matchMedia&&w.matchMedia('(prefers-reduced-motion: reduce)').matches,p=m?100:0,c=94,d=2050;w.__forgeLoaderRampDone=false;w.__forgeLoaderProgress=p;function paint(){var e=document.querySelector('[data-forge-loader]'),n=document.querySelector('.forgeLoaderNumber');if(e){e.style.setProperty('--forge-loader-progress',p*3.6+'deg');e.style.setProperty('--forge-loader-anvil-scale',1.06+0.06*p/100);e.setAttribute('aria-valuenow',Math.round(p));}if(n)n.textContent=String(Math.round(p)).padStart(2,'0');}function tick(t){if(w.__forgeLoaderRampDone)return;p=Math.min(c,c*(t-s)/d);w.__forgeLoaderProgress=p;paint();w.__forgeLoaderFrame=w.requestAnimationFrame(tick);}paint();if(!m)w.__forgeLoaderFrame=w.requestAnimationFrame(tick);}catch(_){}})();`;
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
@@ -69,6 +70,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: LOADER_RAMP_SCRIPT }} />
         <noscript>
           <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
