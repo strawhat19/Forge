@@ -21,11 +21,17 @@ type SiteHeaderProps = {
   sticky?: boolean;
 };
 
+const megaMenuHoverDelay = 300;
+const megaMenuCloseDelay = 400;
+const megaMenuFocusCooldown = 500;
+
 export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
   const { user, onSignOut } = useGlobalContext();
   const userId = user?.id ?? null;
   const scrolledRef = useRef(false);
   const mobileMenuToggleRef = useRef<HTMLButtonElement | null>(null);
+  const megaMenuTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverBlockedUntilRef = useRef(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openAccountUserId, setOpenAccountUserId] = useState<string | null>(null);
@@ -41,11 +47,19 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
     transition: `background-color 360ms ease, backdrop-filter 420ms cubic-bezier(0.2, 0.85, 0.25, 1), -webkit-backdrop-filter 420ms cubic-bezier(0.2, 0.85, 0.25, 1)`,
   } as CSSProperties;
 
+  const cancelMegaMenuHover = useCallback(() => {
+    if (megaMenuTimerRef.current !== null) {
+      clearTimeout(megaMenuTimerRef.current);
+      megaMenuTimerRef.current = null;
+    }
+  }, []);
+
   const closeNavigation = useCallback(() => {
+    cancelMegaMenuHover();
     setMenuOpen(false);
     setActiveMegaMenu(null);
     setActiveMobileSection(null);
-  }, []);
+  }, [cancelMegaMenuHover]);
 
   const closeHeaderSurfaces = useCallback(() => {
     closeNavigation();
@@ -70,15 +84,38 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
     setOpenAccountUserId(open ? userId : null);
   }, [closeNavigation, userId]);
 
-  const changeMegaMenu = (menuId: string | null) => {
+  const changeMegaMenu = useCallback((menuId: string | null) => {
+    cancelMegaMenuHover();
     setMenuOpen(false);
     setOpenAccountUserId(null);
     setNotificationsOpen(false);
     setActiveMobileSection(null);
     setActiveMegaMenu(menuId);
-  };
+  }, [cancelMegaMenuHover]);
+
+  const scheduleMegaMenu = useCallback((menuId: string) => {
+    cancelMegaMenuHover();
+    if (document.hidden || !document.hasFocus() || Date.now() < hoverBlockedUntilRef.current) return;
+
+    megaMenuTimerRef.current = setTimeout(() => {
+      megaMenuTimerRef.current = null;
+      if (document.hidden || !document.hasFocus() || Date.now() < hoverBlockedUntilRef.current) return;
+      changeMegaMenu(menuId);
+    }, megaMenuHoverDelay);
+  }, [cancelMegaMenuHover, changeMegaMenu]);
+
+  const scheduleMegaMenuClose = useCallback(() => {
+    cancelMegaMenuHover();
+    megaMenuTimerRef.current = setTimeout(() => {
+      megaMenuTimerRef.current = null;
+      // Keep the panel available while someone is navigating its links by keyboard.
+      if (document.activeElement?.closest(`.megaMenuOpen`)) return;
+      setActiveMegaMenu(null);
+    }, megaMenuCloseDelay);
+  }, [cancelMegaMenuHover]);
 
   const toggleMobileMenu = () => {
+    cancelMegaMenuHover();
     const nextOpen = !menuOpen;
     setActiveMegaMenu(null);
     setOpenAccountUserId(null);
@@ -91,6 +128,11 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
     const desktopQuery = window.matchMedia(`(min-width: 981px)`);
 
     const syncBreakpoint = () => closeHeaderSurfaces();
+    const suspendMegaMenu = () => {
+      // Ignore hover events replayed while the browser restores the active tab.
+      hoverBlockedUntilRef.current = Date.now() + megaMenuFocusCooldown;
+      closeNavigation();
+    };
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== `Escape`) return;
@@ -109,14 +151,21 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
     window.addEventListener(`keydown`, closeOnEscape);
     window.addEventListener(forgeLoaderStartEvent, closeHeaderSurfaces);
     window.addEventListener(forgeGaussianBlurDismissEvent, closeHeaderSurfaces);
+    window.addEventListener(`blur`, suspendMegaMenu);
+    window.addEventListener(`focus`, suspendMegaMenu);
+    document.addEventListener(`visibilitychange`, suspendMegaMenu);
 
     return () => {
       desktopQuery.removeEventListener(`change`, syncBreakpoint);
       window.removeEventListener(`keydown`, closeOnEscape);
       window.removeEventListener(forgeLoaderStartEvent, closeHeaderSurfaces);
       window.removeEventListener(forgeGaussianBlurDismissEvent, closeHeaderSurfaces);
+      window.removeEventListener(`blur`, suspendMegaMenu);
+      window.removeEventListener(`focus`, suspendMegaMenu);
+      document.removeEventListener(`visibilitychange`, suspendMegaMenu);
+      cancelMegaMenuHover();
     };
-  }, [closeHeaderSurfaces]);
+  }, [cancelMegaMenuHover, closeHeaderSurfaces, closeNavigation]);
 
   useEffect(() => {
     const overlayOpen = menuOpen || Boolean(activeMegaMenu) || notificationsOpen || accountOpen;
@@ -152,7 +201,7 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
 
   const handleNavigationBlur = (event: FocusEvent<HTMLDivElement>) => {
     if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
-    setActiveMegaMenu(null);
+    closeNavigation();
   };
 
   return (
@@ -167,9 +216,22 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
 
         <nav className="siteNav siteProductNav" aria-label="Primary navigation">
           {siteConfig.navigation.map((item) => item.children?.length ? (
-            <div className="siteNavGroup" key={item.id} onBlur={handleNavigationBlur} onMouseEnter={() => changeMegaMenu(item.id)}>
+            <div
+              className="siteNavGroup"
+              key={item.id}
+              onBlur={handleNavigationBlur}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== `mouse`) return;
+                cancelMegaMenuHover();
+                if (activeMegaMenu !== item.id) scheduleMegaMenu(item.id);
+              }}
+              onPointerLeave={(event) => {
+                if (event.pointerType === `mouse`) scheduleMegaMenuClose();
+              }}
+              onPointerCancel={cancelMegaMenuHover}
+            >
               <div className="siteNavGroupControl">
-                <Link className="siteNavGroupLink" href={item.href} onFocus={() => changeMegaMenu(item.id)} onClick={closeNavigation}>
+                <Link className="siteNavGroupLink" href={item.href} onClick={closeNavigation}>
                   <ForgeIcon name={item.icon} />
                   {item.label}
                 </Link>
@@ -179,7 +241,6 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
                   aria-controls={`mega-menu-${item.id}`}
                   aria-expanded={activeMegaMenu === item.id}
                   aria-label={`${activeMegaMenu === item.id ? `Close` : `Open`} ${item.label} menu`}
-                  onFocus={() => changeMegaMenu(item.id)}
                   onClick={() => changeMegaMenu(activeMegaMenu === item.id ? null : item.id)}
                 >
                   <span className="siteNavChevron" aria-hidden="true" />
@@ -191,10 +252,6 @@ export default function SiteHeader({ sticky = false }: SiteHeaderProps) {
                 className={`megaMenu${activeMegaMenu === item.id ? ` megaMenuOpen` : ``}`}
                 aria-hidden={activeMegaMenu !== item.id}
                 inert={activeMegaMenu !== item.id}
-                onMouseLeave={(event) => {
-                  if (event.currentTarget.contains(document.activeElement)) return;
-                  setActiveMegaMenu(null);
-                }}
               >
                 <div className="megaMenuLead">
                   <span className="eyebrow">{item.label}</span>
