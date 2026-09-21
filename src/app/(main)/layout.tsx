@@ -72,7 +72,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <script dangerouslySetInnerHTML={{ __html: LOADER_RAMP_SCRIPT }} />
         <noscript>
-          <style>{`.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
+          <style>{`html{overflow-y:auto!important}.forgeLoader{display:none!important}.heroReveal{opacity:1!important;transform:none!important}.textRevealPending,.elementRevealPending{visibility:visible!important;opacity:1!important;filter:none!important;clip-path:none!important;transform:none!important}.siteHeader{visibility:visible!important;opacity:1!important;pointer-events:auto!important;transform:translateX(-50%)!important}`}</style>
         </noscript>
         <GlobalProvider>
           <ForgeLoader doneDelayBeforeLeave={0} />

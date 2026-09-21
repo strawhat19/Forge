@@ -23,14 +23,17 @@
   box-sizing: border-box;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--red) rgba(255, 255, 255, 0.04);
+// Native scrollbar properties override the pixel sizing in WebKit/Blink.
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--red) rgba(255, 255, 255, 0.04);
+  }
 }
 
 *::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 3px;
+  height: 3px;
 }
 
 *::-webkit-scrollbar-track {

@@ -752,10 +752,8 @@
   padding: 0;
   overflow-y: auto;
   list-style: none;
-  scrollbar-width: thin;
   overscroll-behavior: contain;
   max-height: min(28rem, calc(100svh - 20rem));
-  scrollbar-color: var(--red) rgba(255, 255, 255, 0.04);
 }
 
 .notificationPopoverList li {
@@ -2874,7 +2872,6 @@
       radial-gradient(circle at 100% 0, rgba(255, 32, 41, 0.14), transparent 22rem),
       linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 42%),
       rgba(3, 4, 7, 0.98);
-    scrollbar-width: thin;
   }
 
   .mobileProductNavItems {
