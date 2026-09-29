@@ -1,9 +1,59 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AI Instructions
 
-# This is NOT the Next.js you know
+1. When making code changes,
+dont verify or test or build the code, 
+just make minimal code changes and let the user look at the code diff and verify themselves before they commit.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+2. Always try your best to structure code and imports like this:
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+code line 1
+code line 2 - A
+code line 3 - ABC
 
-<!-- END:nextjs-agent-rules -->
+^ should be like a christmas tree where shortest line length is at the top going down to longest line length.
+
+^ try your best to keep this structure its ok if it differs sometimes.
+
+3. try to use SCSS over CSS whenever possible
+
+4. in html or tsx or jsx, all elements should have a descriptive className and ID, especially if its rendered in a for loop or map. the ID can be like the Class but with the id or index of the element.
+User should be able to inspect any element and see its class and then give that back to AI as reference.
+
+5. when making buttons or clickable items, try your best to put icon text together. or icon only.
+
+6. when making transitions, always prefer smooth transitions over flat static transitions.
+
+7. prefer to break things out to make them more readable, like instead of:
+
+<Text style={[styles.tabLabel, { color: timelineMode === value ? palette.blue : palette.muted }]} {...elementProps(`analytics-timeline-tab-label`, `${scope}-${value}`)}>{label}</Text>
+
+or 
+
+<Label className={`intro-eyebrow`} style={styles.eyebrow}>{`A LITTLE CLARITY GOES A LONG WAY`}</Label>
+
+or
+
+<Label className={`reset-confirmation-title`} style={styles.resetTitle}>{`Start fresh?`}</Label>
+
+prefer like this
+
+<Text 
+    {...elementProps(`analytics-timeline-tab-label`, `${scope}-${value}`)} 
+    style={[styles.tabLabel, { color: timelineMode === value ? palette.blue : palette.muted }]}
+>
+    {label}
+</Text>
+
+or this 
+
+<Label className={`intro-eyebrow`} style={styles.eyebrow}>
+    {`A LITTLE CLARITY GOES A LONG WAY`}
+</Label>
+
+or this
+
+<Label className={`reset-confirmation-title`} style={styles.resetTitle}>
+    {`Start fresh?`}
+</Label>
+
+8. in javascript or typescript or tsx or jsx, always use backticks whenever possible, if not then use single quotes, and double quotes as a last resort.

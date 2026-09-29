@@ -8,6 +8,7 @@ import GlobalProvider from '@/shared/global-context';
 import ScrollToTop from '@/app/components/effects/scroll-to-top';
 import GaussianBlurOverlay from '@/app/components/effects/gaussian-blur-overlay';
 import { Barlow_Condensed, Geist, Geist_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import ForgeLoader from '@/app/components/loaders/forge-loader/forge-loader';
 
 const display = Barlow_Condensed({
@@ -82,6 +83,7 @@ export default function MainLayout({ children }: Readonly<{ children: React.Reac
           <SiteFooter parallax />
           <ScrollToTop />
         </GlobalProvider>
+        <Analytics />
       </body>
     </html>
   );
